@@ -79,7 +79,7 @@ BLACKLIST_SUFFIXES = ("UPUSDT", "DOWNUSDT", "BULLUSDT", "BEARUSDT")
 # Calibrato per Binance.US (volumi molto inferiori a Binance.com)
 MIN_QUOTE_VOL_USDT = 200_000
 TOP_CRYPTO_TO_ENRICH = 60
-TOP_N_ALERT = 5
+TOP_N = 10            # quanti asset mostrare nella dashboard e tracciare per gli alert
 
 
 # ── INDICATORI ────────────────────────────────────────────────────────────
@@ -378,7 +378,7 @@ def format_alert(a: dict, score: float, signals: list) -> str:
     ch = a.get("change_24h") or 0
     ch_str = f"{'+' if ch >= 0 else ''}{ch:.2f}%"
     return (
-        f"*Nuovo TOP 5*\n"
+        f"*Nuovo in TOP {TOP_N}*\n"
         f"*{a['name']}* (`{a['symbol']}`)\n"
         f"Score: `{int(round(score))}`\n"
         f"Prezzo: `{price_str}` ({ch_str})\n\n"
@@ -400,8 +400,15 @@ def save_state(state: dict) -> None:
     STATE_FILE.write_text(json.dumps(state, indent=2))
 
 
-def save_web_data(top5: list, all_scored: list, stats: dict) -> None:
-    """Scrive docs/data.json per la dashboard web."""
+def save_web_data(
+    combined_top: list,
+    crypto_top: list,
+    stocks_top: list,
+    stats: dict,
+) -> None:
+    """Scrive docs/data.json per la dashboard web.
+    Ognuna delle tre liste è già ordinata e limitata a TOP_N elementi.
+    """
     docs = Path("docs")
     docs.mkdir(exist_ok=True)
 
@@ -427,8 +434,11 @@ def save_web_data(top5: list, all_scored: list, stats: dict) -> None:
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "stats": stats,
-        "top5": [serialize(x) for x in top5],
-        "honorable_mentions": [serialize(x) for x in all_scored[5:15]],
+        "lists": {
+            "combined": [serialize(x) for x in combined_top],
+            "crypto": [serialize(x) for x in crypto_top],
+            "stocks": [serialize(x) for x in stocks_top],
+        },
     }
     (docs / "data.json").write_text(json.dumps(payload, indent=2, default=str))
 
@@ -460,52 +470,69 @@ def main() -> int:
         print("Stocks: skip (yfinance non disponibile)")
 
     # ── Scoring ──
-    all_assets = enriched + stocks
-    scored = []
-    for a in all_assets:
-        score, signals = compute_score(a)
-        if score > 0:
-            scored.append((a, score, signals))
-    scored.sort(key=lambda x: x[1], reverse=True)
-    top5 = scored[:TOP_N_ALERT]
+    # Calcoliamo lo score per ogni asset e costruiamo tre classifiche
+    def score_and_sort(assets):
+        out = []
+        for a in assets:
+            score, signals = compute_score(a)
+            if score > 0:
+                out.append((a, score, signals))
+        out.sort(key=lambda x: x[1], reverse=True)
+        return out
 
-    print("\nTOP 5:")
-    if not top5:
+    scored_combined = score_and_sort(enriched + stocks)
+    scored_crypto = score_and_sort(enriched)
+    scored_stocks = score_and_sort(stocks)
+
+    combined_top = scored_combined[:TOP_N]
+    crypto_top = scored_crypto[:TOP_N]
+    stocks_top = scored_stocks[:TOP_N]
+
+    print(f"\nTOP {TOP_N} (combinati):")
+    if not combined_top:
         print("  (nessun segnale forte)")
-    for a, score, _ in top5:
+    for a, score, _ in combined_top:
         ch = a.get("change_24h") or 0
         rsi = a.get("rsi") or 0
         print(f"  {int(round(score)):>4}  {a['symbol']:<12} {ch:+6.2f}%  rsi={rsi:5.1f}")
 
     # ── Alert ──
+    # Si triggera quando un asset entra nella TOP N combinata
     state = load_state()
-    prev_ids = set(state.get("previous_top5", []))
-    current_ids = [asset_id(a) for a, _, _ in top5]
+    prev_ids = set(state.get("previous_top_n", state.get("previous_top5", [])))
+    prev_count = len(prev_ids)
+    current_ids = [asset_id(a) for a, _, _ in combined_top]
 
     if not prev_ids:
         print("\nPrimo run: registro lo stato senza inviare alert.")
+    elif prev_count != TOP_N and prev_count != 0:
+        # Cambio del N dimensione lista (es. da 5 a 10) → skip per evitare spam
+        print(f"\nDimensione TOP cambiata ({prev_count}→{TOP_N}): skip alert per questo run.")
     else:
-        newcomers = [(a, s, sig) for a, s, sig in top5 if asset_id(a) not in prev_ids]
+        newcomers = [(a, s, sig) for a, s, sig in combined_top if asset_id(a) not in prev_ids]
         if newcomers:
             print(f"\n{len(newcomers)} new entries -> invio alert Telegram:")
             for a, score, signals in newcomers:
                 print(f"  -> {a['symbol']} (score {int(round(score))})")
                 send_telegram(format_alert(a, score, signals))
         else:
-            print("\nTOP 5 invariata, nessun alert.")
+            print(f"\nTOP {TOP_N} invariata, nessun alert.")
 
-    state["previous_top5"] = current_ids
+    state["previous_top_n"] = current_ids
+    state.pop("previous_top5", None)  # cleanup chiave vecchia
     state["last_run"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     save_state(state)
 
     # Salva il JSON per la dashboard web
     save_web_data(
-        top5=top5,
-        all_scored=scored,
+        combined_top=combined_top,
+        crypto_top=crypto_top,
+        stocks_top=stocks_top,
         stats={
             "crypto_count": len(enriched),
             "stocks_count": len(stocks),
-            "scored_count": len(scored),
+            "scored_count": len(scored_combined),
+            "top_n": TOP_N,
         },
     )
 
