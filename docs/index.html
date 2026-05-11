@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#0a0a0a" />
-<title>Mercati · Scanner mean-reversion</title>
+<title>Top Market Moves · Mercati</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -276,6 +276,82 @@
   footer strong { color: var(--text-dim); }
   footer a { color: var(--amber-2); }
 
+  /* Guide / glossary */
+  details.guide {
+    margin-top: 32px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.015);
+    overflow: hidden;
+  }
+  details.guide summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  details.guide summary::-webkit-details-marker { display: none; }
+  details.guide summary:hover { background: rgba(255,255,255,0.02); }
+  details.guide summary .summary-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 20px;
+    color: #fef3c7;
+  }
+  details.guide summary .chevron {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-faint);
+    font-size: 12px;
+    transition: transform 0.2s;
+  }
+  details.guide[open] summary .chevron { transform: rotate(180deg); }
+  details.guide summary .hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--text-faint);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-left: 10px;
+  }
+  .guide-body {
+    padding: 6px 18px 18px;
+    border-top: 1px solid var(--line);
+  }
+  .glossary {
+    display: grid;
+    gap: 16px;
+    padding: 12px 0 4px;
+  }
+  .term {
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.018);
+    border-radius: 8px;
+    border-left: 2px solid rgba(245,158,11,0.45);
+  }
+  .term .t {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 16px;
+    color: var(--amber);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .term .t .sub {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-size: 11px;
+    color: var(--text-faint);
+    font-weight: 400;
+    margin-left: 6px;
+    letter-spacing: 0.04em;
+  }
+  .term .d {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .term .d strong { color: var(--text); font-weight: 500; }
+  .term .d em { color: var(--amber); font-style: normal; font-weight: 500; }
+
   @media (max-width: 520px) {
     .row { grid-template-columns: 28px 1fr auto; gap: 10px; padding: 12px; }
     .row .score { display: none; }
@@ -308,8 +384,8 @@
   </header>
 
   <section class="hero">
-    <h1><em>Cinque</em> nomi.</h1>
-    <p class="lead">I 5 asset – cripto o azioni – con il punteggio mean-reversion più alto adesso.</p>
+    <h1>Top <em>market moves</em>.</h1>
+    <p class="lead">I 5 asset – cripto o azioni – con il punteggio mean-reversion più alto adesso. Tap su una riga per i dettagli, o apri la guida sotto per capire cosa significano i numeri.</p>
   </section>
 
   <div class="stats" id="stats">
@@ -337,6 +413,110 @@
     <h2>Menzioni</h2>
     <div id="mentions"></div>
   </section>
+
+  <details class="guide">
+    <summary>
+      <span><span class="summary-title">Guida ai segnali</span> <span class="hint">cosa significano i numeri</span></span>
+      <span class="chevron">▼</span>
+    </summary>
+    <div class="guide-body">
+      <div class="glossary">
+
+        <div class="term">
+          <div class="t">RSI <span class="sub">Relative Strength Index · 0–100</span></div>
+          <div class="d">
+            Misura quanto un asset è "tirato" verso l'alto o verso il basso negli
+            ultimi 14 periodi.
+            <strong>Sotto 30</strong> = <em>ipervenduto</em>, è sceso così tanto
+            e così in fretta che spesso (non sempre) rimbalza.
+            <strong>Sopra 70</strong> = <em>ipercomprato</em>, situazione opposta.
+            Lo scanner premia gli ipervenduti perché cerchiamo rimbalzi a breve termine.
+          </div>
+        </div>
+
+        <div class="term">
+          <div class="t">MA20 <span class="sub">Media mobile a 20 periodi</span></div>
+          <div class="d">
+            La media dei prezzi di chiusura degli ultimi 20 candele.
+            Se il prezzo è <strong>molto sotto</strong> la sua media (es. -8%),
+            di solito è un segnale che si è allontanato troppo e ha buone probabilità
+            di rientrare verso quella media nei giorni successivi.
+            È il principio base del <em>mean-reversion</em>.
+          </div>
+        </div>
+
+        <div class="term">
+          <div class="t">MACD <span class="sub">Moving Average Convergence Divergence</span></div>
+          <div class="d">
+            Confronta una media veloce (12 periodi) e una lenta (26).
+            Quando la veloce supera la lenta dal basso si chiama
+            <em>"cross UP"</em> ed è un classico segnale di inversione rialzista.
+            <strong>L'istogramma</strong> misura la distanza fra le due:
+            se positivo e in crescita, la spinta verso l'alto sta accelerando.
+          </div>
+        </div>
+
+        <div class="term">
+          <div class="t">Bollinger Bands <span class="sub">%B</span></div>
+          <div class="d">
+            Sono due linee che disegnano il "canale normale" del prezzo
+            (media ± 2 deviazioni standard). Il <strong>%B</strong> dice dove
+            sta il prezzo dentro questo canale:
+            <strong>0</strong> = sulla banda inferiore,
+            <strong>1</strong> = sulla superiore,
+            <strong>0.5</strong> = in mezzo.
+            Sotto <em>0.05</em> il prezzo ha sfondato la banda inferiore —
+            situazione rara, spesso seguita da rimbalzo.
+          </div>
+        </div>
+
+        <div class="term">
+          <div class="t">Volume ratio <span class="sub">Volume recente vs media</span></div>
+          <div class="d">
+            Volume scambiato negli ultimi periodi diviso per la media di sfondo.
+            <strong>1.0×</strong> = normale.
+            <strong>2.0×</strong> = sta scambiando il doppio del solito.
+            Un picco di volume su un <em>crollo</em> può segnalare
+            <em>capitulation</em> (vendita finale prima del rimbalzo);
+            su un <em>rialzo</em> conferma che la spinta è reale e non un rumore.
+          </div>
+        </div>
+
+        <div class="term">
+          <div class="t">Score composito <span class="sub">Il numero grande a destra</span></div>
+          <div class="d">
+            È la somma pesata di tutti i segnali sopra.
+            <strong>&gt;100</strong> = molti segnali bullish convergenti (situazione interessante).
+            <strong>50–100</strong> = uno o due segnali medi.
+            <strong>&lt;50</strong> = segnali deboli, "il meno peggio" in giornata fiacca.
+            <em>Non è un'indicazione di profitto futuro</em>, solo una misura di
+            quanto i pattern mean-reversion sono allineati adesso su quell'asset.
+          </div>
+        </div>
+
+        <div class="term">
+          <div class="t">Trade Republic vs Binance only <span class="sub">Dove tradare</span></div>
+          <div class="d">
+            Delle crypto scansionate, solo circa 25 sono disponibili
+            su Trade Republic (BTC, ETH, SOL, XRP, ADA, DOGE, AVAX, MATIC, LINK, ecc.).
+            Le altre richiedono un account su <strong>Binance</strong> o exchange simili.
+            Il badge accanto al nome te lo segnala subito così sai dove andare
+            a piazzare l'ordine.
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--text-faint); line-height:1.6">
+        <strong style="color:var(--text-dim)">Una nota sulla strategia.</strong>
+        Lo scanner cerca <em style="color:var(--amber-2);font-style:normal">mean-reversion</em>
+        — la tendenza dei prezzi a rientrare verso una media dopo aver
+        esagerato in una direzione. Funziona bene nei mercati laterali, fallisce
+        nei trend forti (dove "ipervenduto" può diventare "ancora più ipervenduto").
+        Per questo i segnali sono spunti per indagare, non ordini da eseguire al volo.
+      </div>
+    </div>
+  </details>
 
   <footer>
     <strong>Avvertenza.</strong> Questo strumento è uno <em>screener tecnico</em>, non un
