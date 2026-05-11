@@ -125,6 +125,39 @@
   .stat .label { color: var(--text-faint); font-size: 9px; text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 2px; }
   .stat .value { color: var(--text); font-size: 16px; font-weight: 500; }
 
+  /* Tabs */
+  .tabs {
+    display: inline-flex;
+    gap: 2px;
+    padding: 4px;
+    margin-bottom: 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    background: rgba(255,255,255,0.015);
+  }
+  .tab {
+    background: transparent; border: 0;
+    color: var(--text-dim);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    background: rgba(245,158,11,0.18);
+    color: #fef3c7;
+  }
+  .tab .count {
+    margin-left: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    opacity: 0.6;
+  }
+
   /* Top 5 panel */
   .panel {
     border: 1px solid var(--line-strong);
@@ -385,7 +418,7 @@
 
   <section class="hero">
     <h1>Top <em>market moves</em>.</h1>
-    <p class="lead">I 5 asset – cripto o azioni – con il punteggio mean-reversion più alto adesso. Tap su una riga per i dettagli, o apri la guida sotto per capire cosa significano i numeri.</p>
+    <p class="lead">I 10 asset con il punteggio mean-reversion più alto. Filtra per <em style="color:var(--amber);font-style:normal">crypto</em>, <em style="color:var(--amber);font-style:normal">azioni</em>, o entrambe combinate. Tap su una riga per i dettagli; apri la guida sotto per capire i numeri.</p>
   </section>
 
   <div class="stats" id="stats">
@@ -394,25 +427,27 @@
     <div class="stat"><div class="label">Con segnale</div><div class="value mono" id="stat-scored">—</div></div>
   </div>
 
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="combined" role="tab">Top combinati <span class="count" id="count-combined">—</span></button>
+    <button class="tab" data-tab="crypto" role="tab">Crypto <span class="count" id="count-crypto">—</span></button>
+    <button class="tab" data-tab="stocks" role="tab">Azioni <span class="count" id="count-stocks">—</span></button>
+  </div>
+
   <div class="panel">
     <div class="panel-head">
       <span>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
-        Top 5 buy signal
+        <span id="panel-title">Top 10 buy signal</span>
       </span>
       <span>tap per dettagli</span>
     </div>
-    <div id="top5">
+    <div id="list-container">
       <div class="loading">
+        <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
         <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
       </div>
     </div>
   </div>
-
-  <section class="mentions" id="mentions-wrap" hidden>
-    <h2>Menzioni</h2>
-    <div id="mentions"></div>
-  </section>
 
   <details class="guide">
     <summary>
@@ -533,6 +568,14 @@
 <script>
 const TR_CRYPTO = new Set(["BTCUSDT","ETHUSDT","SOLUSDT","XRPUSDT","ADAUSDT","DOGEUSDT","LINKUSDT","DOTUSDT","AVAXUSDT","MATICUSDT","LTCUSDT","BCHUSDT","UNIUSDT","AAVEUSDT","ATOMUSDT","TRXUSDT","XLMUSDT","ETCUSDT","FILUSDT","ALGOUSDT","EOSUSDT","SHIBUSDT","ARBUSDT","OPUSDT","INJUSDT"]);
 
+let currentData = null;
+let currentTab = "combined";  // ricordato in sessionStorage
+
+try {
+  const saved = sessionStorage.getItem("active-tab");
+  if (saved && ["combined","crypto","stocks"].includes(saved)) currentTab = saved;
+} catch (e) {}
+
 function fmtPrice(p) {
   if (p == null) return "—";
   if (p < 1) return p.toFixed(6);
@@ -604,20 +647,49 @@ function renderRow(a, i) {
   `;
 }
 
-function renderMention(a) {
-  const positive = (a.change_24h ?? 0) >= 0;
-  const chCls = positive ? "pos" : "neg";
-  const chTxt = (positive ? "+" : "") + (a.change_24h?.toFixed(2) ?? "0.00") + "%";
-  return `
-    <div class="mention">
-      <div style="display:flex;gap:10px;align-items:center">
-        <span class="mono" style="opacity:0.5;font-size:11px">${Math.round(a.score)}</span>
-        <span class="mono" style="font-weight:500">${a.name}</span>
-        ${badgeFor(a)}
-      </div>
-      <span class="ch ${chCls} mono" style="font-size:11px">${chTxt}</span>
-    </div>
-  `;
+function renderActiveTab() {
+  if (!currentData) return;
+  const list = currentData.lists?.[currentTab] || [];
+  const container = document.getElementById("list-container");
+
+  // Titolo pannello
+  const topN = currentData.stats?.top_n || 10;
+  const title = currentTab === "combined"
+    ? `Top ${topN} buy signal`
+    : currentTab === "crypto"
+    ? `Top ${topN} crypto`
+    : `Top ${topN} azioni`;
+  document.getElementById("panel-title").textContent = title;
+
+  if (!list || list.length === 0) {
+    const msg = currentTab === "stocks"
+      ? "Nessuna azione con segnale forte adesso."
+      : currentTab === "crypto"
+      ? "Nessuna crypto con segnale forte adesso."
+      : "Nessun segnale forte al momento.";
+    container.innerHTML = `<div class="empty"><h3>${msg}</h3><p>I mercati sono in equilibrio.<br>Riprova tra qualche ora.</p></div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(renderRow).join("");
+  container.querySelectorAll(".row").forEach(row => {
+    row.addEventListener("click", () => row.classList.toggle("open"));
+  });
+}
+
+function setTab(tab) {
+  currentTab = tab;
+  try { sessionStorage.setItem("active-tab", tab); } catch (e) {}
+  document.querySelectorAll(".tab").forEach(t => {
+    t.classList.toggle("active", t.dataset.tab === tab);
+  });
+  renderActiveTab();
+}
+
+function updateCounts(d) {
+  document.getElementById("count-combined").textContent = d.lists?.combined?.length ?? 0;
+  document.getElementById("count-crypto").textContent = d.lists?.crypto?.length ?? 0;
+  document.getElementById("count-stocks").textContent = d.lists?.stocks?.length ?? 0;
 }
 
 async function load() {
@@ -633,34 +705,44 @@ async function load() {
     document.getElementById("stat-stocks").textContent = d.stats.stocks_count;
     document.getElementById("stat-scored").textContent = d.stats.scored_count;
 
-    const top5el = document.getElementById("top5");
-    if (!d.top5 || d.top5.length === 0) {
-      top5el.innerHTML = `<div class="empty"><h3>Nessun segnale forte al momento.</h3><p>I mercati sono in equilibrio.<br>Riprova tra qualche ora.</p></div>`;
-    } else {
-      top5el.innerHTML = d.top5.map(renderRow).join("");
-      top5el.querySelectorAll(".row").forEach(row => {
-        row.addEventListener("click", () => row.classList.toggle("open"));
-      });
+    // Retrocompatibilità: vecchio formato con top5/honorable_mentions
+    if (!d.lists && d.top5) {
+      d.lists = {
+        combined: [...d.top5, ...(d.honorable_mentions || [])].slice(0, 10),
+        crypto: [],
+        stocks: [],
+      };
     }
 
-    if (d.honorable_mentions && d.honorable_mentions.length > 0) {
-      document.getElementById("mentions-wrap").hidden = false;
-      document.getElementById("mentions").innerHTML =
-        d.honorable_mentions.map(renderMention).join("");
-    }
+    currentData = d;
+    updateCounts(d);
+    setTab(currentTab);
   } catch (e) {
-    document.getElementById("top5").innerHTML =
-      `<div class="error">Impossibile caricare i dati. ${e.message}<br><small>Probabilmente lo screener non ha ancora completato il primo run.</small></div>`;
+    document.getElementById("list-container").innerHTML =
+      `<div class="error">Impossibile caricare i dati. ${e.message}<br><small>Probabilmente lo screener non ha ancora completato il primo run dopo l'aggiornamento.</small></div>`;
   }
 }
 
+// Tab handlers
+document.querySelectorAll(".tab").forEach(t => {
+  t.addEventListener("click", () => setTab(t.dataset.tab));
+});
+
+// Inizializza tab attivo (ripristina selezione da sessionStorage)
+document.querySelectorAll(".tab").forEach(t => {
+  t.classList.toggle("active", t.dataset.tab === currentTab);
+});
+
 document.getElementById("refresh-btn").addEventListener("click", load);
 load();
-// Auto refresh ogni 60s del display "X min fa" + reload data ogni 5 min
+// Aggiorna il timestamp "X min fa" ogni 60s
 setInterval(() => {
-  const el = document.getElementById("last-updated");
-  // Trigger reload completo ogni 5 min
+  if (currentData?.generated_at) {
+    document.getElementById("last-updated").textContent =
+      "aggiornato " + fmtAgo(currentData.generated_at);
+  }
 }, 60_000);
+// Reload dati ogni 5 min
 setInterval(load, 5 * 60_000);
 </script>
 
