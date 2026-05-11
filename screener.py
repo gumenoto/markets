@@ -400,6 +400,39 @@ def save_state(state: dict) -> None:
     STATE_FILE.write_text(json.dumps(state, indent=2))
 
 
+def save_web_data(top5: list, all_scored: list, stats: dict) -> None:
+    """Scrive docs/data.json per la dashboard web."""
+    docs = Path("docs")
+    docs.mkdir(exist_ok=True)
+
+    def serialize(item):
+        a, score, signals = item
+        return {
+            "type": a["type"],
+            "symbol": a["symbol"],
+            "name": a["name"],
+            "price": a["price"],
+            "change_24h": a.get("change_24h"),
+            "rsi": a.get("rsi"),
+            "dist_from_ma20": a.get("dist_from_ma20"),
+            "volume_ratio": a.get("volume_ratio"),
+            "macd": a.get("macd"),
+            "bollinger": a.get("bollinger"),
+            "score": round(score, 1),
+            "signals": [
+                {"kind": s[0], "label": s[1], "value": s[2]} for s in signals
+            ],
+        }
+
+    payload = {
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "stats": stats,
+        "top5": [serialize(x) for x in top5],
+        "honorable_mentions": [serialize(x) for x in all_scored[5:15]],
+    }
+    (docs / "data.json").write_text(json.dumps(payload, indent=2, default=str))
+
+
 def main() -> int:
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] Avvio screener")
 
@@ -464,6 +497,18 @@ def main() -> int:
     state["previous_top5"] = current_ids
     state["last_run"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     save_state(state)
+
+    # Salva il JSON per la dashboard web
+    save_web_data(
+        top5=top5,
+        all_scored=scored,
+        stats={
+            "crypto_count": len(enriched),
+            "stocks_count": len(stocks),
+            "scored_count": len(scored),
+        },
+    )
+
     print("Fatto.")
     return 0
 
