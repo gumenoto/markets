@@ -2,7 +2,7 @@
 """
 Mercati Screener — backend autonomo.
 
-Scansiona crypto (Binance, no API key) + azioni (Finnhub, free key opzionale),
+Scansiona crypto (Binance.US) + azioni (Yahoo Finance via yfinance),
 calcola RSI/MA20/MACD/Bollinger/Volume, e manda alert Telegram quando un
 asset entra nella TOP 5 mean-reversion.
 
@@ -12,7 +12,6 @@ persistito in `state.json` committato sul repo tra un'esecuzione e l'altra.
 Variabili d'ambiente (segrete in GitHub):
     TELEGRAM_BOT_TOKEN    obbligatoria
     TELEGRAM_CHAT_ID      obbligatoria
-    FINNHUB_KEY           opzionale — se mancante, salta le azioni
 """
 
 from __future__ import annotations
@@ -21,21 +20,27 @@ import json
 import math
 import os
 import sys
-import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
 
+# yfinance per i dati azionari (gratis, illimitato, no API key)
+try:
+    import yfinance as yf
+    YFINANCE_AVAILABLE = True
+except ImportError:
+    YFINANCE_AVAILABLE = False
+    print("! yfinance non installato, azioni saltate")
+
 # ── CONFIG ────────────────────────────────────────────────────────────────
 
 BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
-FINNHUB_KEY = os.environ.get("FINNHUB_KEY", "").strip()
 
 STATE_FILE = Path("state.json")
 
-# Pesi dei segnali (puoi tarare a piacere)
+# Pesi dei segnali
 WEIGHTS = {
     "rsi": 1.0,
     "drop": 1.0,
@@ -46,25 +51,34 @@ WEIGHTS = {
     "bollinger": 1.0,
 }
 
-# Universo azioni (compatibili Trade Republic IT)
+# Universo azioni — simboli yfinance, tutti disponibili su Trade Republic
 STOCK_UNIVERSE = [
+    # US
     ("AAPL", "Apple"), ("MSFT", "Microsoft"), ("GOOGL", "Alphabet"),
     ("AMZN", "Amazon"), ("META", "Meta Platforms"), ("NVDA", "NVIDIA"),
     ("TSLA", "Tesla"), ("AMD", "AMD"), ("NFLX", "Netflix"),
     ("JPM", "JPMorgan"), ("V", "Visa"), ("MA", "Mastercard"),
     ("DIS", "Disney"), ("KO", "Coca-Cola"), ("PEP", "PepsiCo"),
-    ("ASML", "ASML Holding"), ("SAP", "SAP SE"),
+    # EU
+    ("ASML.AS", "ASML Holding"), ("SAP.DE", "SAP SE"),
+    ("MC.PA", "LVMH"), ("OR.PA", "L'Oreal"), ("AIR.PA", "Airbus"),
+    ("SIE.DE", "Siemens"), ("ALV.DE", "Allianz"),
+    # IT (Borsa Italiana)
+    ("ENI.MI", "ENI"), ("ENEL.MI", "Enel"),
+    ("ISP.MI", "Intesa Sanpaolo"), ("UCG.MI", "UniCredit"),
+    ("STLAM.MI", "Stellantis"), ("STM.MI", "STMicroelectronics"),
+    ("RACE.MI", "Ferrari"), ("MONC.MI", "Moncler"), ("LDO.MI", "Leonardo"),
 ]
 
-# Token base USDT da escludere (stable, fiat, leveraged)
 BLACKLIST_BASES = {
     "USDC", "FDUSD", "TUSD", "BUSD", "DAI",
     "EUR", "GBP", "TRY", "JPY", "RUB", "UAH", "BIDR", "AEUR",
 }
 BLACKLIST_SUFFIXES = ("UPUSDT", "DOWNUSDT", "BULLUSDT", "BEARUSDT")
 
-MIN_QUOTE_VOL_USDT = 5_000_000  # almeno 5M$ di volume 24h
-TOP_CRYPTO_TO_ENRICH = 50
+# Calibrato per Binance.US (volumi molto inferiori a Binance.com)
+MIN_QUOTE_VOL_USDT = 200_000
+TOP_CRYPTO_TO_ENRICH = 60
 TOP_N_ALERT = 5
 
 
@@ -188,18 +202,18 @@ def compute_score(asset: dict, w: dict = WEIGHTS) -> tuple[float, list]:
     if vr is not None and vr > 1.5:
         pts = min(vr, 6) * 6 * w["volume"]
         score += pts
-        signals.append(("bull", f"Volume {vr:.1f}×", ""))
+        signals.append(("bull", f"Volume {vr:.1f}x", ""))
 
     macd = asset.get("macd")
     if macd:
         if macd.get("crossover") == "bull":
             pts = 35 * w["macd"]
             score += pts
-            signals.append(("bull", "MACD cross ↑", f"{macd['histogram']:.4f}"))
+            signals.append(("bull", "MACD cross UP", f"{macd['histogram']:.4f}"))
         elif macd.get("crossover") == "bear":
             pts = -25 * w["macd"]
             score += pts
-            signals.append(("bear", "MACD cross ↓", f"{macd['histogram']:.4f}"))
+            signals.append(("bear", "MACD cross DOWN", f"{macd['histogram']:.4f}"))
         elif macd["histogram"] > 0 and macd["macd"] < 0:
             pts = 12 * w["macd"]
             score += pts
@@ -224,7 +238,7 @@ def compute_score(asset: dict, w: dict = WEIGHTS) -> tuple[float, list]:
     return score, signals
 
 
-# ── BINANCE ───────────────────────────────────────────────────────────────
+# ── BINANCE.US ────────────────────────────────────────────────────────────
 
 def fetch_binance_universe() -> list[dict]:
     r = requests.get("https://api.binance.us/api/v3/ticker/24hr", timeout=20)
@@ -282,45 +296,36 @@ def enrich_crypto(asset: dict) -> dict:
     return asset
 
 
-# ── FINNHUB STOCKS ────────────────────────────────────────────────────────
+# ── AZIONI (YFINANCE) ─────────────────────────────────────────────────────
 
 def fetch_stock(symbol: str, name: str) -> dict | None:
+    if not YFINANCE_AVAILABLE:
+        return None
     try:
-        q = requests.get(
-            "https://finnhub.io/api/v1/quote",
-            params={"symbol": symbol, "token": FINNHUB_KEY},
-            timeout=15,
-        ).json()
-        if not q.get("c"):
+        t = yf.Ticker(symbol)
+        hist = t.history(period="3mo", auto_adjust=True, prepost=False)
+        if hist is None or hist.empty or len(hist) < 30:
             return None
-        now = int(time.time())
-        c = requests.get(
-            "https://finnhub.io/api/v1/stock/candle",
-            params={
-                "symbol": symbol,
-                "resolution": "D",
-                "from": now - 90 * 86400,
-                "to": now,
-                "token": FINNHUB_KEY,
-            },
-            timeout=15,
-        ).json()
-        if c.get("s") != "ok":
-            return None
-        closes = c["c"]
-        volumes = c["v"]
+        closes = [float(x) for x in hist["Close"].tolist()]
+        volumes = [float(x) for x in hist["Volume"].tolist()]
+        current_price = closes[-1]
+        prev_close = closes[-2] if len(closes) >= 2 else current_price
+        change_24h = (
+            (current_price - prev_close) / prev_close * 100 if prev_close else 0.0
+        )
+
         a: dict = {
             "type": "stock",
             "symbol": symbol,
             "name": name,
-            "price": q["c"],
-            "change_24h": q.get("dp"),
+            "price": current_price,
+            "change_24h": change_24h,
             "rsi": calc_rsi(closes),
             "macd": calc_macd(closes),
             "bollinger": calc_bollinger(closes),
         }
         ma20 = sma(closes, 20)
-        a["dist_from_ma20"] = (q["c"] - ma20) / ma20 * 100 if ma20 else None
+        a["dist_from_ma20"] = (current_price - ma20) / ma20 * 100 if ma20 else None
         if len(volumes) >= 30:
             recent = sum(volumes[-3:]) / 3
             avg = sum(volumes[-30:-3]) / 27
@@ -367,18 +372,18 @@ def asset_id(a: dict) -> str:
 def format_alert(a: dict, score: float, signals: list) -> str:
     venue = "Binance / Trade Republic" if a["type"] == "crypto" else "Trade Republic"
     bull = [s for s in signals if s[0] == "bull"][:3]
-    sig_lines = "\n".join(f"• {s[1]}{(' ' + s[2]) if s[2] else ''}" for s in bull)
+    sig_lines = "\n".join(f"- {s[1]}{(' ' + s[2]) if s[2] else ''}" for s in bull)
     price = a["price"]
     price_str = f"{price:.6f}" if price < 1 else f"{price:.2f}"
     ch = a.get("change_24h") or 0
     ch_str = f"{'+' if ch >= 0 else ''}{ch:.2f}%"
     return (
-        f"🎯 *Nuovo TOP 5*\n"
+        f"*Nuovo TOP 5*\n"
         f"*{a['name']}* (`{a['symbol']}`)\n"
         f"Score: `{int(round(score))}`\n"
         f"Prezzo: `{price_str}` ({ch_str})\n\n"
         f"{sig_lines}\n\n"
-        f"📍 {venue}"
+        f"{venue}"
     )
 
 
@@ -399,27 +404,27 @@ def main() -> int:
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] Avvio screener")
 
     # ── Crypto ──
-    print("Crypto (Binance)...")
+    print("Crypto (Binance.US)...")
     try:
         universe = fetch_binance_universe()
     except Exception as e:
         print(f"!! errore Binance universe: {e}")
-        return 1
-    print(f"  {len(universe)} pair USDT con volume > {MIN_QUOTE_VOL_USDT/1e6:.0f}M$")
+        universe = []
+    print(f"  {len(universe)} pair USDT con volume > {MIN_QUOTE_VOL_USDT/1e3:.0f}K$")
     top = universe[:TOP_CRYPTO_TO_ENRICH]
     enriched = [enrich_crypto(a) for a in top]
 
     # ── Stocks ──
     stocks: list[dict] = []
-    if FINNHUB_KEY:
-        print("Stocks (Finnhub)...")
+    if YFINANCE_AVAILABLE:
+        print("Stocks (Yahoo Finance)...")
         for sym, name in STOCK_UNIVERSE:
             a = fetch_stock(sym, name)
             if a:
                 stocks.append(a)
         print(f"  {len(stocks)}/{len(STOCK_UNIVERSE)} azioni recuperate")
     else:
-        print("Stocks: skip (FINNHUB_KEY non impostata)")
+        print("Stocks: skip (yfinance non disponibile)")
 
     # ── Scoring ──
     all_assets = enriched + stocks
@@ -436,7 +441,8 @@ def main() -> int:
         print("  (nessun segnale forte)")
     for a, score, _ in top5:
         ch = a.get("change_24h") or 0
-        print(f"  {int(round(score)):>4}  {a['symbol']:<12} {ch:+.2f}%  rsi={a.get('rsi') or 0:.1f}")
+        rsi = a.get("rsi") or 0
+        print(f"  {int(round(score)):>4}  {a['symbol']:<12} {ch:+6.2f}%  rsi={rsi:5.1f}")
 
     # ── Alert ──
     state = load_state()
@@ -448,9 +454,9 @@ def main() -> int:
     else:
         newcomers = [(a, s, sig) for a, s, sig in top5 if asset_id(a) not in prev_ids]
         if newcomers:
-            print(f"\n{len(newcomers)} new entries → invio alert Telegram:")
+            print(f"\n{len(newcomers)} new entries -> invio alert Telegram:")
             for a, score, signals in newcomers:
-                print(f"  → {a['symbol']} (score {int(round(score))})")
+                print(f"  -> {a['symbol']} (score {int(round(score))})")
                 send_telegram(format_alert(a, score, signals))
         else:
             print("\nTOP 5 invariata, nessun alert.")
