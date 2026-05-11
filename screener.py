@@ -227,7 +227,7 @@ def compute_score(asset: dict, w: dict = WEIGHTS) -> tuple[float, list]:
 # ── BINANCE ───────────────────────────────────────────────────────────────
 
 def fetch_binance_universe() -> list[dict]:
-    r = requests.get("https://api.binance.com/api/v3/ticker/24hr", timeout=20)
+    r = requests.get("https://api.binance.us/api/v3/ticker/24hr", timeout=20)
     r.raise_for_status()
     out = []
     for t in r.json():
@@ -260,7 +260,7 @@ def fetch_binance_universe() -> list[dict]:
 def enrich_crypto(asset: dict) -> dict:
     try:
         r = requests.get(
-            "https://api.binance.com/api/v3/klines",
+            "https://api.binance.us/api/v3/klines",
             params={"symbol": asset["symbol"], "interval": "4h", "limit": 80},
             timeout=15,
         )
