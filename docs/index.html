@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0a0a" />
+<title>Mercati · Scanner mean-reversion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0a;
+    --panel: #111;
+    --panel-2: #161616;
+    --line: rgba(255,255,255,0.06);
+    --line-strong: rgba(255,255,255,0.12);
+    --text: #f5f5f5;
+    --text-dim: rgba(255,255,255,0.55);
+    --text-faint: rgba(255,255,255,0.35);
+    --amber: #fcd34d;
+    --amber-2: #f59e0b;
+    --amber-soft: rgba(245, 158, 11, 0.12);
+    --green: #34d399;
+    --green-soft: rgba(16, 185, 129, 0.12);
+    --red: #f87171;
+    --red-soft: rgba(239, 68, 68, 0.12);
+  }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.018) 1px, transparent 0);
+    background-size: 3px 3px;
+  }
+  .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-feature-settings: "tnum" 1; }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 18px 18px 80px; }
+
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(10,10,10,0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    margin: -18px -18px 18px;
+    padding: 14px 18px;
+  }
+  .header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 30px; font-weight: 600;
+    color: #fef3c7;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    margin-left: 10px;
+    color: var(--text-faint);
+    font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--text-faint);
+    display: flex; gap: 10px; align-items: center;
+  }
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 10px var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  button.refresh {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+    background: var(--amber-soft);
+    color: var(--amber);
+    border: 1px solid rgba(245,158,11,0.35);
+    border-radius: 7px;
+    padding: 6px 11px;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  button.refresh:hover { background: rgba(245,158,11,0.22); }
+  button.refresh:active { transform: scale(0.97); }
+
+  /* Hero */
+  .hero h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(40px, 9vw, 64px);
+    line-height: 0.95;
+    margin: 18px 0 8px;
+    letter-spacing: -0.025em;
+  }
+  .hero h1 em {
+    font-style: italic; font-weight: 500;
+    color: var(--amber);
+  }
+  .hero .lead {
+    color: var(--text-dim);
+    font-size: 14px; max-width: 480px;
+    margin: 0;
+  }
+
+  .stats {
+    margin: 22px 0 26px;
+    display: flex; gap: 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+  }
+  .stat .label { color: var(--text-faint); font-size: 9px; text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 2px; }
+  .stat .value { color: var(--text); font-size: 16px; font-weight: 500; }
+
+  /* Top 5 panel */
+  .panel {
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(245,158,11,0.025), transparent);
+  }
+  .panel-head {
+    padding: 11px 18px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,0.02);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--amber);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .panel-head svg { vertical-align: middle; margin-right: 6px; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .row:last-child { border-bottom: 0; }
+  .row:hover { background: rgba(255,255,255,0.02); }
+  .row.open { background: rgba(255,255,255,0.025); }
+  .rank {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic; font-size: 30px;
+    color: rgba(252,211,77,0.32);
+    line-height: 0.85;
+  }
+  .name-block { min-width: 0; }
+  .name-line { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .name {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600; font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .sym {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--text-faint);
+  }
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 2px 7px; border-radius: 4px;
+  }
+  .badge.tr { background: rgba(245,158,11,0.1); color: #fbbf24; border: 1px solid rgba(245,158,11,0.22); }
+  .badge.bn { background: rgba(56,189,248,0.1); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.22); }
+  .signals {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    margin-top: 7px;
+  }
+  .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 2px 6px; border-radius: 4px;
+    display: inline-flex; gap: 4px; align-items: center;
+  }
+  .chip.bull { background: var(--green-soft); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.22); }
+  .chip.bear { background: var(--red-soft); color: #fca5a5; border: 1px solid rgba(239,68,68,0.22); }
+  .chip .v { opacity: 0.65; }
+
+  .price {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .price .v { font-size: 13px; color: var(--text); }
+  .price .ch { font-size: 11px; margin-top: 2px; }
+  .ch.pos { color: var(--green); }
+  .ch.neg { color: var(--red); }
+
+  .score {
+    text-align: right;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 28px; color: var(--amber);
+    line-height: 0.9;
+  }
+  .score .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; color: var(--text-faint);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-top: 4px;
+    line-height: 1;
+  }
+
+  .details {
+    grid-column: 1 / -1;
+    display: none;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+    margin-top: 6px;
+  }
+  .row.open .details { display: block; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; font-size: 11px; }
+  .metric .ml { color: var(--text-faint); font-size: 9px; text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 3px; }
+  .metric .mv { font-family: 'JetBrains Mono', monospace; }
+
+  /* Honorable mentions */
+  .mentions {
+    margin-top: 32px;
+  }
+  .mentions h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic; font-weight: 400;
+    font-size: 22px; margin: 0 0 12px;
+    color: var(--text-dim);
+  }
+  .mention {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .mention:last-child { border-bottom: 0; }
+
+  /* States */
+  .loading, .error, .empty {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-dim);
+  }
+  .empty h3 {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 22px; font-weight: 400;
+    color: var(--text-dim);
+    margin: 0 0 8px;
+  }
+  .skel {
+    height: 60px; background: rgba(255,255,255,0.025);
+    border-radius: 8px; margin-bottom: 6px;
+    animation: pulse 1.6s infinite;
+  }
+
+  footer {
+    margin-top: 50px;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+    font-size: 11px;
+    color: var(--text-faint);
+    line-height: 1.55;
+  }
+  footer strong { color: var(--text-dim); }
+  footer a { color: var(--amber-2); }
+
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 28px 1fr auto; gap: 10px; padding: 12px; }
+    .row .score { display: none; }
+    .row .score-mobile {
+      grid-column: 3;
+      grid-row: 1;
+      font-family: 'Fraunces', serif;
+      font-size: 22px; color: var(--amber);
+    }
+    .hero h1 { font-size: 44px; }
+    .stat .value { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="header-row">
+      <div>
+        <span class="title">Mercati</span>
+        <span class="subtitle">Scanner · IT</span>
+      </div>
+      <div class="meta">
+        <span class="live-dot"></span>
+        <span id="last-updated">caricamento…</span>
+        <button class="refresh" id="refresh-btn">Aggiorna</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1><em>Cinque</em> nomi.</h1>
+    <p class="lead">I 5 asset – cripto o azioni – con il punteggio mean-reversion più alto adesso.</p>
+  </section>
+
+  <div class="stats" id="stats">
+    <div class="stat"><div class="label">Crypto</div><div class="value mono" id="stat-crypto">—</div></div>
+    <div class="stat"><div class="label">Azioni</div><div class="value mono" id="stat-stocks">—</div></div>
+    <div class="stat"><div class="label">Con segnale</div><div class="value mono" id="stat-scored">—</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
+        Top 5 buy signal
+      </span>
+      <span>tap per dettagli</span>
+    </div>
+    <div id="top5">
+      <div class="loading">
+        <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="mentions" id="mentions-wrap" hidden>
+    <h2>Menzioni</h2>
+    <div id="mentions"></div>
+  </section>
+
+  <footer>
+    <strong>Avvertenza.</strong> Questo strumento è uno <em>screener tecnico</em>, non un
+    consiglio di investimento. I segnali (RSI ipervenduto, crolli intraday,
+    distanza dalla MA20, volumi anomali, MACD, Bollinger Bands) sono indicatori
+    storici che non garantiscono performance future. Il trading intraday su
+    crypto e azioni comporta rischi significativi di perdita del capitale.
+    Verifica sempre i dati su fonte primaria, considera commissioni e spread,
+    e investi solo capitale che puoi permetterti di perdere.
+  </footer>
+
+</div>
+
+<script>
+const TR_CRYPTO = new Set(["BTCUSDT","ETHUSDT","SOLUSDT","XRPUSDT","ADAUSDT","DOGEUSDT","LINKUSDT","DOTUSDT","AVAXUSDT","MATICUSDT","LTCUSDT","BCHUSDT","UNIUSDT","AAVEUSDT","ATOMUSDT","TRXUSDT","XLMUSDT","ETCUSDT","FILUSDT","ALGOUSDT","EOSUSDT","SHIBUSDT","ARBUSDT","OPUSDT","INJUSDT"]);
+
+function fmtPrice(p) {
+  if (p == null) return "—";
+  if (p < 1) return p.toFixed(6);
+  if (p < 100) return p.toFixed(3);
+  return p.toFixed(2);
+}
+
+function fmtAgo(iso) {
+  if (!iso) return "—";
+  const then = new Date(iso);
+  const sec = Math.floor((Date.now() - then.getTime()) / 1000);
+  if (sec < 60) return "ora";
+  if (sec < 3600) return Math.floor(sec/60) + " min fa";
+  if (sec < 86400) return Math.floor(sec/3600) + "h fa";
+  return Math.floor(sec/86400) + "g fa";
+}
+
+function badgeFor(a) {
+  if (a.type === "crypto") {
+    return TR_CRYPTO.has(a.symbol)
+      ? '<span class="badge tr">Trade Republic</span>'
+      : '<span class="badge bn">Binance only</span>';
+  }
+  return '<span class="badge tr">Trade Republic</span>';
+}
+
+function chip(s) {
+  const cls = s.kind === "bull" ? "bull" : "bear";
+  return `<span class="chip ${cls}"><span>${s.label}</span>${s.value ? `<span class="v">${s.value}</span>` : ""}</span>`;
+}
+
+function renderRow(a, i) {
+  const positive = (a.change_24h ?? 0) >= 0;
+  const chCls = positive ? "pos" : "neg";
+  const chTxt = (positive ? "+" : "") + (a.change_24h?.toFixed(2) ?? "0.00") + "%";
+  const score = Math.round(a.score);
+
+  const metricsHTML = `
+    <div class="grid-4">
+      <div class="metric"><div class="ml">RSI(14)</div><div class="mv">${a.rsi != null ? a.rsi.toFixed(1) : "—"}</div></div>
+      <div class="metric"><div class="ml">vs MA20</div><div class="mv">${a.dist_from_ma20 != null ? (a.dist_from_ma20 > 0 ? "+" : "") + a.dist_from_ma20.toFixed(2) + "%" : "—"}</div></div>
+      <div class="metric"><div class="ml">Volume</div><div class="mv">${a.volume_ratio != null ? a.volume_ratio.toFixed(2) + "×" : "—"}</div></div>
+      <div class="metric"><div class="ml">MACD hist</div><div class="mv">${a.macd?.histogram != null ? a.macd.histogram.toFixed(4) : "—"}${a.macd?.crossover === "bull" ? " ↑" : a.macd?.crossover === "bear" ? " ↓" : ""}</div></div>
+      <div class="metric"><div class="ml">BB %B</div><div class="mv">${a.bollinger?.percent_b != null ? a.bollinger.percent_b.toFixed(2) : "—"}</div></div>
+    </div>
+  `;
+
+  return `
+    <div class="row" data-idx="${i}">
+      <div class="rank">${String(i+1).padStart(2,"0")}</div>
+      <div class="name-block">
+        <div class="name-line">
+          <span class="name">${a.name}</span>
+          <span class="sym">${a.symbol}</span>
+          ${badgeFor(a)}
+        </div>
+        <div class="signals">${a.signals.slice(0,4).map(chip).join("")}</div>
+      </div>
+      <div class="price">
+        <div class="v">${fmtPrice(a.price)}</div>
+        <div class="ch ${chCls}">${chTxt}</div>
+      </div>
+      <div class="score">
+        ${score}
+        <div class="lbl">score</div>
+      </div>
+      <div class="details">${metricsHTML}</div>
+    </div>
+  `;
+}
+
+function renderMention(a) {
+  const positive = (a.change_24h ?? 0) >= 0;
+  const chCls = positive ? "pos" : "neg";
+  const chTxt = (positive ? "+" : "") + (a.change_24h?.toFixed(2) ?? "0.00") + "%";
+  return `
+    <div class="mention">
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="mono" style="opacity:0.5;font-size:11px">${Math.round(a.score)}</span>
+        <span class="mono" style="font-weight:500">${a.name}</span>
+        ${badgeFor(a)}
+      </div>
+      <span class="ch ${chCls} mono" style="font-size:11px">${chTxt}</span>
+    </div>
+  `;
+}
+
+async function load() {
+  try {
+    const r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const d = await r.json();
+
+    document.getElementById("last-updated").textContent =
+      "aggiornato " + fmtAgo(d.generated_at);
+
+    document.getElementById("stat-crypto").textContent = d.stats.crypto_count;
+    document.getElementById("stat-stocks").textContent = d.stats.stocks_count;
+    document.getElementById("stat-scored").textContent = d.stats.scored_count;
+
+    const top5el = document.getElementById("top5");
+    if (!d.top5 || d.top5.length === 0) {
+      top5el.innerHTML = `<div class="empty"><h3>Nessun segnale forte al momento.</h3><p>I mercati sono in equilibrio.<br>Riprova tra qualche ora.</p></div>`;
+    } else {
+      top5el.innerHTML = d.top5.map(renderRow).join("");
+      top5el.querySelectorAll(".row").forEach(row => {
+        row.addEventListener("click", () => row.classList.toggle("open"));
+      });
+    }
+
+    if (d.honorable_mentions && d.honorable_mentions.length > 0) {
+      document.getElementById("mentions-wrap").hidden = false;
+      document.getElementById("mentions").innerHTML =
+        d.honorable_mentions.map(renderMention).join("");
+    }
+  } catch (e) {
+    document.getElementById("top5").innerHTML =
+      `<div class="error">Impossibile caricare i dati. ${e.message}<br><small>Probabilmente lo screener non ha ancora completato il primo run.</small></div>`;
+  }
+}
+
+document.getElementById("refresh-btn").addEventListener("click", load);
+load();
+// Auto refresh ogni 60s del display "X min fa" + reload data ogni 5 min
+setInterval(() => {
+  const el = document.getElementById("last-updated");
+  // Trigger reload completo ogni 5 min
+}, 60_000);
+setInterval(load, 5 * 60_000);
+</script>
+
+</body>
+</html>
