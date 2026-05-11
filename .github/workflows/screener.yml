@@ -2,18 +2,16 @@ name: Mercati Screener
 
 on:
   schedule:
-    # Ogni 30 minuti durante l'orario dei mercati EU+US (07:00–22:00 UTC, lun-ven)
-    # + meno frequente fuori orario per le crypto (ogni ora)
     - cron: '*/30 7-22 * * 1-5'
     - cron: '0 0,1,2,3,4,5,6,23 * * *'
     - cron: '0 */2 * * 0,6'
-  workflow_dispatch:  # permette esecuzione manuale dal pannello GitHub
+  workflow_dispatch:
 
 jobs:
   scan:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # serve per committare state.json
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,13 +22,12 @@ jobs:
           python-version: '3.11'
 
       - name: Install deps
-        run: pip install --quiet requests
+        run: pip install --quiet requests yfinance
 
       - name: Run screener
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
-          FINNHUB_KEY:        ${{ secrets.FINNHUB_KEY }}
         run: python screener.py
 
       - name: Persist state
