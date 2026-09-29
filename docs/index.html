@@ -468,7 +468,7 @@ function detailsFor(a) {
       metric("Rendimento 7g", `<span class="${cls(a.change_7d)}">${sign(a.change_7d)}</span>`),
       metric(a.type === "commodity" ? "Forza relativa" : benchLabel, a.type === "commodity" ? "—" : `<span class="${cls(a.rel_7d)}">${sign(a.rel_7d)}</span>`),
       metric("Volume vs media", d.vr != null ? d.vr.toFixed(1) + "x" : "—"),
-      metric("Massimo 20g rotto", d.hi20 != null ? fmtPrice(d.hi20) + (d.breakout55 ? " · anche 55g" : "") : "—"),
+      metric(d.breakout20 ? "Massimo 20g rotto" : "Massimo 20g", d.hi20 != null ? fmtPrice(d.hi20) + (d.breakout55 ? " · anche 55g" : "") : "—"),
       metric("ADX", d.adx != null ? d.adx.toFixed(0) : "—"),
       metric("RSI giornaliero", d.rsi_d != null ? d.rsi_d.toFixed(0) : "—"),
       metric("Sopra MA20", d.ext != null ? sign(d.ext, 0) : "—"),
