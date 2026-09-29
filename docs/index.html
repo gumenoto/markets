@@ -13,12 +13,11 @@
   :root {
     --bg: #0a0a0a;
     --panel: #111;
-    --panel-2: #161616;
     --line: rgba(255,255,255,0.06);
     --line-strong: rgba(255,255,255,0.12);
     --text: #f5f5f5;
-    --text-dim: rgba(255,255,255,0.55);
-    --text-faint: rgba(255,255,255,0.35);
+    --text-dim: rgba(255,255,255,0.62);
+    --text-faint: rgba(255,255,255,0.42);
     --amber: #fcd34d;
     --amber-2: #f59e0b;
     --amber-soft: rgba(245, 158, 11, 0.12);
@@ -26,376 +25,190 @@
     --green-soft: rgba(16, 185, 129, 0.12);
     --red: #f87171;
     --red-soft: rgba(239, 68, 68, 0.12);
+    --warn: #fdba74;
+    --warn-soft: rgba(249, 115, 22, 0.10);
   }
   html, body {
     margin: 0; padding: 0;
     background: var(--bg); color: var(--text);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    font-weight: 400;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
     min-height: 100vh;
-    background-image:
-      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.018) 1px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.018) 1px, transparent 0);
     background-size: 3px 3px;
   }
-  .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
   .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-feature-settings: "tnum" 1; }
-
-  .wrap { max-width: 880px; margin: 0 auto; padding: 18px 18px 80px; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 18px 16px 80px; }
 
   /* Header */
   header {
     position: sticky; top: 0; z-index: 30;
-    background: rgba(10,10,10,0.78);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(10,10,10,0.8);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--line);
-    margin: -18px -18px 18px;
-    padding: 14px 18px;
+    margin: -18px -16px 18px; padding: 14px 16px;
   }
   .header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-style: italic;
-    font-size: 30px; font-weight: 600;
-    color: #fef3c7;
-    line-height: 1;
-    letter-spacing: -0.01em;
-  }
-  .subtitle {
-    margin-left: 10px;
-    color: var(--text-faint);
-    font-size: 10px; font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.18em; text-transform: uppercase;
-  }
-  .meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; color: var(--text-faint);
-    display: flex; gap: 10px; align-items: center;
-  }
-  .live-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--green); box-shadow: 0 0 10px var(--green);
-    animation: pulse 2s infinite;
-  }
+  .title { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 30px; font-weight: 600; color: #fef3c7; line-height: 1; }
+  .subtitle { margin-left: 10px; color: var(--text-faint); font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; }
+  .meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-faint); display: flex; gap: 10px; align-items: center; }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); animation: pulse 2s infinite; flex: none; }
+  .live-dot.stale { background: var(--warn); box-shadow: 0 0 10px var(--warn); }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
   button.refresh {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
-    background: var(--amber-soft);
-    color: var(--amber);
-    border: 1px solid rgba(245,158,11,0.35);
-    border-radius: 7px;
-    padding: 6px 11px;
-    cursor: pointer;
-    transition: 0.15s;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+    background: var(--amber-soft); color: var(--amber);
+    border: 1px solid rgba(245,158,11,0.35); border-radius: 7px; padding: 6px 11px; cursor: pointer;
   }
   button.refresh:hover { background: rgba(245,158,11,0.22); }
-  button.refresh:active { transform: scale(0.97); }
 
   /* Hero */
-  .hero h1 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 400;
-    font-size: clamp(40px, 9vw, 64px);
-    line-height: 0.95;
-    margin: 18px 0 8px;
-    letter-spacing: -0.025em;
+  .hero h1 { font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: clamp(40px, 9vw, 64px); line-height: 0.95; margin: 18px 0 8px; letter-spacing: -0.025em; }
+  .hero h1 em { font-style: italic; font-weight: 500; color: var(--amber); }
+  .hero .lead { color: var(--text-dim); font-size: 14px; line-height: 1.55; max-width: 560px; margin: 0; min-height: 44px; }
+
+  /* Lens selector */
+  .lenses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 22px 0 18px; }
+  .lens {
+    text-align: left; cursor: pointer; color: var(--text);
+    background: rgba(255,255,255,0.02); border: 1px solid var(--line-strong); border-radius: 12px;
+    padding: 12px 13px; transition: 0.15s; font-family: inherit;
   }
-  .hero h1 em {
-    font-style: italic; font-weight: 500;
-    color: var(--amber);
-  }
-  .hero .lead {
-    color: var(--text-dim);
-    font-size: 14px; max-width: 480px;
-    margin: 0;
-  }
+  .lens:hover { border-color: rgba(245,158,11,0.4); }
+  .lens.active { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.55); }
+  .lens .ln { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+  .lens .lt { font-family: 'Fraunces', Georgia, serif; font-size: 18px; font-weight: 500; }
+  .lens.active .lt { color: #fef3c7; }
+  .lens .lc { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); }
+  .lens .ld { font-size: 11.5px; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
+  .lens .ico { font-family: 'JetBrains Mono', monospace; color: var(--amber-2); margin-right: 6px; }
 
   .stats {
-    margin: 22px 0 26px;
-    display: flex; gap: 22px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    padding: 12px 0;
+    margin: 0 0 18px; display: flex; flex-wrap: wrap; gap: 8px 22px;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 0;
   }
-  .stat .label { color: var(--text-faint); font-size: 9px; text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 2px; }
-  .stat .value { color: var(--text); font-size: 16px; font-weight: 500; }
+  .stat .label { color: var(--text-faint); font-size: 10px; letter-spacing: 0.06em; margin-bottom: 2px; }
+  .stat .value { color: var(--text); font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; }
 
   /* Tabs */
-  .tabs {
-    display: inline-flex;
-    gap: 2px;
-    padding: 4px;
-    margin-bottom: 12px;
-    border: 1px solid var(--line-strong);
-    border-radius: 9px;
-    background: rgba(255,255,255,0.015);
-  }
-  .tab {
-    background: transparent; border: 0;
-    color: var(--text-dim);
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 7px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.15s;
-  }
+  .tabs { display: inline-flex; gap: 2px; padding: 4px; margin-bottom: 12px; border: 1px solid var(--line-strong); border-radius: 9px; background: rgba(255,255,255,0.015); max-width: 100%; }
+  .tab { background: transparent; border: 0; color: var(--text-dim); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; padding: 7px 12px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
   .tab:hover { color: var(--text); }
-  .tab.active {
-    background: rgba(245,158,11,0.18);
-    color: #fef3c7;
-  }
-  .tab .count {
-    margin-left: 5px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    opacity: 0.6;
-  }
+  .tab.active { background: rgba(245,158,11,0.18); color: #fef3c7; }
+  .tab .count { margin-left: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: 0.65; }
 
-  /* Top 5 panel */
-  .panel {
-    border: 1px solid var(--line-strong);
-    border-radius: 14px;
-    overflow: hidden;
-    background: linear-gradient(180deg, rgba(245,158,11,0.025), transparent);
-  }
+  /* Panel & rows */
+  .panel { border: 1px solid var(--line-strong); border-radius: 14px; overflow: hidden; background: linear-gradient(180deg, rgba(245,158,11,0.025), transparent); }
   .panel-head {
-    padding: 11px 18px;
-    border-bottom: 1px solid var(--line);
-    background: rgba(255,255,255,0.02);
-    display: flex; justify-content: space-between; align-items: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; color: var(--amber);
-    text-transform: uppercase; letter-spacing: 0.18em;
+    padding: 11px 16px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.02);
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--amber); text-transform: uppercase; letter-spacing: 0.16em;
   }
-  .panel-head svg { vertical-align: middle; margin-right: 6px; }
-
+  .panel-head .hint { color: var(--text-faint); letter-spacing: 0.1em; }
   .row {
-    display: grid;
-    grid-template-columns: 36px 1fr auto auto;
-    gap: 14px;
-    align-items: center;
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--line);
-    cursor: pointer;
-    transition: background 0.15s;
+    display: grid; grid-template-columns: 36px 1fr auto auto; gap: 14px; align-items: center;
+    padding: 14px 16px; border-bottom: 1px solid var(--line); cursor: pointer; transition: background 0.15s;
   }
   .row:last-child { border-bottom: 0; }
   .row:hover { background: rgba(255,255,255,0.02); }
-  .row.open { background: rgba(255,255,255,0.025); }
-  .rank {
-    font-family: 'Fraunces', Georgia, serif;
-    font-style: italic; font-size: 30px;
-    color: rgba(252,211,77,0.32);
-    line-height: 0.85;
-  }
+  .row.open { background: rgba(255,255,255,0.03); }
+  .rank { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 30px; color: rgba(252,211,77,0.35); line-height: 0.85; }
   .name-block { min-width: 0; }
   .name-line { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-  .name {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600; font-size: 14px;
-    letter-spacing: -0.01em;
-  }
-  .sym {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; color: var(--text-faint);
-  }
-  .badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; text-transform: uppercase;
-    letter-spacing: 0.12em;
-    padding: 2px 7px; border-radius: 4px;
-  }
+  .name { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 14px; overflow-wrap: anywhere; }
+  .sym { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-faint); }
+  .badge { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
   .badge.tr { background: rgba(245,158,11,0.1); color: #fbbf24; border: 1px solid rgba(245,158,11,0.22); }
   .badge.bn { background: rgba(56,189,248,0.1); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.22); }
-  .signals {
-    display: flex; flex-wrap: wrap; gap: 4px;
-    margin-top: 7px;
-  }
-  .chip {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; padding: 2px 6px; border-radius: 4px;
-    display: inline-flex; gap: 4px; align-items: center;
-  }
+  .badge.cm { background: rgba(217,119,6,0.12); color: #fdba74; border: 1px solid rgba(217,119,6,0.3); }
+  .badge.hot { background: rgba(167,139,250,0.12); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.3); }
+  .signals { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
+  .chip { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 6px; border-radius: 4px; display: inline-flex; gap: 4px; align-items: center; }
   .chip.bull { background: var(--green-soft); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.22); }
   .chip.bear { background: var(--red-soft); color: #fca5a5; border: 1px solid rgba(239,68,68,0.22); }
-  .chip .v { opacity: 0.65; }
-
-  .price {
-    text-align: right;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .price .v { font-size: 13px; color: var(--text); }
+  .chip.flag { background: var(--warn-soft); color: var(--warn); border: 1px dashed rgba(249,115,22,0.45); }
+  .chip .v { opacity: 0.7; }
+  .price { text-align: right; font-family: 'JetBrains Mono', monospace; }
+  .price .v { font-size: 13px; }
   .price .ch { font-size: 11px; margin-top: 2px; }
-  .ch.pos { color: var(--green); }
-  .ch.neg { color: var(--red); }
-
-  .score {
-    text-align: right;
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 28px; color: var(--amber);
-    line-height: 0.9;
-  }
-  .score .lbl {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; color: var(--text-faint);
-    text-transform: uppercase; letter-spacing: 0.18em;
-    margin-top: 4px;
-    line-height: 1;
-  }
-
-  .details {
-    grid-column: 1 / -1;
-    display: none;
-    padding-top: 8px;
-    border-top: 1px dashed var(--line);
-    margin-top: 6px;
-  }
+  .price .sc-m { display: none; }
+  .ch.pos, .pos { color: var(--green); }
+  .ch.neg, .neg { color: var(--red); }
+  .score { text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 28px; color: var(--amber); line-height: 0.9; }
+  .score .lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.16em; margin-top: 4px; line-height: 1; }
+  .details { grid-column: 1 / -1; display: none; padding-top: 10px; border-top: 1px dashed var(--line); margin-top: 4px; }
   .row.open .details { display: block; }
-  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; font-size: 11px; }
-  .metric .ml { color: var(--text-faint); font-size: 9px; text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 3px; }
-  .metric .mv { font-family: 'JetBrains Mono', monospace; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 12px 14px; font-size: 11px; }
+  .metric .ml { color: var(--text-faint); font-size: 10px; margin-bottom: 3px; }
+  .metric .mv { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .venue { margin-top: 10px; font-size: 11.5px; color: var(--text-dim); }
 
-  /* Honorable mentions */
-  .mentions {
-    margin-top: 32px;
-  }
-  .mentions h2 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-style: italic; font-weight: 400;
-    font-size: 22px; margin: 0 0 12px;
-    color: var(--text-dim);
-  }
-  .mention {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 8px 14px;
-    border-bottom: 1px solid var(--line);
-    font-size: 12px;
-  }
-  .mention:last-child { border-bottom: 0; }
+  .loading, .error, .empty { padding: 50px 20px; text-align: center; color: var(--text-dim); }
+  .empty h3 { font-family: 'Fraunces', serif; font-style: italic; font-size: 22px; font-weight: 400; margin: 0 0 8px; }
+  .empty p { margin: 0; font-size: 13px; line-height: 1.5; }
+  .skel { height: 60px; background: rgba(255,255,255,0.025); border-radius: 8px; margin: 6px; animation: pulse 1.6s infinite; }
 
-  /* States */
-  .loading, .error, .empty {
-    padding: 60px 20px;
-    text-align: center;
-    color: var(--text-dim);
-  }
-  .empty h3 {
-    font-family: 'Fraunces', serif; font-style: italic;
-    font-size: 22px; font-weight: 400;
-    color: var(--text-dim);
-    margin: 0 0 8px;
-  }
-  .skel {
-    height: 60px; background: rgba(255,255,255,0.025);
-    border-radius: 8px; margin-bottom: 6px;
-    animation: pulse 1.6s infinite;
-  }
+  /* Registro segnali */
+  section.perf { margin-top: 34px; }
+  .sec-title { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 26px; font-weight: 400; margin: 0; color: #fef3c7; }
+  .sec-sub { color: var(--text-dim); font-size: 13px; margin: 4px 0 14px; line-height: 1.5; }
+  .perf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .perf-card { border: 1px solid var(--line-strong); border-radius: 12px; padding: 12px 13px; background: rgba(255,255,255,0.015); }
+  .perf-card h4 { margin: 0 0 2px; font-family: 'Fraunces', serif; font-weight: 500; font-size: 17px; }
+  .perf-card .n { font-size: 11px; color: var(--text-faint); margin-bottom: 10px; }
+  .hz { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .hz .h { font-size: 10px; color: var(--text-faint); margin-bottom: 2px; }
+  .hz .w { font-size: 17px; font-weight: 600; }
+  .hz .a { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 1px; }
+  .hz .na { font-size: 11px; color: var(--text-faint); line-height: 1.3; }
+  .table-wrap { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; overflow-x: auto; }
+  table.recent { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.recent th { text-align: left; font-weight: 500; color: var(--text-faint); font-size: 10.5px; padding: 9px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  table.recent td { padding: 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  table.recent td:first-child { white-space: normal; }
+  table.recent .rsub { font-size: 10.5px; color: var(--text-faint); margin-top: 2px; }
+  .hz .u { font-size: 10.5px; font-weight: 400; color: var(--text-faint); }
+  table.recent tr:last-child td { border-bottom: 0; }
+  table.recent td.num, table.recent th.num { text-align: right; font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+  .lens-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); }
+  .muted { color: var(--text-faint); }
 
-  footer {
-    margin-top: 50px;
-    border-top: 1px solid var(--line);
-    padding-top: 18px;
-    font-size: 11px;
-    color: var(--text-faint);
-    line-height: 1.55;
-  }
-  footer strong { color: var(--text-dim); }
-  footer a { color: var(--amber-2); }
-
-  /* Guide / glossary */
-  details.guide {
-    margin-top: 32px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: rgba(255,255,255,0.015);
-    overflow: hidden;
-  }
-  details.guide summary {
-    cursor: pointer;
-    padding: 14px 18px;
-    list-style: none;
-    display: flex; justify-content: space-between; align-items: center;
-    user-select: none;
-    transition: background 0.15s;
-  }
+  /* Guida */
+  details.guide { margin-top: 32px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,0.015); overflow: hidden; }
+  details.guide summary { cursor: pointer; padding: 14px 16px; list-style: none; display: flex; justify-content: space-between; align-items: center; user-select: none; }
   details.guide summary::-webkit-details-marker { display: none; }
-  details.guide summary:hover { background: rgba(255,255,255,0.02); }
-  details.guide summary .summary-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-style: italic;
-    font-size: 20px;
-    color: #fef3c7;
-  }
-  details.guide summary .chevron {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--text-faint);
-    font-size: 12px;
-    transition: transform 0.2s;
-  }
+  details.guide summary .summary-title { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 20px; color: #fef3c7; }
+  details.guide summary .chevron { color: var(--text-faint); font-size: 12px; transition: transform 0.2s; }
   details.guide[open] summary .chevron { transform: rotate(180deg); }
-  details.guide summary .hint {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; color: var(--text-faint);
-    text-transform: uppercase; letter-spacing: 0.18em;
-    margin-left: 10px;
-  }
-  .guide-body {
-    padding: 6px 18px 18px;
-    border-top: 1px solid var(--line);
-  }
-  .glossary {
-    display: grid;
-    gap: 16px;
-    padding: 12px 0 4px;
-  }
-  .term {
-    padding: 12px 14px;
-    background: rgba(255,255,255,0.018);
-    border-radius: 8px;
-    border-left: 2px solid rgba(245,158,11,0.45);
-  }
-  .term .t {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 16px;
-    color: var(--amber);
-    margin-bottom: 4px;
-    font-weight: 500;
-  }
-  .term .t .sub {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-size: 11px;
-    color: var(--text-faint);
-    font-weight: 400;
-    margin-left: 6px;
-    letter-spacing: 0.04em;
-  }
-  .term .d {
-    font-size: 12.5px;
-    color: var(--text-dim);
-    line-height: 1.6;
-  }
+  details.guide summary .hint { font-size: 11px; color: var(--text-faint); margin-left: 10px; }
+  .guide-body { padding: 6px 16px 18px; border-top: 1px solid var(--line); }
+  .guide-body h5 { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--amber-2); text-transform: uppercase; letter-spacing: 0.16em; margin: 20px 0 8px; font-weight: 500; }
+  .glossary { display: grid; gap: 12px; }
+  .term { padding: 12px 14px; background: rgba(255,255,255,0.018); border-radius: 8px; border-left: 2px solid rgba(245,158,11,0.45); }
+  .term.flagterm { border-left-color: rgba(249,115,22,0.6); }
+  .term .t { font-family: 'Fraunces', Georgia, serif; font-size: 16px; color: var(--amber); margin-bottom: 4px; font-weight: 500; }
+  .term .t .sub { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text-faint); font-weight: 400; margin-left: 6px; }
+  .term .d { font-size: 12.5px; color: var(--text-dim); line-height: 1.6; }
   .term .d strong { color: var(--text); font-weight: 500; }
   .term .d em { color: var(--amber); font-style: normal; font-weight: 500; }
+  .term code { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
 
-  @media (max-width: 520px) {
-    .row { grid-template-columns: 28px 1fr auto; gap: 10px; padding: 12px; }
+  footer { margin-top: 44px; border-top: 1px solid var(--line); padding-top: 18px; font-size: 11px; color: var(--text-faint); line-height: 1.6; }
+  footer strong { color: var(--text-dim); }
+
+  @media (max-width: 620px) {
+    .lenses { grid-template-columns: 1fr; gap: 6px; }
+    .lens { padding: 10px 12px; }
+    .lens .ld { display: none; }
+    .lens.active .ld { display: block; }
+    .perf-grid { grid-template-columns: 1fr; }
+    .row { grid-template-columns: 26px 1fr auto; gap: 10px; padding: 12px; }
+    .rank { font-size: 24px; }
     .row .score { display: none; }
-    .row .score-mobile {
-      grid-column: 3;
-      grid-row: 1;
-      font-family: 'Fraunces', serif;
-      font-size: 22px; color: var(--amber);
-    }
+    .price .sc-m { display: block; font-family: 'Fraunces', serif; font-size: 18px; color: var(--amber); margin-top: 3px; }
     .hero h1 { font-size: 44px; }
-    .stat .value { font-size: 14px; }
+    .subtitle { display: none; }
+    .tab { padding: 7px 9px; font-size: 12.5px; }
   }
 </style>
 </head>
@@ -404,12 +217,9 @@
 
   <header>
     <div class="header-row">
-      <div>
-        <span class="title">Mercati</span>
-        <span class="subtitle">Scanner · IT</span>
-      </div>
+      <div><span class="title">Mercati</span><span class="subtitle">Scanner · IT</span></div>
       <div class="meta">
-        <span class="live-dot"></span>
+        <span class="live-dot" id="live-dot"></span>
         <span id="last-updated">caricamento…</span>
         <button class="refresh" id="refresh-btn">Aggiorna</button>
       </div>
@@ -418,333 +228,398 @@
 
   <section class="hero">
     <h1>Top <em>market moves</em>.</h1>
-    <p class="lead">I 10 asset con il punteggio mean-reversion più alto. Filtra per <em style="color:var(--amber);font-style:normal">crypto</em>, <em style="color:var(--amber);font-style:normal">azioni</em>, o entrambe combinate. Tap su una riga per i dettagli; apri la guida sotto per capire i numeri.</p>
+    <p class="lead" id="lead"></p>
   </section>
 
-  <div class="stats" id="stats">
-    <div class="stat"><div class="label">Crypto</div><div class="value mono" id="stat-crypto">—</div></div>
-    <div class="stat"><div class="label">Azioni</div><div class="value mono" id="stat-stocks">—</div></div>
-    <div class="stat"><div class="label">Con segnale</div><div class="value mono" id="stat-scored">—</div></div>
+  <div class="lenses" role="tablist" aria-label="Modalità">
+    <button class="lens" data-lens="momentum" role="tab">
+      <div class="ln"><span class="lt"><span class="ico">↗</span>Accelerazioni</span><span class="lc" id="lc-momentum">—</span></div>
+      <div class="ld">Rompono i massimi con volume. Movimenti presi all'innesco.</div>
+    </button>
+    <button class="lens" data-lens="setup" role="tab">
+      <div class="ln"><span class="lt"><span class="ico">◎</span>In carica</span><span class="lc" id="lc-setup">—</span></div>
+      <div class="ld">Volatilità compressa sotto il tetto. Da tenere d'occhio.</div>
+    </button>
+    <button class="lens" data-lens="reversion" role="tab">
+      <div class="ln"><span class="lt"><span class="ico">↺</span>Rimbalzi</span><span class="lc" id="lc-reversion">—</span></div>
+      <div class="ld">Scesi troppo e in fretta. Candidati a rientrare.</div>
+    </button>
   </div>
 
-  <div class="tabs" role="tablist">
-    <button class="tab active" data-tab="combined" role="tab">Top combinati <span class="count" id="count-combined">—</span></button>
+  <div class="stats">
+    <div class="stat"><div class="label">Crypto analizzate</div><div class="value" id="stat-crypto">—</div></div>
+    <div class="stat"><div class="label">Azioni</div><div class="value" id="stat-stocks">—</div></div>
+    <div class="stat"><div class="label">Commodity</div><div class="value" id="stat-commodities">—</div></div>
+    <div class="stat"><div class="label">BTC 7 giorni</div><div class="value" id="stat-btc">—</div></div>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Classe di asset">
+    <button class="tab" data-tab="combined" role="tab">Tutti <span class="count" id="count-combined">—</span></button>
     <button class="tab" data-tab="crypto" role="tab">Crypto <span class="count" id="count-crypto">—</span></button>
-    <button class="tab" data-tab="stocks" role="tab">Azioni <span class="count" id="count-stocks">—</span></button>
+    <button class="tab" data-tab="brokerage" role="tab">Brokerage <span class="count" id="count-brokerage">—</span></button>
   </div>
 
   <div class="panel">
     <div class="panel-head">
-      <span>
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
-        <span id="panel-title">Top 10 buy signal</span>
-      </span>
-      <span>tap per dettagli</span>
+      <span id="panel-title">Top 10</span>
+      <span class="hint">tap per dettagli</span>
     </div>
     <div id="list-container">
-      <div class="loading">
-        <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
-        <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
-      </div>
+      <div class="loading"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
     </div>
   </div>
 
+  <section class="perf">
+    <h2 class="sec-title">Registro segnali</h2>
+    <p class="sec-sub">Ultimi 30 giorni. Ogni segnale nuovo viene seguito per una settimana. <strong style="color:var(--text);font-weight:500">Positivi</strong> = quota di segnali in guadagno dopo 1, 3 e 7 giorni dal prezzo di segnalazione; sotto, il rendimento medio. Servono almeno 5 segnali per una statistica.</p>
+    <div class="perf-grid" id="perf-grid"></div>
+    <div class="table-wrap">
+      <table class="recent">
+        <thead><tr><th>Segnale</th><th class="num">Entrata</th><th class="num">1g</th><th class="num">3g</th><th class="num">7g</th><th class="num" title="Massimo rialzo raggiunto">Max</th></tr></thead>
+        <tbody id="recent-body"><tr><td colspan="6" class="muted">Nessun segnale registrato finora.</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
   <details class="guide">
     <summary>
-      <span><span class="summary-title">Guida ai segnali</span> <span class="hint">cosa significano i numeri</span></span>
+      <span><span class="summary-title">Guida ai segnali</span><span class="hint">cosa significano i numeri</span></span>
       <span class="chevron">▼</span>
     </summary>
     <div class="guide-body">
+
+      <h5>Le tre modalità</h5>
       <div class="glossary">
-
         <div class="term">
-          <div class="t">RSI <span class="sub">Relative Strength Index · 0–100</span></div>
+          <div class="t">Accelerazioni <span class="sub">momentum · breakout</span></div>
           <div class="d">
-            Misura quanto un asset è "tirato" verso l'alto o verso il basso negli
-            ultimi 14 periodi.
-            <strong>Sotto 30</strong> = <em>ipervenduto</em>, è sceso così tanto
-            e così in fretta che spesso (non sempre) rimbalza.
-            <strong>Sopra 70</strong> = <em>ipercomprato</em>, situazione opposta.
-            Lo scanner premia gli ipervenduti perché cerchiamo rimbalzi a breve termine.
+            Cerca chi <strong>rompe il massimo degli ultimi 20 giorni</strong> (meglio se anche dei 55) con
+            <strong>volume sopra la media</strong> e fa meglio del mercato di riferimento (BTC per le crypto,
+            l'indice per le azioni). È il tipo di movimento di QNT a fine settembre:
+            non si può prevedere la notizia, ma si può vedere l'innesco nelle prime ore.
+            I breakout falliscono spesso: <em>serve sempre uno stop</em>.
           </div>
         </div>
-
         <div class="term">
-          <div class="t">MA20 <span class="sub">Media mobile a 20 periodi</span></div>
+          <div class="t">In carica <span class="sub">watchlist pre-breakout</span></div>
           <div class="d">
-            La media dei prezzi di chiusura degli ultimi 20 candele.
-            Se il prezzo è <strong>molto sotto</strong> la sua media (es. -8%),
-            di solito è un segnale che si è allontanato troppo e ha buone probabilità
-            di rientrare verso quella media nei giorni successivi.
-            È il principio base del <em>mean-reversion</em>.
+            Asset con la <strong>volatilità ai minimi</strong> degli ultimi mesi (le bande di Bollinger si stringono),
+            spesso con volumi in lento aumento. È la "molla compressa": prima o poi si muove, ma
+            <em>la compressione non dice in che direzione</em>. Non è un segnale d'acquisto:
+            nessun alert all'ingresso. L'alert <strong>⚡ Squeeze scattato</strong> arriva solo se nei giorni
+            successivi rompe verso l'alto con volume.
           </div>
         </div>
-
         <div class="term">
-          <div class="t">MACD <span class="sub">Moving Average Convergence Divergence</span></div>
+          <div class="t">Rimbalzi <span class="sub">mean-reversion · la logica originale</span></div>
           <div class="d">
-            Confronta una media veloce (12 periodi) e una lenta (26).
-            Quando la veloce supera la lenta dal basso si chiama
-            <em>"cross UP"</em> ed è un classico segnale di inversione rialzista.
-            <strong>L'istogramma</strong> misura la distanza fra le due:
-            se positivo e in crescita, la spinta verso l'alto sta accelerando.
+            Asset scesi troppo e troppo in fretta (RSI basso, sotto la media, sotto la banda di Bollinger inferiore)
+            che tendono a rientrare verso la media in 1–3 giorni. Funziona nei mercati laterali,
+            fallisce nei crolli veri: "ipervenduto" può diventare "ancora più ipervenduto".
           </div>
         </div>
-
-        <div class="term">
-          <div class="t">Bollinger Bands <span class="sub">%B</span></div>
-          <div class="d">
-            Sono due linee che disegnano il "canale normale" del prezzo
-            (media ± 2 deviazioni standard). Il <strong>%B</strong> dice dove
-            sta il prezzo dentro questo canale:
-            <strong>0</strong> = sulla banda inferiore,
-            <strong>1</strong> = sulla superiore,
-            <strong>0.5</strong> = in mezzo.
-            Sotto <em>0.05</em> il prezzo ha sfondato la banda inferiore —
-            situazione rara, spesso seguita da rimbalzo.
-          </div>
-        </div>
-
-        <div class="term">
-          <div class="t">Volume ratio <span class="sub">Volume recente vs media</span></div>
-          <div class="d">
-            Volume scambiato negli ultimi periodi diviso per la media di sfondo.
-            <strong>1.0×</strong> = normale.
-            <strong>2.0×</strong> = sta scambiando il doppio del solito.
-            Un picco di volume su un <em>crollo</em> può segnalare
-            <em>capitulation</em> (vendita finale prima del rimbalzo);
-            su un <em>rialzo</em> conferma che la spinta è reale e non un rumore.
-          </div>
-        </div>
-
-        <div class="term">
-          <div class="t">Score composito <span class="sub">Il numero grande a destra</span></div>
-          <div class="d">
-            È la somma pesata di tutti i segnali sopra.
-            <strong>&gt;100</strong> = molti segnali bullish convergenti (situazione interessante).
-            <strong>50–100</strong> = uno o due segnali medi.
-            <strong>&lt;50</strong> = segnali deboli, "il meno peggio" in giornata fiacca.
-            <em>Non è un'indicazione di profitto futuro</em>, solo una misura di
-            quanto i pattern mean-reversion sono allineati adesso su quell'asset.
-          </div>
-        </div>
-
-        <div class="term">
-          <div class="t">Trade Republic vs Binance only <span class="sub">Dove tradare</span></div>
-          <div class="d">
-            Delle crypto scansionate, solo circa 25 sono disponibili
-            su Trade Republic (BTC, ETH, SOL, XRP, ADA, DOGE, AVAX, MATIC, LINK, ecc.).
-            Le altre richiedono un account su <strong>Binance</strong> o exchange simili.
-            Il badge accanto al nome te lo segnala subito così sai dove andare
-            a piazzare l'ordine.
-          </div>
-        </div>
-
       </div>
 
-      <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--text-faint); line-height:1.6">
-        <strong style="color:var(--text-dim)">Una nota sulla strategia.</strong>
-        Lo scanner cerca <em style="color:var(--amber-2);font-style:normal">mean-reversion</em>
-        — la tendenza dei prezzi a rientrare verso una media dopo aver
-        esagerato in una direzione. Funziona bene nei mercati laterali, fallisce
-        nei trend forti (dove "ipervenduto" può diventare "ancora più ipervenduto").
-        Per questo i segnali sono spunti per indagare, non ordini da eseguire al volo.
+      <h5>Indicatori</h5>
+      <div class="glossary">
+        <div class="term">
+          <div class="t">Breakout 20g / 55g <span class="sub">rottura dei massimi</span></div>
+          <div class="d">Il prezzo supera il massimo più alto degli ultimi 20 (o 55) giorni. Più lungo il periodo rotto, più significativo il segnale. Senza volume è spesso una falsa rottura.</div>
+        </div>
+        <div class="term">
+          <div class="t">Forza relativa <span class="sub">rendimento 7g meno il riferimento</span></div>
+          <div class="d">Per le crypto: rendimento a 7 giorni meno quello di BTC. Per le azioni: meno l'indice (S&amp;P 500, Euro Stoxx 50 o FTSE MIB). <strong>+30%</strong> vuol dire che ha fatto 30 punti meglio del mercato: si sta muovendo per motivi suoi, spesso una notizia.</div>
+        </div>
+        <div class="term">
+          <div class="t">Volume <span class="sub">rispetto alla media</span></div>
+          <div class="d"><strong>1.0x</strong> = normale, <strong>3.0x</strong> = il triplo del solito. Nelle Accelerazioni è il volume delle ultime 24 ore contro la media giornaliera dei 20 giorni precedenti: conferma che dietro il movimento ci sono soldi veri.</div>
+        </div>
+        <div class="term">
+          <div class="t">ADX <span class="sub">forza del trend · 0–100</span></div>
+          <div class="d">Misura quanto è forte un trend, non la direzione. Sopra <strong>25</strong> c'è un trend deciso; lo scanner lo premia solo se la spinta è rialzista.</div>
+        </div>
+        <div class="term">
+          <div class="t">Compressione <span class="sub">larghezza Bollinger, percentile</span></div>
+          <div class="d">Quanto sono strette le bande rispetto agli ultimi 120 giorni. <strong>3° pct</strong> vuol dire più strette del 97% dei giorni recenti: volatilità ai minimi. Accanto: distanza dal tetto dei 20 giorni e accumulo di volumi.</div>
+        </div>
+        <div class="term">
+          <div class="t">RSI, MA20, MACD, Bollinger %B <span class="sub">usati nei Rimbalzi</span></div>
+          <div class="d">
+            <strong>RSI</strong> sotto 30 = ipervenduto, sopra 70 = ipercomprato.
+            <strong>MA20</strong>: media dei prezzi delle ultime 20 candele; molto sotto = possibile rientro.
+            <strong>MACD</strong>: incrocio tra media veloce e lenta, "cross UP" = inversione rialzista.
+            <strong>%B</strong>: posizione nel canale di Bollinger (0 = banda inferiore, 1 = superiore).
+          </div>
+        </div>
+        <div class="term">
+          <div class="t">Score <span class="sub">il numero grande a destra</span></div>
+          <div class="d">Somma pesata dei segnali della modalità. Serve solo a ordinare la lista: <em>non è una previsione di guadagno</em>. Il registro segnali qui sopra dirà, con i numeri, quale modalità funziona davvero.</div>
+        </div>
+        <div class="term">
+          <div class="t">In tendenza <span class="sub">badge viola</span></div>
+          <div class="d">La coin è tra le più cercate su CoinGecko: spesso vuol dire che c'è una notizia o un catalizzatore in corso.</div>
+        </div>
+      </div>
+
+      <h5>Etichette di rischio (arancioni)</h5>
+      <div class="glossary">
+        <div class="term flagterm">
+          <div class="t">Esteso · Surriscaldato</div>
+          <div class="d">Il prezzo è già molto sopra la media a 20 giorni (oltre +35% per le crypto, +15% per azioni e commodity), con RSI oltre 85. Il movimento può continuare, come QNT, ma i ritracciamenti possono essere violenti: <strong>posizione più piccola, stop più vicino</strong>.</div>
+        </div>
+        <div class="term flagterm">
+          <div class="t">Liquidità bassa · Volume anomalo</div>
+          <div class="d"><strong>Liquidità bassa</strong>: meno di 20 M$ scambiati in 24 ore, spread e slippage alti. <strong>Volume anomalo</strong>: volume superiore al 50% della capitalizzazione in un giorno. Succede nei pump e con scambi fittizi (wash trading): il prezzo può crollare con la stessa velocità.</div>
+        </div>
+        <div class="term flagterm">
+          <div class="t">Crollo estremo</div>
+          <div class="d">Oltre -40% in 24 ore. Sotto -50% l'asset viene escluso: di solito è un delisting o un collasso, non un'occasione di rimbalzo.</div>
+        </div>
+      </div>
+
+      <h5>Dove tradare</h5>
+      <div class="glossary">
+        <div class="term">
+          <div class="t">Trade Republic · Binance/altri</div>
+          <div class="d">Il badge indica dove trovi l'asset. Per le crypto la lista Trade Republic è indicativa (BTC, ETH, SOL, XRP, ADA, DOGE, LINK, AVAX…): <strong>verifica sempre in app</strong>. Le altre richiedono Binance o un exchange simile.</div>
+        </div>
+        <div class="term">
+          <div class="t">Commodity · via ETF <span class="sub">oro, petrolio, gas, grano…</span></div>
+          <div class="d">
+            I prezzi vengono dai <em>futures</em> ufficiali (<code>GC=F</code> oro, <code>CL=F</code> WTI), che su Trade Republic non si tradano:
+            serve un <strong>ETF/ETC equivalente</strong>. Esempi: oro → <strong>4GLD</strong> o SGLN · argento → PHAG ·
+            WTI → CRUD · Brent → OILB · gas → NGAS · rame → COPA · grano/mais/caffè → WEAT/CORN/COFF.
+            Verifica la disponibilità in app. Gli ETP a leva o short si "consumano" nel tempo: vanno bene solo per posizioni brevi.
+          </div>
+        </div>
       </div>
     </div>
   </details>
 
   <footer>
-    <strong>Avvertenza.</strong> Questo strumento è uno <em>screener tecnico</em>, non un
-    consiglio di investimento. I segnali (RSI ipervenduto, crolli intraday,
-    distanza dalla MA20, volumi anomali, MACD, Bollinger Bands) sono indicatori
-    storici che non garantiscono performance future. Il trading intraday su
-    crypto e azioni comporta rischi significativi di perdita del capitale.
-    Verifica sempre i dati su fonte primaria, considera commissioni e spread,
-    e investi solo capitale che puoi permetterti di perdere.
+    <strong>Avvertenza.</strong> Questo strumento è uno <em>screener tecnico</em>, non un consiglio di investimento.
+    I segnali sono indicatori calcolati su dati passati e non garantiscono risultati futuri. Il trading su crypto,
+    azioni e commodity comporta il rischio di perdere il capitale. Verifica sempre i dati su fonte primaria,
+    considera commissioni e spread, e investi solo capitale che puoi permetterti di perdere.
   </footer>
-
 </div>
 
 <script>
-const TR_CRYPTO = new Set(["BTCUSDT","ETHUSDT","SOLUSDT","XRPUSDT","ADAUSDT","DOGEUSDT","LINKUSDT","DOTUSDT","AVAXUSDT","MATICUSDT","LTCUSDT","BCHUSDT","UNIUSDT","AAVEUSDT","ATOMUSDT","TRXUSDT","XLMUSDT","ETCUSDT","FILUSDT","ALGOUSDT","EOSUSDT","SHIBUSDT","ARBUSDT","OPUSDT","INJUSDT"]);
+const TR_CRYPTO = new Set(["BTC","ETH","SOL","XRP","ADA","DOGE","LINK","DOT","AVAX","MATIC","POL","LTC","BCH","UNI","AAVE","ATOM","TRX","XLM","ETC","FIL","ALGO","EOS","SHIB","ARB","OP","INJ"]);
+const LENS_INFO = {
+  momentum: { title: "Accelerazioni", lead: "Asset che <em>rompono i massimi</em> con volume e battono il mercato. È qui che si vede l'innesco di movimenti come QNT." },
+  setup: { title: "In carica", lead: "Volatilità <em>compressa</em> sotto il tetto del range. Da tenere d'occhio: l'alert arriva solo quando scattano verso l'alto." },
+  reversion: { title: "Rimbalzi", lead: "Asset scesi troppo e troppo in fretta: candidati a un <em>rimbalzo</em> di 1–3 giorni." },
+};
+const TABS = ["combined", "crypto", "brokerage"];
 
-let currentData = null;
-let currentTab = "combined";  // ricordato in sessionStorage
-
+let data = null;
+let lens = "momentum";
+let tab = "combined";
 try {
-  const saved = sessionStorage.getItem("active-tab");
-  if (saved && ["combined","crypto","stocks"].includes(saved)) currentTab = saved;
+  const sl = sessionStorage.getItem("lens"); if (sl && LENS_INFO[sl]) lens = sl;
+  const st = sessionStorage.getItem("active-tab"); if (st && TABS.includes(st)) tab = st;
 } catch (e) {}
 
-function fmtPrice(p) {
-  if (p == null) return "—";
-  if (p < 1) return p.toFixed(6);
-  if (p < 100) return p.toFixed(3);
-  return p.toFixed(2);
-}
-
+const $ = (id) => document.getElementById(id);
+function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function fmtPrice(p) { if (p == null) return "—"; if (p < 1) return p.toPrecision(4); if (p < 100) return p.toFixed(3); return p.toFixed(2); }
+function sign(v, d = 1) { if (v == null) return "—"; return (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(d) + "%"; }
+function cls(v) { return v == null ? "muted" : (v >= 0 ? "pos" : "neg"); }
 function fmtAgo(iso) {
   if (!iso) return "—";
-  const then = new Date(iso);
-  const sec = Math.floor((Date.now() - then.getTime()) / 1000);
+  const sec = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
   if (sec < 60) return "ora";
-  if (sec < 3600) return Math.floor(sec/60) + " min fa";
-  if (sec < 86400) return Math.floor(sec/3600) + "h fa";
-  return Math.floor(sec/86400) + "g fa";
+  if (sec < 3600) return Math.floor(sec / 60) + " min fa";
+  if (sec < 86400) return Math.floor(sec / 3600) + " h fa";
+  return Math.floor(sec / 86400) + " g fa";
+}
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString("it-IT", { day: "2-digit", month: "2-digit" }) + " " + d.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
 }
 
-function badgeFor(a) {
+function badgesFor(a) {
+  let b = "";
   if (a.type === "crypto") {
-    return TR_CRYPTO.has(a.symbol)
-      ? '<span class="badge tr">Trade Republic</span>'
-      : '<span class="badge bn">Binance only</span>';
+    const base = a.symbol.replace(/USDT$/, "");
+    b += TR_CRYPTO.has(base) ? '<span class="badge tr">Trade Republic</span>' : '<span class="badge bn">Binance/altri</span>';
+    if (a.trending) b += ' <span class="badge hot">In tendenza</span>';
+  } else if (a.type === "commodity") {
+    b += '<span class="badge cm">Commodity · via ETF</span>';
+  } else {
+    b += '<span class="badge tr">Trade Republic</span>';
   }
-  return '<span class="badge tr">Trade Republic</span>';
+  return b;
 }
-
 function chip(s) {
-  const cls = s.kind === "bull" ? "bull" : "bear";
-  return `<span class="chip ${cls}"><span>${s.label}</span>${s.value ? `<span class="v">${s.value}</span>` : ""}</span>`;
+  return `<span class="chip ${s.kind === "bull" ? "bull" : "bear"}"><span>${esc(s.label)}</span>${s.value ? `<span class="v">${esc(s.value)}</span>` : ""}</span>`;
+}
+function flagChip(f) {
+  return `<span class="chip flag"><span>⚠ ${esc(f.label)}</span>${f.value ? `<span class="v">${esc(f.value)}</span>` : ""}</span>`;
+}
+function metric(label, value) { return `<div class="metric"><div class="ml">${label}</div><div class="mv">${value}</div></div>`; }
+
+function detailsFor(a) {
+  const d = a.daily || {};
+  const benchLabel = a.type === "crypto" ? "vs BTC 7g" : (a.type === "stock" ? "vs indice 7g" : "—");
+  if (lens === "momentum") {
+    return [
+      metric("Rendimento 7g", `<span class="${cls(a.change_7d)}">${sign(a.change_7d)}</span>`),
+      metric(a.type === "commodity" ? "Forza relativa" : benchLabel, a.type === "commodity" ? "—" : `<span class="${cls(a.rel_7d)}">${sign(a.rel_7d)}</span>`),
+      metric("Volume vs media", d.vr != null ? d.vr.toFixed(1) + "x" : "—"),
+      metric(d.breakout20 ? "Massimo 20g rotto" : "Massimo 20g", d.hi20 != null ? fmtPrice(d.hi20) + (d.breakout55 ? " · anche 55g" : "") : "—"),
+      metric("ADX", d.adx != null ? d.adx.toFixed(0) : "—"),
+      metric("RSI giornaliero", d.rsi_d != null ? d.rsi_d.toFixed(0) : "—"),
+      metric("Sopra MA20", d.ext != null ? sign(d.ext, 0) : "—"),
+    ].join("");
+  }
+  if (lens === "setup") {
+    return [
+      metric("Compressione", d.bbw_pct != null ? (d.bbw_pct * 100).toFixed(0) + "° percentile" : "—"),
+      metric("Distanza dal tetto 20g", d.dist_top20 != null ? "−" + Math.max(0, d.dist_top20).toFixed(1) + "%" : "—"),
+      metric("Tetto da rompere", d.hi20 != null ? fmtPrice(d.hi20) : "—"),
+      metric("Accumulo volumi", d.accum != null ? d.accum.toFixed(2) + "x" : "—"),
+      metric("Sopra MA50", d.above_ma50 == null ? "—" : (d.above_ma50 ? "sì" : "no")),
+      metric("Rendimento 7g", `<span class="${cls(a.change_7d)}">${sign(a.change_7d)}</span>`),
+    ].join("");
+  }
+  return [
+    metric("RSI(14)", a.rsi != null ? a.rsi.toFixed(1) : "—"),
+    metric("vs MA20", a.dist_from_ma20 != null ? sign(a.dist_from_ma20, 2) : "—"),
+    metric("Volume", a.volume_ratio != null ? a.volume_ratio.toFixed(2) + "x" : "—"),
+    metric("MACD hist", a.macd?.histogram != null ? a.macd.histogram.toPrecision(3) + (a.macd.crossover === "bull" ? " ↑" : a.macd.crossover === "bear" ? " ↓" : "") : "—"),
+    metric("BB %B", a.bollinger?.percent_b != null ? a.bollinger.percent_b.toFixed(2) : "—"),
+    metric("Rendimento 7g", `<span class="${cls(a.change_7d)}">${sign(a.change_7d)}</span>`),
+  ].join("");
 }
 
 function renderRow(a, i) {
-  const positive = (a.change_24h ?? 0) >= 0;
-  const chCls = positive ? "pos" : "neg";
-  const chTxt = (positive ? "+" : "") + (a.change_24h?.toFixed(2) ?? "0.00") + "%";
   const score = Math.round(a.score);
-
-  const metricsHTML = `
-    <div class="grid-4">
-      <div class="metric"><div class="ml">RSI(14)</div><div class="mv">${a.rsi != null ? a.rsi.toFixed(1) : "—"}</div></div>
-      <div class="metric"><div class="ml">vs MA20</div><div class="mv">${a.dist_from_ma20 != null ? (a.dist_from_ma20 > 0 ? "+" : "") + a.dist_from_ma20.toFixed(2) + "%" : "—"}</div></div>
-      <div class="metric"><div class="ml">Volume</div><div class="mv">${a.volume_ratio != null ? a.volume_ratio.toFixed(2) + "×" : "—"}</div></div>
-      <div class="metric"><div class="ml">MACD hist</div><div class="mv">${a.macd?.histogram != null ? a.macd.histogram.toFixed(4) : "—"}${a.macd?.crossover === "bull" ? " ↑" : a.macd?.crossover === "bear" ? " ↓" : ""}</div></div>
-      <div class="metric"><div class="ml">BB %B</div><div class="mv">${a.bollinger?.percent_b != null ? a.bollinger.percent_b.toFixed(2) : "—"}</div></div>
-    </div>
-  `;
-
+  const flags = (a.flags || []).map(flagChip).join("");
+  const rankInfo = a.mcap_rank ? ` · #${a.mcap_rank} per capitalizzazione` : "";
   return `
-    <div class="row" data-idx="${i}">
-      <div class="rank">${String(i+1).padStart(2,"0")}</div>
+    <div class="row" role="button" tabindex="0" aria-expanded="false">
+      <div class="rank">${String(i + 1).padStart(2, "0")}</div>
       <div class="name-block">
-        <div class="name-line">
-          <span class="name">${a.name}</span>
-          <span class="sym">${a.symbol}</span>
-          ${badgeFor(a)}
-        </div>
-        <div class="signals">${a.signals.slice(0,4).map(chip).join("")}</div>
+        <div class="name-line"><span class="name">${esc(a.name)}</span><span class="sym">${esc(a.symbol)}</span>${badgesFor(a)}</div>
+        <div class="signals">${(a.signals || []).filter(s => s.label !== "In tendenza").slice(0, 5).map(chip).join("")}${flags}</div>
       </div>
       <div class="price">
         <div class="v">${fmtPrice(a.price)}</div>
-        <div class="ch ${chCls}">${chTxt}</div>
+        <div class="ch ${cls(a.change_24h)}">${sign(a.change_24h, 2)}</div>
+        <div class="sc-m" aria-label="score">${score}</div>
       </div>
-      <div class="score">
-        ${score}
-        <div class="lbl">score</div>
+      <div class="score">${score}<div class="lbl">score</div></div>
+      <div class="details">
+        <div class="grid-4">${detailsFor(a)}</div>
+        <div class="venue">📍 ${esc(a.venue || "")}${rankInfo}</div>
       </div>
-      <div class="details">${metricsHTML}</div>
-    </div>
-  `;
+    </div>`;
 }
 
-function renderActiveTab() {
-  if (!currentData) return;
-  const list = currentData.lists?.[currentTab] || [];
-  const container = document.getElementById("list-container");
+function currentLists() {
+  if (data?.lenses?.[lens]) return data.lenses[lens];
+  if (lens === "reversion" && data?.lists) return data.lists;
+  return null;
+}
 
-  // Titolo pannello
-  const topN = currentData.stats?.top_n || 10;
-  const title = currentTab === "combined"
-    ? `Top ${topN} buy signal`
-    : currentTab === "crypto"
-    ? `Top ${topN} crypto`
-    : `Top ${topN} azioni`;
-  document.getElementById("panel-title").textContent = title;
+function render() {
+  if (!data) return;
+  document.querySelectorAll(".lens").forEach(b => { const on = b.dataset.lens === lens; b.classList.toggle("active", on); b.setAttribute("aria-selected", on); });
+  document.querySelectorAll(".tab").forEach(b => { const on = b.dataset.tab === tab; b.classList.toggle("active", on); b.setAttribute("aria-selected", on); });
+  $("lead").innerHTML = LENS_INFO[lens].lead;
 
-  if (!list || list.length === 0) {
-    const msg = currentTab === "stocks"
-      ? "Nessuna azione con segnale forte adesso."
-      : currentTab === "crypto"
-      ? "Nessuna crypto con segnale forte adesso."
-      : "Nessun segnale forte al momento.";
-    container.innerHTML = `<div class="empty"><h3>${msg}</h3><p>I mercati sono in equilibrio.<br>Riprova tra qualche ora.</p></div>`;
+  const lists = currentLists();
+  for (const t of TABS) $("count-" + t).textContent = lists?.[t]?.length ?? 0;
+  const topN = data.stats?.top_n || 10;
+  const tabLabel = { combined: "", crypto: " crypto", brokerage: " brokerage" }[tab];
+  $("panel-title").textContent = `${LENS_INFO[lens].title} · top ${topN}${tabLabel}`;
+
+  const c = $("list-container");
+  const list = lists?.[tab] || [];
+  if (!lists) {
+    c.innerHTML = `<div class="empty"><h3>In arrivo.</h3><p>Questa modalità sarà disponibile dal prossimo aggiornamento dello scanner.</p></div>`;
     return;
   }
-
-  container.innerHTML = list.map(renderRow).join("");
-  container.querySelectorAll(".row").forEach(row => {
-    row.addEventListener("click", () => row.classList.toggle("open"));
+  if (!list.length) {
+    const msg = { momentum: "Nessuna accelerazione in corso.", setup: "Nessun asset in compressione adesso.", reversion: "Nessun rimbalzo interessante adesso." }[lens];
+    c.innerHTML = `<div class="empty"><h3>${msg}</h3><p>Prova un'altra classe di asset o un'altra modalità.</p></div>`;
+    return;
+  }
+  c.innerHTML = list.map(renderRow).join("");
+  c.querySelectorAll(".row").forEach(row => {
+    const toggle = () => { row.classList.toggle("open"); row.setAttribute("aria-expanded", row.classList.contains("open")); };
+    row.addEventListener("click", toggle);
+    row.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
   });
 }
 
-function setTab(tab) {
-  currentTab = tab;
-  try { sessionStorage.setItem("active-tab", tab); } catch (e) {}
-  document.querySelectorAll(".tab").forEach(t => {
-    t.classList.toggle("active", t.dataset.tab === tab);
-  });
-  renderActiveTab();
+function renderPerf() {
+  const p = data?.performance;
+  const grid = $("perf-grid");
+  const order = ["momentum", "setup", "reversion"];
+  grid.innerHTML = order.map(l => {
+    const s = p?.lenses?.[l];
+    const hz = ["1d", "3d", "7d"].map(h => {
+      const x = s?.horizons?.[h];
+      const lbl = { "1d": "1 giorno", "3d": "3 giorni", "7d": "7 giorni" }[h];
+      if (!x || x.n < 5) return `<div><div class="h">${lbl}</div><div class="na">in raccolta<br>${x?.n ?? 0}/5</div></div>`;
+      return `<div><div class="h">${lbl}</div><div class="w">${Math.round(x.win)}%<span class="u"> positivi</span></div><div class="a ${cls(x.avg)}">media ${sign(x.avg, Math.abs(x.avg) >= 10 ? 0 : 1)}</div></div>`;
+    }).join("");
+    return `<div class="perf-card"><h4>${LENS_INFO[l].title}</h4><div class="n">${s?.signals ?? 0} segnali registrati</div><div class="hz">${hz}</div></div>`;
+  }).join("");
+
+  const rows = (p?.recent || []).slice(0, 15).map(e => {
+    const r = e.rets || {};
+    const started = r["1d"] != null;
+    const cell = v => `<td class="num ${cls(v)}">${v == null ? "·" : sign(v, Math.abs(v) >= 10 ? 0 : 1)}</td>`;
+    return `<tr><td><div>${esc(e.name)}</div><div class="rsub">${fmtDate(e.ts)} · ${LENS_INFO[e.lens]?.title || e.lens}${e.alerted ? " · alert" : ""}</div></td>
+      <td class="num">${fmtPrice(e.price)}</td>${cell(r["1d"])}${cell(r["3d"])}${cell(r["7d"])}${cell(started ? e.max_up : null)}</tr>`;
+  }).join("");
+  $("recent-body").innerHTML = rows || `<tr><td colspan="6" class="muted">Nessun segnale registrato finora: il registro parte dal primo aggiornamento con il nuovo modello.</td></tr>`;
 }
 
-function updateCounts(d) {
-  document.getElementById("count-combined").textContent = d.lists?.combined?.length ?? 0;
-  document.getElementById("count-crypto").textContent = d.lists?.crypto?.length ?? 0;
-  document.getElementById("count-stocks").textContent = d.lists?.stocks?.length ?? 0;
-}
+function setLens(l) { lens = l; try { sessionStorage.setItem("lens", l); } catch (e) {} render(); }
+function setTab(t) { tab = t; try { sessionStorage.setItem("active-tab", t); } catch (e) {} render(); }
 
 async function load() {
   try {
     const r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
     if (!r.ok) throw new Error("HTTP " + r.status);
     const d = await r.json();
-
-    document.getElementById("last-updated").textContent =
-      "aggiornato " + fmtAgo(d.generated_at);
-
-    document.getElementById("stat-crypto").textContent = d.stats.crypto_count;
-    document.getElementById("stat-stocks").textContent = d.stats.stocks_count;
-    document.getElementById("stat-scored").textContent = d.stats.scored_count;
-
-    // Retrocompatibilità: vecchio formato con top5/honorable_mentions
-    if (!d.lists && d.top5) {
-      d.lists = {
-        combined: [...d.top5, ...(d.honorable_mentions || [])].slice(0, 10),
-        crypto: [],
-        stocks: [],
-      };
+    if (d.lists && !d.lists.brokerage && d.lists.stocks) d.lists.brokerage = d.lists.stocks;
+    data = d;
+    const s = d.stats || {};
+    $("stat-crypto").textContent = s.crypto_count ?? "—";
+    $("stat-stocks").textContent = s.stocks_count ?? "—";
+    $("stat-commodities").textContent = s.commodities_count ?? "—";
+    $("stat-btc").innerHTML = s.btc_7d != null ? `<span class="${cls(s.btc_7d)}">${sign(s.btc_7d)}</span>` : "—";
+    for (const l of Object.keys(LENS_INFO)) {
+      const n = s.lens_counts?.[l];
+      $("lc-" + l).textContent = n != null ? n + " asset" : (l === "reversion" ? (s.scored_count ?? "—") + " asset" : "—");
     }
-
-    currentData = d;
-    updateCounts(d);
-    setTab(currentTab);
+    updateAgo();
+    render();
+    renderPerf();
   } catch (e) {
-    document.getElementById("list-container").innerHTML =
-      `<div class="error">Impossibile caricare i dati. ${e.message}<br><small>Probabilmente lo screener non ha ancora completato il primo run dopo l'aggiornamento.</small></div>`;
+    $("list-container").innerHTML = `<div class="error">Impossibile caricare i dati (${esc(e.message)}).<br><small>Riprova tra qualche minuto.</small></div>`;
   }
 }
+function updateAgo() {
+  if (!data?.generated_at) return;
+  $("last-updated").textContent = "aggiornato " + fmtAgo(data.generated_at);
+  const hours = (Date.now() - new Date(data.generated_at).getTime()) / 3600000;
+  $("live-dot").classList.toggle("stale", hours > 6);
+}
 
-// Tab handlers
-document.querySelectorAll(".tab").forEach(t => {
-  t.addEventListener("click", () => setTab(t.dataset.tab));
-});
-
-// Inizializza tab attivo (ripristina selezione da sessionStorage)
-document.querySelectorAll(".tab").forEach(t => {
-  t.classList.toggle("active", t.dataset.tab === currentTab);
-});
-
-document.getElementById("refresh-btn").addEventListener("click", load);
+document.querySelectorAll(".lens").forEach(b => b.addEventListener("click", () => setLens(b.dataset.lens)));
+document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab)));
+$("refresh-btn").addEventListener("click", load);
+$("lead").innerHTML = LENS_INFO[lens].lead;
 load();
-// Aggiorna il timestamp "X min fa" ogni 60s
-setInterval(() => {
-  if (currentData?.generated_at) {
-    document.getElementById("last-updated").textContent =
-      "aggiornato " + fmtAgo(currentData.generated_at);
-  }
-}, 60_000);
-// Reload dati ogni 5 min
+setInterval(updateAgo, 60_000);
 setInterval(load, 5 * 60_000);
 </script>
-
 </body>
 </html>
