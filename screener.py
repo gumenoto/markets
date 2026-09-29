@@ -100,6 +100,10 @@ ALERT_MIN_SCORE = {
     ("momentum", "brokerage"): 60,
     ("squeeze", "crypto"): 50,
     ("squeeze", "brokerage"): 40,
+    # commodity: nessuna conferma di volume disponibile → serve uno score più alto
+    ("reversion", "commodity"): 40,
+    ("momentum", "commodity"): 85,
+    ("squeeze", "commodity"): 60,
 }
 # Accelerazioni e squeeze: push solo con volume confermato (volume 24h vs media 20g)
 ALERT_MIN_VOLUME = {
@@ -221,9 +225,11 @@ class Source:
         self.disabled_reason = ""
         self.calls = 0
         self.ok = 0
+        self.last_error = ""
 
     def _hard(self, reason: str) -> None:
         with self._lock:
+            self.last_error = reason
             self.hard_failures += 1
             if self.hard_failures >= self.max_hard and not self.disabled:
                 self.disabled = True
@@ -265,21 +271,30 @@ class Source:
                 continue
             if status in (403, 418, 429, 451) or status >= 500:
                 self._hard(f"HTTP {status}")
+            else:
+                self.last_error = f"HTTP {status}"
             return None  # 400/404 ecc.: simbolo non disponibile su questa sorgente
 
     def summary(self) -> str:
         s = f"{self.name}: {self.ok}/{self.calls} ok"
         if self.disabled:
             s += f" (disattivata: {self.disabled_reason})"
+        elif self.last_error and self.ok < self.calls:
+            s += f" (ultimo errore: {self.last_error})"
         return s
+
+    def diag(self) -> dict:
+        return {"calls": self.calls, "ok": self.ok, "disabled": self.disabled,
+                "last_error": self.last_error or None}
 
 
 SRC_COINGECKO = Source("coingecko", 2.5, max_hard_failures=3)
+SRC_COINPAPRIKA = Source("coinpaprika", 1.0, max_hard_failures=2)
 SRC_BINANCE = Source("binance", 0.06)
 SRC_COINBASE = Source("coinbase", 0.15)
 SRC_KRAKEN = Source("kraken", 1.05)
 SRC_BINANCE_US = Source("binance.us", 0.1)
-ALL_SOURCES = (SRC_COINGECKO, SRC_BINANCE, SRC_COINBASE, SRC_KRAKEN, SRC_BINANCE_US)
+ALL_SOURCES = (SRC_COINGECKO, SRC_COINPAPRIKA, SRC_BINANCE, SRC_COINBASE, SRC_KRAKEN, SRC_BINANCE_US)
 
 
 # ══ INDICATORI ═══════════════════════════════════════════════════════════
@@ -859,19 +874,60 @@ def fetch_coingecko_universe() -> list[dict] | None:
     )
     if not isinstance(data, list) or not data:
         return None
-    out, seen = [], set()
+    rows = []
     for c in data:
-        try:
-            sym = (c.get("symbol") or "").upper()
-            name = c.get("name") or sym
-            price = c.get("current_price")
-            vol = c.get("total_volume") or 0
-            mcap = c.get("market_cap") or 0
-            ch24 = c.get("price_change_percentage_24h_in_currency", c.get("price_change_percentage_24h"))
-            ch7 = c.get("price_change_percentage_7d_in_currency")
-        except AttributeError:
+        if not isinstance(c, dict):
             continue
-        if not sym or not price or price <= 0 or sym in seen:
+        rows.append({
+            "base": (c.get("symbol") or "").upper(),
+            "name": c.get("name"),
+            "price": c.get("current_price"),
+            "change_24h": c.get("price_change_percentage_24h_in_currency", c.get("price_change_percentage_24h")),
+            "change_7d": c.get("price_change_percentage_7d_in_currency"),
+            "volume_24h": c.get("total_volume"),
+            "market_cap": c.get("market_cap"),
+            "mcap_rank": c.get("market_cap_rank"),
+        })
+    return _clean_universe(rows)
+
+
+def fetch_coinpaprika_universe() -> list[dict] | None:
+    """Seconda fonte per l'universo (gratuita, senza chiave)."""
+    data = SRC_COINPAPRIKA.get("https://api.coinpaprika.com/v1/tickers",
+                               params={"quotes": "USD"}, timeout=30)
+    if not isinstance(data, list) or not data:
+        return None
+    rows = []
+    for c in data:
+        if not isinstance(c, dict) or not c.get("rank"):
+            continue
+        q = (c.get("quotes") or {}).get("USD") or {}
+        rows.append({
+            "base": (c.get("symbol") or "").upper(),
+            "name": c.get("name"),
+            "price": q.get("price"),
+            "change_24h": q.get("percent_change_24h"),
+            "change_7d": q.get("percent_change_7d"),
+            "volume_24h": q.get("volume_24h"),
+            "market_cap": q.get("market_cap"),
+            "mcap_rank": c.get("rank"),
+        })
+    rows.sort(key=lambda r: r["mcap_rank"])
+    return _clean_universe(rows[:CG_PER_PAGE])
+
+
+def _clean_universe(rows: list[dict]) -> list[dict]:
+    """Normalizza e toglie stablecoin, wrapped/staked, duplicati."""
+    out, seen = [], set()
+    for r in rows:
+        sym = r["base"]
+        name = r.get("name") or sym
+        try:
+            price = float(r["price"]) if r.get("price") is not None else 0.0
+        except (TypeError, ValueError):
+            continue
+        ch24, ch7 = r.get("change_24h"), r.get("change_7d")
+        if not sym or price <= 0 or sym in seen:
             continue
         if sym.lower() in STABLE_SYMBOLS or EXCLUDE_NAME_RE.search(name):
             continue
@@ -879,28 +935,28 @@ def fetch_coingecko_universe() -> list[dict] | None:
             continue  # stablecoin non in lista
         seen.add(sym)
         out.append({
-            "id": c.get("id"),
             "base": sym,
             "name": name,
-            "price": float(price),
+            "price": price,
             "change_24h": float(ch24) if ch24 is not None else None,
             "change_7d": float(ch7) if ch7 is not None else None,
-            "volume_24h": float(vol),
-            "market_cap": float(mcap),
-            "mcap_rank": c.get("market_cap_rank"),
+            "volume_24h": float(r.get("volume_24h") or 0),
+            "market_cap": float(r.get("market_cap") or 0),
+            "mcap_rank": r.get("mcap_rank"),
         })
     return out
 
 
 def fetch_coingecko_trending() -> set[str]:
+    """Simboli in tendenza su CoinGecko (proxy di notizie/catalizzatori)."""
     data = SRC_COINGECKO.get(f"{CG_BASE}/search/trending", headers=_cg_headers(), retries_429=1)
-    ids = set()
+    syms = set()
     if isinstance(data, dict):
         for c in data.get("coins") or []:
             item = c.get("item") if isinstance(c, dict) else None
-            if item and item.get("id"):
-                ids.add(item["id"])
-    return ids
+            if item and item.get("symbol"):
+                syms.add(str(item["symbol"]).upper())
+    return syms
 
 
 def fetch_binance_us_universe() -> list[dict]:
@@ -911,6 +967,8 @@ def fetch_binance_us_universe() -> list[dict]:
     best: dict[str, dict] = {}
     for t in data:
         sym = t.get("symbol", "")
+        if sym.endswith(("BUSD", "TUSD", "FDUSD", "USDC", "DAI")):
+            continue  # quotate in altre stablecoin (es. OMG/BUSD)
         quote = "USDT" if sym.endswith("USDT") else ("USD" if sym.endswith("USD") else None)
         if not quote:
             continue
@@ -926,7 +984,7 @@ def fetch_binance_us_universe() -> list[dict]:
         if qv < 1_000_000 or price <= 0:
             continue
         if base not in best or qv > best[base]["volume_24h"]:
-            best[base] = {"id": None, "base": base, "name": base, "price": price,
+            best[base] = {"base": base, "name": base, "price": price,
                           "change_24h": ch, "change_7d": None, "volume_24h": qv,
                           "market_cap": None, "mcap_rank": None, "exact_symbol": sym}
     return sorted(best.values(), key=lambda x: x["volume_24h"], reverse=True)
@@ -934,16 +992,24 @@ def fetch_binance_us_universe() -> list[dict]:
 
 def build_crypto_assets() -> tuple[list[dict], dict]:
     info = {"universe_source": None, "universe_size": 0, "trending": 0, "btc_7d": None}
-    universe = fetch_coingecko_universe()
     trending: set[str] = set()
+    universe = fetch_coingecko_universe()
     if universe:
         info["universe_source"] = "coingecko"
-        trending = fetch_coingecko_trending()
+    else:
+        print(f"  ! CoinGecko non disponibile ({SRC_COINGECKO.last_error or 'nessuna risposta'}): provo CoinPaprika")
+        universe = fetch_coinpaprika_universe()
+        if universe:
+            info["universe_source"] = "coinpaprika"
+    if universe:
+        if not SRC_COINGECKO.disabled:
+            trending = fetch_coingecko_trending()
         info["trending"] = len(trending)
         universe = [u for u in universe
                     if u["volume_24h"] >= MIN_CRYPTO_VOL_USD and (u["market_cap"] or 0) >= MIN_CRYPTO_MCAP_USD]
     else:
-        print("  ! CoinGecko non disponibile: uso l'universo di riserva Binance.US")
+        print(f"  ! CoinPaprika non disponibile ({SRC_COINPAPRIKA.last_error or 'nessuna risposta'}): "
+              "uso l'universo di riserva Binance.US")
         universe = fetch_binance_us_universe()
         info["universe_source"] = "binance.us" if universe else None
     universe = universe[:CRYPTO_ENRICH_MAX]
@@ -966,7 +1032,7 @@ def build_crypto_assets() -> tuple[list[dict], dict]:
             "volume_24h": u["volume_24h"],
             "market_cap": u["market_cap"],
             "mcap_rank": u["mcap_rank"],
-            "trending": bool(u.get("id") and u["id"] in trending),
+            "trending": u["base"] in trending,
             "source": src,
         }
         reversion_metrics(a, h4["closes"], h4["volumes"])
@@ -1035,6 +1101,9 @@ def fetch_yf_asset(symbol: str, name: str, asset_type: str, bench: dict) -> dict
     d = yf_daily(symbol)
     if not d:
         return None
+    if asset_type == "commodity":
+        # il volume dei futures continui è inaffidabile (rollover): non lo usiamo
+        d["volumes"] = [0.0] * len(d["closes"])
     closes = d["closes"]
     price = closes[-1]
     prev = closes[-2] if len(closes) >= 2 else price
@@ -1273,6 +1342,10 @@ def asset_class(a: dict) -> str:
     return "crypto" if a["type"] == "crypto" else "brokerage"
 
 
+def alert_class(a: dict) -> str:
+    return {"crypto": "crypto", "commodity": "commodity"}.get(a["type"], "brokerage")
+
+
 def main() -> int:
     now = now_utc()
     print(f"[{iso(now)}] Avvio screener v{MODEL_VERSION}")
@@ -1373,10 +1446,11 @@ def main() -> int:
             if lens == "setup":
                 continue  # "In carica" non manda alert all'ingresso
             kind = "squeeze" if (lens == "momentum" and a.get("from_squeeze")) else lens
-            if score < ALERT_MIN_SCORE[(kind, asset_class(a))]:
+            if score < ALERT_MIN_SCORE[(kind, alert_class(a))]:
                 continue
             min_vr = ALERT_MIN_VOLUME.get((kind, asset_class(a)))
-            if min_vr and ((a.get("m") or {}).get("vr") or 0) < min_vr:
+            vr = (a.get("m") or {}).get("vr")
+            if min_vr and vr is not None and vr < min_vr:  # vr None = volume non disponibile (commodity)
                 continue
             last_alert = parse_iso(alert_hist.get(f"{lens}|{aid}"))
             if last_alert and last_alert > now - timedelta(hours=ALERT_COOLDOWN_H):
@@ -1450,6 +1524,8 @@ def main() -> int:
             "crypto_sources": by_src,
             "btc_7d": cinfo["btc_7d"],
             "benchmarks_7d": bench,
+            "trending": cinfo["trending"],
+            "sources": {s.name: s.diag() for s in ALL_SOURCES},
         },
         # retrocompatibilità con la dashboard precedente (= modalità Rimbalzi)
         "lists": {"combined": rev["combined"], "crypto": rev["crypto"],
