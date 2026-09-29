@@ -624,8 +624,8 @@ def compute_momentum(asset: dict, w: dict = MOMENTUM_WEIGHTS) -> tuple[float, li
         or ((rel or 0) >= 10 and vr >= 1.5)
         or (ch >= 8 and vr >= 2)
     )
-    if not gate or m["last"] < m["ma20"] or (ret7 is not None and ret7 <= 0):
-        return 0.0, []
+    if not gate or m["last"] < m["ma20"] or (ret7 is not None and ret7 <= 0) or ch < -3:
+        return 0.0, []  # niente accelerazioni su chi sta scendendo oggi
 
     score = 0.0
     signals = []

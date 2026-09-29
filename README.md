@@ -17,11 +17,15 @@ asset viene escluso (di solito delisting o collasso).
 
 ## Dati
 
-- **Crypto**: universo da CoinGecko (prime 250 per capitalizzazione, escluse
-  stablecoin, wrapped/staked, capitalizzazione < 30 M$ e volume < 3 M$). Candele
-  da Binance (mirror dati pubblico), Coinbase, Kraken o Binance.US, in cascata:
-  si usa la prima sorgente che risponde con un prezzo coerente con CoinGecko.
-  Se CoinGecko non risponde, universo di riserva da Binance.US.
+- **Crypto**: universo dalle prime 250 per capitalizzazione (escluse
+  stablecoin, wrapped/staked, capitalizzazione < 30 M$ e volume < 3 M$), da
+  CoinGecko o, se non risponde, da CoinPaprika. Dai server di GitHub CoinGecko
+  oggi risponde 403 sulla lista mercati, quindi di fatto si usa CoinPaprika;
+  CoinGecko resta per la lista "in tendenza". Candele da Binance (mirror dati
+  pubblico), Coinbase, Kraken o Binance.US, in cascata: si usa la prima sorgente
+  con un prezzo coerente. Ultima riserva: universo da Binance.US.
+  Lo stato di ogni sorgente (chiamate, ultimo errore) è in `docs/data.json` →
+  `stats.sources`.
 - **Brokerage**: 30 azioni US/EU/IT + 10 commodity (futures) via Yahoo Finance.
 
 ## Registro segnali
