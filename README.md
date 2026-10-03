@@ -28,6 +28,23 @@ asset viene escluso (di solito delisting o collasso).
   `stats.sources`.
 - **Brokerage**: 30 azioni US/EU/IT + 10 commodity (futures) via Yahoo Finance.
 
+## Portafogli simulati (paper trading)
+
+`paper.py` gestisce quattro portafogli da 10.000 finti, salvati in `paper.json`:
+
+- **Accelerazioni**, **In carica → squeeze**, **Rimbalzi**: automatici, comprano
+  1.000 a ogni alert della modalità e vendono da soli (stop, obiettivo o trailing,
+  durata massima: vedi `PAPER_RULES`). Costi per operazione in `COSTS`.
+- **Le mie scelte**: manuale, via Telegram — `/compra QNT 500`, `/vendi QNT`,
+  `/vendi QNT 50%`, `/portafoglio`. Gli ordini sono eseguiti al prezzo del
+  prossimo aggiornamento; ogni acquisto è marcato "suggerito" se l'asset era in
+  una lista dello scanner in quel momento.
+
+La dashboard mostra per ognuno valore, rendimento contro BTC e S&P 500, quota di
+operazioni positive, profit factor, calo massimo e un verdetto che resta
+"in raccolta" fino a 20 operazioni chiuse. Le esecuzioni su branch diversi da
+`main` non leggono né mandano messaggi Telegram (prova a secco).
+
 ## Registro segnali
 
 Ogni asset che entra nella top di una modalità viene registrato in

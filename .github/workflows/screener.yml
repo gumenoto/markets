@@ -41,7 +41,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for f in state.json signals_log.json docs/data.json; do
+          for f in state.json signals_log.json paper.json docs/data.json; do
             [ -f "$f" ] && git add "$f"
           done
           if git diff --staged --quiet; then echo "Nessuna modifica da salvare"; exit 0; fi
