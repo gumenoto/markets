@@ -148,6 +148,36 @@
   .empty p { margin: 0; font-size: 13px; line-height: 1.5; }
   .skel { height: 60px; background: rgba(255,255,255,0.025); border-radius: 8px; margin: 6px; animation: pulse 1.6s infinite; }
 
+  /* Portafogli simulati */
+  section.paper { margin-top: 34px; }
+  .bench-line { font-size: 12.5px; color: var(--text-dim); margin: -6px 0 14px; }
+  .pf-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .pf-card { border: 1px solid var(--line-strong); border-radius: 12px; padding: 13px 14px 12px; background: rgba(255,255,255,0.015); }
+  .pf-card.manual { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.04); }
+  .pf-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .pf-head h4 { margin: 0; font-family: 'Fraunces', serif; font-weight: 500; font-size: 17px; }
+  .pf-head .kind { font-size: 10.5px; color: var(--text-faint); white-space: nowrap; }
+  .pf-val { display: flex; align-items: baseline; gap: 10px; margin-top: 8px; }
+  .pf-val .eq { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; }
+  .pf-val .r { font-size: 14px; font-weight: 600; }
+  .spark { display: block; width: 100%; height: 38px; margin: 8px 0 6px; }
+  .verdict { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-dim); }
+  .verdict.promettente { color: #6ee7b7; border-color: rgba(16,185,129,0.4); background: var(--green-soft); }
+  .verdict.debole { color: var(--warn); border-color: rgba(249,115,22,0.4); background: var(--warn-soft); }
+  .verdict.negativo { color: #fca5a5; border-color: rgba(239,68,68,0.4); background: var(--red-soft); }
+  .pf-stats { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 11.5px; color: var(--text-dim); margin-top: 9px; }
+  .pf-stats b { color: var(--text); font-weight: 600; }
+  .pf-split { font-size: 11.5px; color: var(--text-dim); margin-top: 6px; line-height: 1.5; }
+  .sub-title { font-size: 12px; color: var(--text-faint); margin: 18px 0 6px; letter-spacing: 0.04em; }
+  details.rules { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,0.015); }
+  details.rules summary { cursor: pointer; padding: 12px 14px; font-size: 13px; color: var(--text); list-style: none; }
+  details.rules summary::-webkit-details-marker { display: none; }
+  details.rules summary::after { content: " ▾"; color: var(--text-faint); }
+  .rules-body { padding: 0 14px 14px; font-size: 12.5px; color: var(--text-dim); line-height: 1.6; }
+  .rules-body code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--amber); background: rgba(245,158,11,0.08); padding: 1px 5px; border-radius: 4px; }
+  .rules-body ul { margin: 6px 0 10px; padding-left: 18px; }
+  .rules-body strong { color: var(--text); font-weight: 500; }
+
   /* Registro segnali */
   section.perf { margin-top: 34px; }
   .sec-title { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 26px; font-weight: 400; margin: 0; color: #fef3c7; }
@@ -202,6 +232,7 @@
     .lens .ld { display: none; }
     .lens.active .ld { display: block; }
     .perf-grid { grid-template-columns: 1fr; }
+    .pf-grid { grid-template-columns: 1fr; }
     .row { grid-template-columns: 26px 1fr auto; gap: 10px; padding: 12px; }
     .rank { font-size: 24px; }
     .row .score { display: none; }
@@ -268,6 +299,55 @@
       <div class="loading"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
     </div>
   </div>
+
+  <section class="paper" id="paper">
+    <h2 class="sec-title">Portafogli simulati</h2>
+    <p class="sec-sub" id="paper-intro">Soldi finti per capire se i segnali funzionano prima di usare soldi veri.</p>
+    <div class="bench-line" id="paper-bench"></div>
+    <div class="pf-grid" id="pf-grid"><div class="empty"><p>In attesa del primo aggiornamento con la simulazione attiva.</p></div></div>
+
+    <div class="sub-title">Posizioni aperte</div>
+    <div class="table-wrap">
+      <table class="recent">
+        <thead><tr><th>Posizione</th><th class="num">Entrata</th><th class="num">Ora</th><th class="num">Risultato</th></tr></thead>
+        <tbody id="pf-open"><tr><td colspan="4" class="muted">Nessuna posizione aperta.</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="sub-title">Ultime operazioni chiuse</div>
+    <div class="table-wrap">
+      <table class="recent">
+        <thead><tr><th>Operazione</th><th class="num">Risultato</th><th>Motivo</th></tr></thead>
+        <tbody id="pf-closed"><tr><td colspan="3" class="muted">Ancora nessuna operazione chiusa.</td></tr></tbody>
+      </table>
+    </div>
+
+    <details class="rules">
+      <summary>Come funziona e quando passare ai soldi veri</summary>
+      <div class="rules-body" id="pf-rules">
+        <p><strong>I tre portafogli automatici</strong> comprano <span id="pf-size">1.000</span> a ogni alert della loro modalità e vendono da soli:</p>
+        <ul id="pf-rules-list"></ul>
+        <p><strong>Costi inclusi</strong> a ogni acquisto e vendita: crypto 0,25%, azioni 1 € + 0,10%, commodity (ETF) 1 € + 0,15%.
+        Le operazioni avvengono al prezzo dell'aggiornamento dello scanner: niente senno di poi. I rendimenti sono nella valuta dell'asset (senza cambio euro/dollaro).</p>
+        <p><strong>«Le mie scelte»</strong> è il tuo portafoglio: scrivi al bot Telegram</p>
+        <ul>
+          <li><code>/compra QNT 500</code> compra 500 di Quant (senza importo: 1.000)</li>
+          <li><code>/vendi QNT</code> vende tutto · <code>/vendi QNT 50%</code> vende metà</li>
+          <li><code>/portafoglio</code> ti risponde con la situazione</li>
+        </ul>
+        <p>Vale il ticker o il nome: QNT, Quant, NVDA, ENI.MI, Oro. L'ordine viene eseguito al prossimo aggiornamento (oggi ogni 2–4 ore) e il bot ti conferma prezzo e costi.
+        Ogni acquisto viene segnato come <em>suggerito</em> se in quel momento l'asset era in una delle liste: così vediamo se scegli meglio dentro o fuori dai suggerimenti.</p>
+        <p><strong>Prima di usare soldi veri</strong>, un portafoglio dovrebbe avere:</p>
+        <ul>
+          <li>almeno <span id="pf-min">20</span> operazioni chiuse (meglio 50: con poche operazioni conta la fortuna);</li>
+          <li>un rendimento migliore del mercato nello stesso periodo (media di BTC e S&amp;P 500);</li>
+          <li>un <em>profit factor</em> di almeno 1,3: i guadagni totali almeno 1,3 volte le perdite totali;</li>
+          <li>un calo massimo (drawdown) che reggeresti anche con soldi veri.</li>
+        </ul>
+        <p>Anche se tutto torna, parti con importi piccoli: la simulazione non riproduce lo slippage nei momenti di panico, né la tentazione di non rispettare gli stop.</p>
+      </div>
+    </details>
+  </section>
 
   <section class="perf">
     <h2 class="sec-title">Registro segnali</h2>
@@ -425,7 +505,7 @@ const $ = (id) => document.getElementById(id);
 function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function fmtPrice(p) { if (p == null) return "—"; if (p < 1) return p.toPrecision(4); if (p < 100) return p.toFixed(3); return p.toFixed(2); }
 function sign(v, d = 1) { if (v == null) return "—"; return (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(d) + "%"; }
-function cls(v) { return v == null ? "muted" : (v >= 0 ? "pos" : "neg"); }
+function cls(v) { return v == null || Math.abs(v) < 0.05 ? "muted" : (v > 0 ? "pos" : "neg"); }
 function fmtAgo(iso) {
   if (!iso) return "—";
   const sec = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
@@ -580,6 +660,82 @@ function renderPerf() {
   $("recent-body").innerHTML = rows || `<tr><td colspan="6" class="muted">Nessun segnale registrato finora: il registro parte dal primo aggiornamento con il nuovo modello.</td></tr>`;
 }
 
+function fmtMoney(v) { return v == null ? "—" : v.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
+const VERDICT_ICON = { raccolta: "◷", promettente: "✓", debole: "~", negativo: "✕" };
+const PF_ORDER = ["manual", "momentum", "setup", "reversion"];
+
+function sparkline(hist, initial) {
+  if (!hist || hist.length < 2) return `<svg class="spark" viewBox="0 0 100 30" aria-hidden="true"><line x1="0" y1="15" x2="100" y2="15" stroke="rgba(255,255,255,0.15)" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/></svg>`;
+  const vals = hist.map(h => h[1]);
+  const lo = Math.min(initial, ...vals), hi = Math.max(initial, ...vals);
+  const span = hi - lo || 1;
+  const y = v => 28 - (v - lo) / span * 26;
+  const pts = vals.map((v, i) => `${(i / (vals.length - 1) * 100).toFixed(2)},${y(v).toFixed(2)}`).join(" ");
+  const last = vals[vals.length - 1];
+  const col = Math.abs(last - initial) < initial * 0.0005 ? "rgba(255,255,255,0.45)" : (last > initial ? "#34d399" : "#f87171");
+  const t = `Da ${fmtMoney(initial)} a ${fmtMoney(last)} · ${fmtDate(hist[0][0])} → ${fmtDate(hist[hist.length - 1][0])}`;
+  return `<svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none" role="img" aria-label="${esc(t)}"><title>${esc(t)}</title>
+    <line x1="0" y1="${y(initial).toFixed(2)}" x2="100" y2="${y(initial).toFixed(2)}" stroke="rgba(255,255,255,0.18)" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/>
+    <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+function renderPaper() {
+  const pp = data?.paper;
+  if (!pp?.portfolios) return;
+  const since = pp.started ? new Date(pp.started).toLocaleDateString("it-IT", { day: "numeric", month: "long" }) : "—";
+  $("paper-intro").innerHTML = `10.000 finti ciascuno, dal ${since}. I tre automatici comprano ${fmtMoney(pp.trade_size)} a ogni alert e vendono con regole fisse; <strong style="color:var(--text);font-weight:500">Le mie scelte</strong> sono i tuoi acquisti da Telegram. Costi inclusi.`;
+  const b = pp.bench || {};
+  $("paper-bench").innerHTML = `Mercato nello stesso periodo: BTC <span class="${cls(b.BTC)}">${sign(b.BTC)}</span> · S&amp;P 500 <span class="${cls(b.SPY)}">${sign(b.SPY)}</span>`;
+  $("pf-size").textContent = fmtMoney(pp.trade_size);
+  $("pf-min").textContent = pp.min_trades;
+  const R = pp.rules || {};
+  const rl = (k, label) => { const r = R[k]; if (!r) return ""; const parts = [`stop ${r.stop}%`];
+    if (r.take != null) parts.push(`obiettivo +${r.take}%`);
+    if (r.trail != null) parts.push(`trailing ${r.trail}% dal massimo (attivo sopra +${r.trail_from}%)`);
+    parts.push(`massimo ${r.max_days} giorni`); return `<li><strong>${label}</strong>: ${parts.join(", ")}</li>`; };
+  $("pf-rules-list").innerHTML = rl("momentum", "Accelerazioni") + rl("squeeze", "In carica → squeeze") + rl("reversion", "Rimbalzi") + `<li>al massimo 10 posizioni aperte per portafoglio</li>`;
+
+  $("pf-grid").innerHTML = PF_ORDER.filter(k => pp.portfolios[k]).map(k => {
+    const p = pp.portfolios[k];
+    const v = p.verdict || {};
+    const pf = p.pf_infinite ? "∞" : (p.profit_factor != null ? p.profit_factor.toFixed(2) : "—");
+    let split = "";
+    if (k === "manual" && p.split) {
+      const s = p.split.suggested, o = p.split.other;
+      split = `<div class="pf-split">Scelte dai suggerimenti: ${s.n} chiuse${s.avg_pct != null ? `, media <span class="${cls(s.avg_pct)}">${sign(s.avg_pct)}</span>` : ""} · Altre: ${o.n}${o.avg_pct != null ? `, media <span class="${cls(o.avg_pct)}">${sign(o.avg_pct)}</span>` : ""}</div>`;
+    }
+    return `<div class="pf-card ${k === "manual" ? "manual" : ""}">
+      <div class="pf-head"><h4>${esc(p.label)}</h4><span class="kind">${k === "manual" ? "tue scelte · Telegram" : "automatico"}</span></div>
+      <div class="pf-val"><span class="eq">${fmtMoney(p.equity)}</span><span class="r ${cls(p.ret_pct)}">${sign(p.ret_pct)}</span></div>
+      ${sparkline(p.history, p.initial)}
+      <span class="verdict ${v.code || ""}">${VERDICT_ICON[v.code] || ""} ${esc(v.label || "")}</span>
+      <div class="pf-stats">
+        <span>Aperte <b>${p.n_open}</b></span>
+        <span>Chiuse <b>${p.n_closed}</b></span>
+        <span>Positive <b>${p.win_rate != null ? Math.round(p.win_rate) + "%" : "—"}</b></span>
+        <span>Profit factor <b>${pf}</b></span>
+        <span>Calo max <b>${p.max_dd != null ? sign(p.max_dd) : "—"}</b></span>
+      </div>${split}
+    </div>`;
+  }).join("");
+
+  const short = { manual: "Mie", momentum: "Accelerazioni", setup: "Squeeze", reversion: "Rimbalzi" };
+  const open = PF_ORDER.flatMap(k => (pp.portfolios[k]?.open || []).map(x => ({ ...x, pf: k })))
+    .sort((a, b) => b.entry_ts.localeCompare(a.entry_ts));
+  $("pf-open").innerHTML = open.length ? open.map(x => `<tr>
+      <td><div>${esc(x.name)}</div><div class="rsub">${short[x.pf]} · ${fmtDate(x.entry_ts)}${x.suggested_by?.length ? " · suggerito" : ""}</div></td>
+      <td class="num">${fmtPrice(x.entry_price)}</td><td class="num">${fmtPrice(x.last_price)}</td>
+      <td class="num ${cls(x.ret_pct)}">${sign(x.ret_pct)}</td></tr>`).join("")
+    : `<tr><td colspan="4" class="muted">Nessuna posizione aperta.</td></tr>`;
+
+  const closed = PF_ORDER.flatMap(k => (pp.portfolios[k]?.closed || []).map(x => ({ ...x, pf: k })))
+    .sort((a, b) => b.exit_ts.localeCompare(a.exit_ts)).slice(0, 15);
+  $("pf-closed").innerHTML = closed.length ? closed.map(x => `<tr>
+      <td><div>${esc(x.name)}</div><div class="rsub">${short[x.pf]} · ${fmtDate(x.exit_ts)}</div></td>
+      <td class="num ${cls(x.pnl_pct)}">${sign(x.pnl_pct)}</td><td class="lens-tag">${esc(x.reason)}</td></tr>`).join("")
+    : `<tr><td colspan="3" class="muted">Ancora nessuna operazione chiusa.</td></tr>`;
+}
+
 function setLens(l) { lens = l; try { sessionStorage.setItem("lens", l); } catch (e) {} render(); }
 function setTab(t) { tab = t; try { sessionStorage.setItem("active-tab", t); } catch (e) {} render(); }
 
@@ -601,6 +757,7 @@ async function load() {
     }
     updateAgo();
     render();
+    renderPaper();
     renderPerf();
   } catch (e) {
     $("list-container").innerHTML = `<div class="error">Impossibile caricare i dati (${esc(e.message)}).<br><small>Riprova tra qualche minuto.</small></div>`;

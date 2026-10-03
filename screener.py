@@ -44,6 +44,8 @@ from pathlib import Path
 
 import requests
 
+from paper import PAPER_FILE, PORTFOLIOS, PaperBook, build_resolver
+
 try:
     import yfinance as yf
     YFINANCE_AVAILABLE = True
@@ -60,6 +62,9 @@ BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
 COINGECKO_API_KEY = os.environ.get("COINGECKO_API_KEY", "").strip()
 DASHBOARD_URL = os.environ.get("DASHBOARD_URL", "https://gumenoto.github.io/markets/").strip()
+# Fuori dal branch main (prove su altri branch) niente Telegram: né alert né lettura comandi
+_REF = os.environ.get("GITHUB_REF_NAME", "").strip()
+DRY_RUN = bool(_REF) and _REF != "main"
 
 STATE_FILE = Path("state.json")
 LOG_FILE = Path("signals_log.json")
@@ -1123,21 +1128,54 @@ def fetch_yf_asset(symbol: str, name: str, asset_type: str, bench: dict) -> dict
     return a
 
 
-def build_brokerage_assets() -> tuple[list[dict], list[dict], dict]:
-    bench = {}
+def build_brokerage_assets() -> tuple[list[dict], list[dict], dict, dict]:
+    bench, bench_px = {}, {}
     for region, sym in BENCHMARKS.items():
         d = yf_daily(sym)
         if d and len(d["closes"]) >= 6:
             bench[region] = (d["closes"][-1] / d["closes"][-6] - 1) * 100
+            bench_px[sym] = d["closes"][-1]
     # sequenziale di proposito: Yahoo limita le richieste parallele
     stocks = [a for a in (fetch_yf_asset(s, n, "stock", bench) for s, n in STOCK_UNIVERSE) if a]
     commodities = [a for a in (fetch_yf_asset(s, n, "commodity", bench) for s, n in COMMODITY_UNIVERSE) if a]
-    return stocks, commodities, bench
+    return stocks, commodities, bench, bench_px
 
 
 # ══ TELEGRAM ═════════════════════════════════════════════════════════════
 
+def fetch_telegram_commands(offset: int | None, now: datetime) -> tuple[list[dict], int | None]:
+    """Legge i messaggi arrivati al bot dalla tua chat (comandi del portafoglio simulato)."""
+    if DRY_RUN or not BOT_TOKEN or not CHAT_ID:
+        return [], offset
+    params = {"timeout": 0, "allowed_updates": json.dumps(["message"])}
+    if offset is not None:
+        params["offset"] = offset
+    try:
+        r = requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/getUpdates", params=params, timeout=20)
+        data = r.json()
+    except Exception as e:
+        print(f"  ! Telegram getUpdates: {e}")
+        return [], offset
+    if not data.get("ok"):
+        print(f"  ! Telegram getUpdates: {data.get('description')}")
+        return [], offset
+    msgs, new_offset = [], offset
+    for u in data.get("result") or []:
+        new_offset = max(new_offset or 0, int(u["update_id"]) + 1)
+        m = u.get("message") or {}
+        if str((m.get("chat") or {}).get("id")) != CHAT_ID or not m.get("text"):
+            continue  # solo la tua chat
+        sent = datetime.fromtimestamp(m.get("date", 0), tz=timezone.utc)
+        if sent < now - timedelta(hours=26):
+            continue
+        msgs.append({"text": m["text"], "ts": iso(sent)})
+    return msgs, new_offset
+
+
 def send_telegram(text: str) -> bool:
+    if DRY_RUN:
+        print("  [prova, Telegram disattivato] " + text.replace("\n", " | ")[:160])
+        return True
     if not BOT_TOKEN or not CHAT_ID:
         print("  ! Telegram non configurato (mancano TELEGRAM_BOT_TOKEN/CHAT_ID)")
         return False
@@ -1184,7 +1222,8 @@ LENS_HEADERS = {
 }
 
 
-def format_alert(kind: str, a: dict, score: float, signals: list, flags: list) -> str:
+def format_alert(kind: str, a: dict, score: float, signals: list, flags: list,
+                 paper_note: str | None = None) -> str:
     e = html.escape
     ch = a.get("change_24h") or 0
     bull = [s for s in signals if s[0] == "bull"][:4]
@@ -1200,6 +1239,8 @@ def format_alert(kind: str, a: dict, score: float, signals: list, flags: list) -
         lines.append("")
         lines += [f"⚠️ {e(f[1])}: {e(f[2])}" for f in flags]
     lines += ["", f"📍 {e(venue_for(a))}"]
+    if paper_note:
+        lines.append(f"📒 {e(paper_note)}")
     if DASHBOARD_URL:
         lines.append(f'<a href="{e(DASHBOARD_URL)}">Apri la dashboard</a>')
     return "\n".join(lines)
@@ -1364,7 +1405,7 @@ def main() -> int:
         print(f"  · {s.summary()}")
 
     print("Brokerage (Yahoo Finance)...")
-    stocks, commodities, bench = build_brokerage_assets()
+    stocks, commodities, bench, bench_px = build_brokerage_assets()
     print(f"  {len(stocks)}/{len(STOCK_UNIVERSE)} azioni, {len(commodities)}/{len(COMMODITY_UNIVERSE)} commodity, "
           f"indici {', '.join(f'{k} {v:+.1f}%' for k, v in bench.items()) or 'n/d'}")
     print(f"  dati raccolti in {time.monotonic() - t0:.0f}s")
@@ -1373,6 +1414,8 @@ def main() -> int:
     if not all_assets:
         print("!! Nessun dato disponibile: non sovrascrivo la dashboard.")
         return 1
+    for a in all_assets:
+        a["asset_id"] = asset_id(a)
 
     # ── Pulizia e flag ──
     tradable = []
@@ -1420,6 +1463,7 @@ def main() -> int:
         log = []
     alert_hist = state.get("alert_history") or {}
     pending = []           # (priorità, kind, lens, item)
+    qualified = []         # segnali sopra soglia (anche senza alert): li seguono i portafogli simulati
     new_lens_state = {}
     for lens in LENSES:
         tracked = lists[lens]["crypto"] + lists[lens]["brokerage"]
@@ -1452,6 +1496,7 @@ def main() -> int:
             vr = (a.get("m") or {}).get("vr")
             if min_vr and vr is not None and vr < min_vr:  # vr None = volume non disponibile (commodity)
                 continue
+            qualified.append((kind, a, score))
             last_alert = parse_iso(alert_hist.get(f"{lens}|{aid}"))
             if last_alert and last_alert > now - timedelta(hours=ALERT_COOLDOWN_H):
                 continue
@@ -1460,12 +1505,31 @@ def main() -> int:
 
     if baseline:
         print(f"\nNuovo modello (v{MODEL_VERSION}): registro lo stato senza inviare alert in questo run.")
+
+    # ── Portafogli simulati: uscite, poi nuove entrate sui segnali qualificati ──
+    prices = {asset_id(a): a["price"] for a in all_assets}
+    book = PaperBook.load()
+    paper_bench_px = {"BTC": next((a["price"] for a in crypto if a.get("base") == "BTC"), None),
+                      "SPY": bench_px.get("SPY")}
+    book.ensure_started(now, {k: v for k, v in paper_bench_px.items() if v})
+    paper_events = book.update(prices, now)
+    paper_notes = {}
+    for kind, a, score in qualified:
+        opened = book.open_auto(kind, a, score, now)
+        if opened:
+            paper_events.append(opened)
+            label = next(m["label"] for m in PORTFOLIOS.values() if m["signal"] == kind)
+            paper_notes[(kind, a["asset_id"])] = f"Simulazione: comprati 1.000 nel portafoglio «{label}»"
+    for ev in paper_events:
+        print(f"  📒 {ev}")
+
     pending.sort(key=lambda x: (x[0], x[1]))
     sent = 0
     for prio, _, kind, lens, (a, score, signals), entry in pending[:MAX_ALERTS_PER_RUN - 1] \
             if len(pending) > MAX_ALERTS_PER_RUN else pending:
         print(f"  -> alert {kind}: {a['symbol']} (score {int(round(score))})")
-        if send_telegram(format_alert(kind, a, score, signals, a["flags"])):
+        if send_telegram(format_alert(kind, a, score, signals, a["flags"],
+                                      paper_notes.get((kind, a["asset_id"])))):
             sent += 1
         alert_hist[f"{lens}|{asset_id(a)}"] = iso(now)
         if entry:
@@ -1484,8 +1548,22 @@ def main() -> int:
     elif not baseline:
         print("\nNessun nuovo segnale sopra soglia.")
 
+    # ── Portafoglio manuale: comandi Telegram (/compra, /vendi, /portafoglio) ──
+    lens_labels = {"momentum": "Accelerazioni", "setup": "In carica", "reversion": "Rimbalzi"}
+    listed: dict[str, list[str]] = {}
+    for lens in LENSES:
+        for x in lists[lens]["crypto"] + lists[lens]["brokerage"]:
+            listed.setdefault(asset_id(x[0]), []).append(lens_labels[lens])
+    resolve = build_resolver(tradable)
+    cmds, new_offset = fetch_telegram_commands(book.data.get("telegram_offset"), now)
+    for c in cmds:
+        print(f"  ✉️  comando: {c['text']}")
+        reply = book.handle_command(c["text"], resolve, lambda aid: listed.get(aid, []), now, c["ts"])
+        send_telegram(reply)
+    book.data["telegram_offset"] = new_offset
+    book.record_history(now)
+
     # ── Registro: rendimenti ──
-    prices = {asset_id(a): a["price"] for a in all_assets}
     update_signal_log(log, prices, now)
     log = [e for e in log if (parse_iso(e["ts"]) or now) > now - timedelta(days=LOG_RETENTION_DAYS)]
 
@@ -1532,9 +1610,11 @@ def main() -> int:
                   "brokerage": rev["brokerage"], "stocks": rev["brokerage"]},
         "lenses": lenses_out,
         "performance": perf_summary(log),
+        "paper": book.summary({k: v for k, v in paper_bench_px.items() if v}, now),
     }
     write_json(DOCS_DIR / "data.json", payload)
     write_json(LOG_FILE, log)
+    write_json(PAPER_FILE, book.to_json())
     write_json(STATE_FILE, new_state)
     print(f"\nRegistro segnali: {len(log)} voci · Fatto in {time.monotonic() - t0:.0f}s.")
     return 0
