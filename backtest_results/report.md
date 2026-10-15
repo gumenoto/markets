@@ -1,8 +1,8 @@
-# Backtest — 2026-10-15T09:23:05+00:00
+# Backtest — 2026-10-15T09:26:12+00:00
 
 Periodo: giornaliero dal 2021-11-28, 4h dal 2026-01-10, fino al 2026-10-15 · metà: {'reversion': '2026-02-04', 'momentum': '2024-08-21', 'squeeze': '2024-09-12', 'connors': '2024-08-03'}
 Universo: crypto {'crypto_daily': 99, 'crypto_4h': 99, 'brokerage': 40}
-Benchmark nel periodo: {'BTC': 49.26986937197637, 'SPY': 77.10619460263415}
+Benchmark nel periodo: {'BTC': 49.26986937197637, 'SPY': 77.10620704069146}
 
 ## reversion · attuale · crypto (n=1989)
 fwd netto: 1d -0.47% win 43% · 3d +0.01% win 47% · 7d -0.78% win 44%
@@ -107,22 +107,43 @@ per anno (mom_cur): 2021 n=1 -8.50% win 0% x3 — · 2022 n=60 -3.26% win 13% x3
   mom_cur    n=771 media -0.12% win 29% pf 0.98 | A +0.43% pf 1.08 | B -0.63% pf 0.89 | portafoglio -15.6% dd -34.1% (648 op.)
   mom_wide   n=767 media +0.70% win 32% pf 1.09 | A +1.47% pf 1.21 | B -0.04% pf 0.99 | portafoglio +77.1% dd -29.7% (496 op.)
   mom_short  n=771 media +1.04% win 30% pf 1.19 | A +1.44% pf 1.28 | B +0.65% pf 1.12 | portafoglio +75.1% dd -24.7% (674 op.)
+  mom_t3     n=771 media +0.21% win 33% pf 1.05 | A +0.57% pf 1.13 | B -0.12% pf 0.98 | portafoglio +29.7% dd -20.1% (733 op.)
+  mom_t7     n=769 media +1.56% win 28% pf 1.27 | A +3.08% pf 1.56 | B +0.13% pf 1.02 | portafoglio +124.5% dd -26.5% (625 op.)
+  mom_t10    n=769 media +1.85% win 26% pf 1.30 | A +3.76% pf 1.64 | B +0.03% pf 1.01 | portafoglio +114.4% dd -29.0% (575 op.)
+  mom_t5s12  n=771 media +1.65% win 37% pf 1.28 | A +2.52% pf 1.46 | B +0.83% pf 1.13 | portafoglio +81.9% dd -23.3% (628 op.)
+  mom_t5s5   n=771 media +0.60% win 20% pf 1.14 | A +1.05% pf 1.25 | B +0.19% pf 1.04 | portafoglio +54.1% dd -17.8% (725 op.)
+  mom_w10    n=769 media +0.71% win 36% pf 1.11 | A +1.46% pf 1.23 | B -0.00% pf 1.00 | portafoglio +36.3% dd -30.0% (559 op.)
+  mom_t15s12 n=768 media +3.84% win 33% pf 1.48 | A +6.34% pf 1.84 | B +1.46% pf 1.18 | portafoglio +164.4% dd -26.1% (471 op.)
 
-## momentum · attuale · brokerage (n=339)
-fwd netto: 1d -0.69% win 44% · 3d -0.34% win 48% · 7d -0.44% win 49%
-eccesso 3g vs universo: +0.16% t=0.47 giorni=248 · A +0.32% t=0.76 · B -0.03% t=-0.05
-per anno (mom_cur): 2021 n=2 +2.96% win 100% x3 — · 2022 n=61 -1.00% win 48% x3 +0.54% · 2023 n=60 +0.98% win 62% x3 +0.23% · 2024 n=81 +0.83% win 48% x3 -0.01% · 2025 n=70 +1.16% win 56% x3 +0.54% · 2026 n=65 -1.59% win 40% x3 -0.55%
-  mom_cur    n=339 media +0.14% win 51% pf 1.05 | A +0.69% pf 1.32 | B -0.48% pf 0.86 | portafoglio +11.0% dd -10.6% (265 op.)
-  mom_wide   n=335 media +0.53% win 50% pf 1.14 | A +0.32% pf 1.10 | B +0.78% pf 1.18 | portafoglio +13.3% dd -15.7% (234 op.)
-  mom_short  n=339 media -0.02% win 50% pf 0.99 | A -0.08% pf 0.95 | B +0.05% pf 1.02 | portafoglio +4.2% dd -6.2% (286 op.)
+## momentum · attuale · brokerage (n=338)
+fwd netto: 1d -0.68% win 44% · 3d -0.32% win 48% · 7d -0.45% win 49%
+eccesso 3g vs universo: +0.16% t=0.47 giorni=248 · A +0.32% t=0.77 · B -0.03% t=-0.05
+per anno (mom_cur): 2021 n=2 +2.96% win 100% x3 — · 2022 n=60 -1.01% win 48% x3 +0.55% · 2023 n=60 +0.98% win 62% x3 +0.23% · 2024 n=81 +0.83% win 48% x3 -0.01% · 2025 n=70 +1.16% win 56% x3 +0.54% · 2026 n=65 -1.59% win 40% x3 -0.55%
+  mom_cur    n=338 media +0.15% win 51% pf 1.05 | A +0.70% pf 1.33 | B -0.48% pf 0.86 | portafoglio +11.0% dd -10.6% (265 op.)
+  mom_wide   n=334 media +0.54% win 50% pf 1.14 | A +0.33% pf 1.10 | B +0.78% pf 1.18 | portafoglio +13.3% dd -15.7% (234 op.)
+  mom_short  n=338 media -0.02% win 50% pf 0.99 | A -0.09% pf 0.95 | B +0.05% pf 1.02 | portafoglio +4.2% dd -6.2% (285 op.)
+  mom_t3     n=338 media -0.23% win 47% pf 0.88 | A -0.02% pf 0.99 | B -0.48% pf 0.81 | portafoglio -4.7% dd -11.3% (313 op.)
+  mom_t7     n=338 media -0.40% win 47% pf 0.85 | A +0.06% pf 1.03 | B -0.92% pf 0.73 | portafoglio -4.3% dd -10.8% (274 op.)
+  mom_t10    n=338 media +0.27% win 51% pf 1.09 | A +0.63% pf 1.29 | B -0.15% pf 0.96 | portafoglio +17.3% dd -6.7% (263 op.)
+  mom_t5s12  n=338 media -0.11% win 50% pf 0.95 | A -0.24% pf 0.87 | B +0.04% pf 1.01 | portafoglio +1.3% dd -8.3% (284 op.)
+  mom_t5s5   n=338 media +0.03% win 49% pf 1.02 | A -0.06% pf 0.96 | B +0.14% pf 1.06 | portafoglio +8.5% dd -5.6% (287 op.)
+  mom_w10    n=338 media +0.22% win 53% pf 1.07 | A +0.44% pf 1.19 | B -0.04% pf 0.99 | portafoglio +10.6% dd -10.3% (263 op.)
+  mom_t15s12 n=337 media +0.43% win 51% pf 1.12 | A +0.48% pf 1.16 | B +0.38% pf 1.09 | portafoglio +18.4% dd -11.6% (244 op.)
 
-## momentum · attuale · tutti (n=1110)
-fwd netto: 1d -0.04% win 42% · 3d +1.15% win 44% · 7d +2.88% win 47%
+## momentum · attuale · tutti (n=1109)
+fwd netto: 1d -0.04% win 42% · 3d +1.16% win 44% · 7d +2.88% win 47%
 eccesso 3g vs universo: +0.94% t=2.03 giorni=609 · A +1.24% t=1.93 · B +0.59% t=0.90
-per anno (mom_cur): 2021 n=3 -0.86% win 67% x3 — · 2022 n=121 -2.12% win 31% x3 -0.03% · 2023 n=264 +1.46% win 42% x3 +1.75% · 2024 n=298 +0.48% win 34% x3 +1.16% · 2025 n=184 -0.59% win 38% x3 +2.60% · 2026 n=240 -0.83% win 30% x3 -1.01%
-  mom_cur    n=1110 media -0.04% win 35% pf 0.99 | A +0.51% pf 1.12 | B -0.59% pf 0.88 | portafoglio +10.4% dd -25.7% (857 op.)
-  mom_wide   n=1102 media +0.65% win 38% pf 1.10 | A +1.10% pf 1.19 | B +0.19% pf 1.03 | portafoglio +45.3% dd -37.4% (654 op.)
-  mom_short  n=1110 media +0.71% win 36% pf 1.16 | A +0.95% pf 1.23 | B +0.48% pf 1.10 | portafoglio +80.3% dd -25.2% (931 op.)
+per anno (mom_cur): 2021 n=3 -0.86% win 67% x3 — · 2022 n=120 -2.13% win 31% x3 -0.02% · 2023 n=264 +1.46% win 42% x3 +1.75% · 2024 n=298 +0.48% win 34% x3 +1.16% · 2025 n=184 -0.59% win 38% x3 +2.60% · 2026 n=240 -0.83% win 30% x3 -1.01%
+  mom_cur    n=1109 media -0.04% win 36% pf 0.99 | A +0.51% pf 1.12 | B -0.59% pf 0.88 | portafoglio +10.4% dd -25.7% (857 op.)
+  mom_wide   n=1101 media +0.65% win 38% pf 1.10 | A +1.10% pf 1.19 | B +0.19% pf 1.03 | portafoglio +45.3% dd -37.4% (654 op.)
+  mom_short  n=1109 media +0.71% win 36% pf 1.16 | A +0.95% pf 1.23 | B +0.48% pf 1.10 | portafoglio +80.3% dd -25.2% (930 op.)
+  mom_t3     n=1109 media +0.08% win 37% pf 1.02 | A +0.38% pf 1.11 | B -0.22% pf 0.95 | portafoglio +27.4% dd -20.8% (1026 op.)
+  mom_t7     n=1107 media +0.97% win 34% pf 1.20 | A +2.10% pf 1.48 | B -0.17% pf 0.97 | portafoglio +122.7% dd -27.7% (861 op.)
+  mom_t10    n=1107 media +1.36% win 34% pf 1.27 | A +2.75% pf 1.59 | B -0.02% pf 1.00 | portafoglio +127.5% dd -28.4% (786 op.)
+  mom_t5s12  n=1109 media +1.11% win 41% pf 1.23 | A +1.62% pf 1.38 | B +0.60% pf 1.11 | portafoglio +90.2% dd -23.8% (883 op.)
+  mom_t5s5   n=1109 media +0.43% win 29% pf 1.12 | A +0.69% pf 1.20 | B +0.18% pf 1.05 | portafoglio +60.1% dd -17.4% (993 op.)
+  mom_w10    n=1107 media +0.56% win 41% pf 1.10 | A +1.13% pf 1.22 | B -0.01% pf 1.00 | portafoglio +58.1% dd -29.3% (766 op.)
+  mom_t15s12 n=1105 media +2.80% win 38% pf 1.43 | A +4.43% pf 1.73 | B +1.15% pf 1.16 | portafoglio +184.3% dd -30.0% (645 op.)
 
 ## momentum · regime · crypto (n=665)
 fwd netto: 1d +0.33% win 41% · 3d +2.19% win 43% · 7d +5.61% win 49%
@@ -131,6 +152,13 @@ per anno (mom_cur): 2022 n=31 -0.78% win 19% x3 +0.59% · 2023 n=199 +1.76% win 
   mom_cur    n=665 media +0.34% win 30% pf 1.06 | A +1.05% pf 1.20 | B -0.35% pf 0.94 | portafoglio +13.9% dd -23.6% (546 op.)
   mom_wide   n=661 media +1.25% win 33% pf 1.17 | A +2.06% pf 1.30 | B +0.46% pf 1.06 | portafoglio +101.3% dd -18.0% (396 op.)
   mom_short  n=665 media +1.62% win 31% pf 1.30 | A +2.02% pf 1.39 | B +1.23% pf 1.22 | portafoglio +100.9% dd -12.8% (574 op.)
+  mom_t3     n=665 media +0.56% win 34% pf 1.12 | A +1.15% pf 1.27 | B -0.02% pf 1.00 | portafoglio +50.3% dd -14.4% (628 op.)
+  mom_t7     n=663 media +2.22% win 29% pf 1.40 | A +3.55% pf 1.66 | B +0.93% pf 1.16 | portafoglio +151.8% dd -12.5% (526 op.)
+  mom_t10    n=663 media +2.59% win 28% pf 1.43 | A +4.42% pf 1.76 | B +0.82% pf 1.13 | portafoglio +144.5% dd -14.3% (478 op.)
+  mom_t5s12  n=665 media +2.41% win 38% pf 1.42 | A +3.31% pf 1.63 | B +1.54% pf 1.25 | portafoglio +110.6% dd -14.6% (529 op.)
+  mom_t5s5   n=665 media +0.92% win 20% pf 1.22 | A +1.48% pf 1.36 | B +0.37% pf 1.09 | portafoglio +67.3% dd -13.5% (624 op.)
+  mom_w10    n=663 media +1.22% win 37% pf 1.19 | A +2.16% pf 1.35 | B +0.31% pf 1.05 | portafoglio +60.7% dd -21.3% (458 op.)
+  mom_t15s12 n=662 media +4.95% win 35% pf 1.64 | A +6.92% pf 1.93 | B +3.03% pf 1.38 | portafoglio +191.8% dd -19.9% (376 op.)
 
 ## momentum · regime · brokerage (n=297)
 fwd netto: 1d -0.83% win 43% · 3d -0.49% win 46% · 7d -0.58% win 48%
@@ -139,6 +167,13 @@ per anno (mom_cur): 2022 n=25 -1.95% win 48% x3 -1.28% · 2023 n=58 +0.86% win 6
   mom_cur    n=297 media +0.12% win 50% pf 1.04 | A +0.86% pf 1.43 | B -0.56% pf 0.84 | portafoglio +4.5% dd -11.2% (233 op.)
   mom_wide   n=293 media +0.80% win 52% pf 1.22 | A +0.93% pf 1.32 | B +0.69% pf 1.16 | portafoglio +16.2% dd -8.2% (206 op.)
   mom_short  n=297 media -0.10% win 49% pf 0.96 | A -0.18% pf 0.90 | B -0.04% pf 0.99 | portafoglio -0.3% dd -6.4% (250 op.)
+  mom_t3     n=297 media -0.39% win 45% pf 0.82 | A -0.23% pf 0.86 | B -0.54% pf 0.79 | portafoglio -8.2% dd -11.7% (274 op.)
+  mom_t7     n=297 media -0.49% win 47% pf 0.82 | A +0.10% pf 1.05 | B -1.02% pf 0.70 | portafoglio -8.6% dd -12.5% (241 op.)
+  mom_t10    n=297 media +0.25% win 51% pf 1.09 | A +0.78% pf 1.38 | B -0.23% pf 0.94 | portafoglio +10.8% dd -6.7% (231 op.)
+  mom_t5s12  n=297 media -0.22% win 49% pf 0.91 | A -0.40% pf 0.80 | B -0.05% pf 0.98 | portafoglio -3.0% dd -8.7% (249 op.)
+  mom_t5s5   n=297 media -0.04% win 48% pf 0.98 | A -0.15% pf 0.91 | B +0.06% pf 1.02 | portafoglio +4.3% dd -5.8% (252 op.)
+  mom_w10    n=297 media +0.15% win 52% pf 1.05 | A +0.44% pf 1.19 | B -0.12% pf 0.97 | portafoglio +5.2% dd -10.8% (231 op.)
+  mom_t15s12 n=296 media +0.64% win 52% pf 1.19 | A +1.01% pf 1.37 | B +0.31% pf 1.08 | portafoglio +18.4% dd -8.0% (216 op.)
 
 ## momentum · regime · tutti (n=962)
 fwd netto: 1d -0.03% win 42% · 3d +1.36% win 44% · 7d +3.68% win 49%
@@ -147,6 +182,13 @@ per anno (mom_cur): 2022 n=56 -1.30% win 32% x3 -0.35% · 2023 n=257 +1.56% win 
   mom_cur    n=962 media +0.27% win 36% pf 1.06 | A +0.99% pf 1.23 | B -0.42% pf 0.92 | portafoglio +33.9% dd -16.6% (728 op.)
   mom_wide   n=954 media +1.12% win 39% pf 1.18 | A +1.72% pf 1.30 | B +0.53% pf 1.08 | portafoglio +72.5% dd -21.7% (532 op.)
   mom_short  n=962 media +1.09% win 37% pf 1.25 | A +1.36% pf 1.33 | B +0.83% pf 1.18 | portafoglio +104.2% dd -15.4% (799 op.)
+  mom_t3     n=962 media +0.26% win 37% pf 1.07 | A +0.74% pf 1.21 | B -0.18% pf 0.96 | portafoglio +44.6% dd -14.2% (885 op.)
+  mom_t7     n=960 media +1.38% win 35% pf 1.29 | A +2.51% pf 1.58 | B +0.31% pf 1.06 | portafoglio +141.8% dd -15.3% (735 op.)
+  mom_t10    n=960 media +1.87% win 35% pf 1.37 | A +3.32% pf 1.71 | B +0.49% pf 1.09 | portafoglio +151.4% dd -16.9% (662 op.)
+  mom_t5s12  n=962 media +1.60% win 42% pf 1.34 | A +2.19% pf 1.51 | B +1.03% pf 1.20 | portafoglio +113.9% dd -15.0% (754 op.)
+  mom_t5s5   n=962 media +0.62% win 29% pf 1.17 | A +0.99% pf 1.29 | B +0.27% pf 1.07 | portafoglio +67.9% dd -13.5% (859 op.)
+  mom_w10    n=960 media +0.89% win 42% pf 1.16 | A +1.64% pf 1.32 | B +0.17% pf 1.03 | portafoglio +78.1% dd -20.3% (637 op.)
+  mom_t15s12 n=958 media +3.62% win 40% pf 1.56 | A +5.14% pf 1.86 | B +2.17% pf 1.32 | portafoglio +213.8% dd -22.9% (529 op.)
 
 ## momentum · selettivo · crypto (n=457)
 fwd netto: 1d +0.72% win 42% · 3d +2.96% win 45% · 7d +5.59% win 47%
@@ -155,6 +197,13 @@ per anno (mom_cur): 2022 n=23 -4.77% win 9% x3 -0.78% · 2023 n=125 +0.51% win 3
   mom_cur    n=457 media +0.07% win 28% pf 1.01 | A +0.56% pf 1.11 | B -0.34% pf 0.94 | portafoglio +21.1% dd -19.1% (399 op.)
   mom_wide   n=453 media +0.16% win 30% pf 1.02 | A +0.12% pf 1.02 | B +0.19% pf 1.02 | portafoglio +63.1% dd -21.1% (315 op.)
   mom_short  n=457 media +1.64% win 30% pf 1.30 | A +2.92% pf 1.55 | B +0.59% pf 1.10 | portafoglio +88.0% dd -15.7% (411 op.)
+  mom_t3     n=457 media +0.70% win 33% pf 1.14 | A +1.72% pf 1.38 | B -0.15% pf 0.97 | portafoglio +42.1% dd -10.3% (437 op.)
+  mom_t7     n=455 media +1.84% win 27% pf 1.31 | A +3.74% pf 1.67 | B +0.24% pf 1.04 | portafoglio +91.1% dd -17.0% (395 op.)
+  mom_t10    n=455 media +1.81% win 25% pf 1.29 | A +4.13% pf 1.68 | B -0.13% pf 0.98 | portafoglio +90.7% dd -19.4% (368 op.)
+  mom_t5s12  n=457 media +2.43% win 38% pf 1.40 | A +3.77% pf 1.67 | B +1.31% pf 1.21 | portafoglio +95.3% dd -12.9% (391 op.)
+  mom_t5s5   n=457 media +0.97% win 19% pf 1.22 | A +2.38% pf 1.56 | B -0.19% pf 0.96 | portafoglio +50.1% dd -15.5% (438 op.)
+  mom_w10    n=455 media +0.57% win 35% pf 1.08 | A +0.21% pf 1.03 | B +0.87% pf 1.12 | portafoglio +45.3% dd -21.1% (350 op.)
+  mom_t15s12 n=454 media +3.60% win 31% pf 1.44 | A +6.13% pf 1.76 | B +1.48% pf 1.18 | portafoglio +189.3% dd -21.5% (286 op.)
 
 ## momentum · selettivo · brokerage (n=26)
 fwd netto: 1d -0.30% win 50% · 3d +1.00% win 54% · 7d +0.72% win 58%
@@ -163,6 +212,13 @@ per anno (mom_cur): 2022 n=3 -1.79% win 33% x3 — · 2023 n=4 -0.26% win 75% x3
   mom_cur    n=26 media +1.69% win 62% pf 1.84 | A +1.59% pf 2.00 | B +1.79% pf 1.73 | portafoglio +5.2% dd -1.8% (25 op.)
   mom_wide   n=25 media +5.55% win 64% pf 4.69 | A +5.86% pf 9.15 | B +5.22% pf 3.21 | portafoglio +12.6% dd -2.3% (23 op.)
   mom_short  n=26 media +0.32% win 58% pf 1.18 | A +0.17% pf 1.10 | B +0.47% pf 1.24 | portafoglio +1.7% dd -1.3% (25 op.)
+  mom_t3     n=26 media +1.12% win 54% pf 2.00 | A +0.52% pf 1.58 | B +1.73% pf 2.27 | portafoglio +2.9% dd -0.9% (26 op.)
+  mom_t7     n=26 media +0.03% win 54% pf 1.01 | A +0.54% pf 1.26 | B -0.49% pf 0.79 | portafoglio +0.9% dd -1.7% (25 op.)
+  mom_t10    n=26 media +2.13% win 65% pf 2.19 | A +1.59% pf 2.00 | B +2.68% pf 2.34 | portafoglio +6.4% dd -1.6% (25 op.)
+  mom_t5s12  n=26 media +0.78% win 62% pf 1.58 | A +0.82% pf 1.83 | B +0.75% pf 1.44 | portafoglio +2.4% dd -1.1% (25 op.)
+  mom_t5s5   n=26 media +0.66% win 58% pf 1.45 | A +0.39% pf 1.27 | B +0.93% pf 1.62 | portafoglio +2.3% dd -1.1% (25 op.)
+  mom_w10    n=26 media +2.91% win 69% pf 2.96 | A +3.10% pf 4.12 | B +2.71% pf 2.38 | portafoglio +7.6% dd -1.9% (24 op.)
+  mom_t15s12 n=26 media +3.07% win 62% pf 2.38 | A +4.20% pf 3.26 | B +1.93% pf 1.75 | portafoglio +8.1% dd -2.7% (24 op.)
 
 ## momentum · selettivo · tutti (n=483)
 fwd netto: 1d +0.67% win 42% · 3d +2.85% win 46% · 7d +5.32% win 48%
@@ -171,6 +227,13 @@ per anno (mom_cur): 2022 n=26 -4.42% win 12% x3 -0.90% · 2023 n=129 +0.49% win 
   mom_cur    n=483 media +0.16% win 30% pf 1.03 | A +0.62% pf 1.12 | B -0.23% pf 0.96 | portafoglio +26.9% dd -16.7% (422 op.)
   mom_wide   n=478 media +0.44% win 32% pf 1.06 | A +0.46% pf 1.07 | B +0.42% pf 1.06 | portafoglio +71.3% dd -19.7% (335 op.)
   mom_short  n=483 media +1.57% win 31% pf 1.29 | A +2.75% pf 1.54 | B +0.59% pf 1.11 | portafoglio +90.7% dd -15.1% (434 op.)
+  mom_t3     n=483 media +0.72% win 35% pf 1.15 | A +1.65% pf 1.38 | B -0.06% pf 0.99 | portafoglio +45.7% dd -10.3% (461 op.)
+  mom_t7     n=481 media +1.74% win 28% pf 1.31 | A +3.55% pf 1.66 | B +0.21% pf 1.04 | portafoglio +92.9% dd -16.4% (418 op.)
+  mom_t10    n=481 media +1.83% win 27% pf 1.30 | A +3.98% pf 1.68 | B +0.01% pf 1.00 | portafoglio +97.8% dd -20.0% (391 op.)
+  mom_t5s12  n=483 media +2.34% win 39% pf 1.41 | A +3.60% pf 1.67 | B +1.29% pf 1.21 | portafoglio +99.2% dd -12.6% (414 op.)
+  mom_t5s5   n=483 media +0.96% win 21% pf 1.23 | A +2.26% pf 1.56 | B -0.14% pf 0.97 | portafoglio +53.5% dd -15.0% (461 op.)
+  mom_w10    n=481 media +0.70% win 36% pf 1.11 | A +0.38% pf 1.06 | B +0.96% pf 1.14 | portafoglio +50.9% dd -20.0% (373 op.)
+  mom_t15s12 n=480 media +3.57% win 33% pf 1.45 | A +6.02% pf 1.79 | B +1.51% pf 1.18 | portafoglio +185.6% dd -21.9% (310 op.)
 
 ## momentum · selettivo+regime · crypto (n=433)
 fwd netto: 1d +0.63% win 41% · 3d +2.94% win 45% · 7d +6.08% win 48%
@@ -179,6 +242,13 @@ per anno (mom_cur): 2022 n=15 -4.34% win 13% x3 -1.50% · 2023 n=123 +0.60% win 
   mom_cur    n=433 media +0.17% win 29% pf 1.03 | A +0.95% pf 1.18 | B -0.46% pf 0.92 | portafoglio +25.0% dd -17.6% (376 op.)
   mom_wide   n=429 media +0.06% win 31% pf 1.01 | A +0.38% pf 1.05 | B -0.20% pf 0.97 | portafoglio +58.6% dd -19.5% (292 op.)
   mom_short  n=433 media +1.73% win 30% pf 1.31 | A +3.37% pf 1.63 | B +0.41% pf 1.07 | portafoglio +87.4% dd -13.8% (388 op.)
+  mom_t3     n=433 media +0.65% win 33% pf 1.13 | A +2.07% pf 1.46 | B -0.50% pf 0.91 | portafoglio +38.3% dd -12.2% (413 op.)
+  mom_t7     n=431 media +2.07% win 27% pf 1.36 | A +4.27% pf 1.77 | B +0.29% pf 1.05 | portafoglio +96.8% dd -13.8% (372 op.)
+  mom_t10    n=431 media +2.08% win 25% pf 1.33 | A +4.74% pf 1.78 | B -0.07% pf 0.99 | portafoglio +98.2% dd -16.8% (345 op.)
+  mom_t5s12  n=433 media +2.54% win 38% pf 1.43 | A +4.43% pf 1.81 | B +1.01% pf 1.16 | portafoglio +93.9% dd -14.8% (368 op.)
+  mom_t5s5   n=433 media +0.98% win 19% pf 1.22 | A +2.80% pf 1.66 | B -0.48% pf 0.89 | portafoglio +48.0% dd -17.0% (415 op.)
+  mom_w10    n=431 media +0.54% win 35% pf 1.08 | A +0.70% pf 1.11 | B +0.42% pf 1.06 | portafoglio +42.6% dd -18.6% (327 op.)
+  mom_t15s12 n=430 media +4.08% win 31% pf 1.50 | A +6.81% pf 1.85 | B +1.86% pf 1.22 | portafoglio +201.5% dd -18.6% (263 op.)
 
 ## momentum · selettivo+regime · brokerage (n=23)
 fwd netto: 1d -0.22% win 52% · 3d +1.25% win 57% · 7d +0.49% win 57%
@@ -187,6 +257,13 @@ per anno (mom_cur): 2023 n=4 -0.26% win 75% x3 — · 2024 n=8 +4.61% win 62% x3
   mom_cur    n=23 media +2.14% win 65% pf 2.12 | A +2.61% pf 3.16 | B +1.79% pf 1.73 | portafoglio +5.8% dd -1.7% (22 op.)
   mom_wide   n=22 media +5.16% win 64% pf 4.11 | A +5.09% pf 7.19 | B +5.22% pf 3.21 | portafoglio +9.9% dd -2.3% (21 op.)
   mom_short  n=23 media +0.52% win 61% pf 1.35 | A +0.58% pf 1.70 | B +0.47% pf 1.24 | portafoglio +2.0% dd -1.0% (22 op.)
+  mom_t3     n=23 media +1.38% win 57% pf 2.37 | A +0.94% pf 2.65 | B +1.73% pf 2.27 | portafoglio +3.2% dd -0.9% (23 op.)
+  mom_t7     n=23 media +0.09% win 57% pf 1.05 | A +0.85% pf 1.49 | B -0.49% pf 0.79 | portafoglio +1.1% dd -1.7% (22 op.)
+  mom_t10    n=23 media +2.65% win 70% pf 2.60 | A +2.61% pf 3.16 | B +2.68% pf 2.34 | portafoglio +6.9% dd -1.6% (22 op.)
+  mom_t5s12  n=23 media +0.68% win 61% pf 1.51 | A +0.58% pf 1.70 | B +0.75% pf 1.44 | portafoglio +1.9% dd -1.1% (22 op.)
+  mom_t5s5   n=23 media +0.81% win 61% pf 1.69 | A +0.66% pf 1.87 | B +0.93% pf 1.62 | portafoglio +2.4% dd -0.7% (22 op.)
+  mom_w10    n=23 media +2.64% win 70% pf 2.58 | A +2.54% pf 3.00 | B +2.71% pf 2.38 | portafoglio +6.4% dd -2.0% (22 op.)
+  mom_t15s12 n=23 media +3.27% win 65% pf 2.51 | A +5.00% pf 4.07 | B +1.93% pf 1.75 | portafoglio +7.5% dd -2.7% (22 op.)
 
 ## momentum · selettivo+regime · tutti (n=456)
 fwd netto: 1d +0.59% win 42% · 3d +2.85% win 45% · 7d +5.79% win 48%
@@ -195,6 +272,13 @@ per anno (mom_cur): 2022 n=15 -4.34% win 13% x3 -1.50% · 2023 n=127 +0.58% win 
   mom_cur    n=456 media +0.27% win 30% pf 1.05 | A +1.03% pf 1.20 | B -0.35% pf 0.94 | portafoglio +31.4% dd -14.9% (396 op.)
   mom_wide   n=451 media +0.31% win 32% pf 1.04 | A +0.61% pf 1.09 | B +0.06% pf 1.01 | portafoglio +64.2% dd -19.5% (310 op.)
   mom_short  n=456 media +1.67% win 32% pf 1.31 | A +3.23% pf 1.64 | B +0.42% pf 1.07 | portafoglio +90.5% dd -13.4% (408 op.)
+  mom_t3     n=456 media +0.68% win 34% pf 1.14 | A +2.02% pf 1.46 | B -0.39% pf 0.93 | portafoglio +42.2% dd -11.9% (434 op.)
+  mom_t7     n=454 media +1.97% win 29% pf 1.35 | A +4.10% pf 1.76 | B +0.25% pf 1.04 | portafoglio +98.8% dd -13.8% (392 op.)
+  mom_t10    n=454 media +2.11% win 27% pf 1.35 | A +4.64% pf 1.79 | B +0.07% pf 1.01 | portafoglio +105.7% dd -16.4% (365 op.)
+  mom_t5s12  n=456 media +2.44% win 39% pf 1.43 | A +4.24% pf 1.81 | B +1.00% pf 1.16 | portafoglio +97.2% dd -14.5% (388 op.)
+  mom_t5s5   n=456 media +0.98% win 21% pf 1.23 | A +2.70% pf 1.67 | B -0.41% pf 0.91 | portafoglio +51.5% dd -16.4% (435 op.)
+  mom_w10    n=454 media +0.65% win 37% pf 1.10 | A +0.79% pf 1.13 | B +0.53% pf 1.08 | portafoglio +47.0% dd -17.3% (348 op.)
+  mom_t15s12 n=453 media +4.04% win 33% pf 1.51 | A +6.72% pf 1.87 | B +1.87% pf 1.23 | portafoglio +197.3% dd -18.6% (285 op.)
 
 ## squeeze · attuale · crypto (n=783)
 fwd netto: 1d -0.02% win 45% · 3d +0.59% win 46% · 7d +0.64% win 45%
@@ -203,6 +287,13 @@ per anno (mom_cur): 2021 n=5 -5.31% win 20% x3 -2.41% · 2022 n=129 -2.75% win 2
   mom_cur    n=783 media +0.04% win 33% pf 1.01 | A -0.13% pf 0.97 | B +0.21% pf 1.04 | portafoglio -16.6% dd -37.3% (595 op.)
   mom_wide   n=782 media +0.47% win 33% pf 1.07 | A +1.58% pf 1.22 | B -0.60% pf 0.91 | portafoglio +43.3% dd -38.8% (485 op.)
   mom_short  n=783 media +0.52% win 39% pf 1.12 | A +0.87% pf 1.20 | B +0.18% pf 1.04 | portafoglio +32.3% dd -31.7% (640 op.)
+  mom_t3     n=783 media +0.43% win 42% pf 1.12 | A +0.22% pf 1.06 | B +0.64% pf 1.17 | portafoglio +33.4% dd -20.1% (723 op.)
+  mom_t7     n=783 media +0.69% win 36% pf 1.14 | A +1.61% pf 1.34 | B -0.20% pf 0.96 | portafoglio +41.4% dd -27.0% (606 op.)
+  mom_t10    n=783 media +0.91% win 32% pf 1.17 | A +2.05% pf 1.39 | B -0.18% pf 0.97 | portafoglio +21.6% dd -33.2% (577 op.)
+  mom_t5s12  n=781 media +0.59% win 43% pf 1.12 | A +0.89% pf 1.19 | B +0.29% pf 1.06 | portafoglio +38.3% dd -27.8% (617 op.)
+  mom_t5s5   n=783 media +0.29% win 29% pf 1.08 | A +0.27% pf 1.07 | B +0.31% pf 1.09 | portafoglio +32.4% dd -26.3% (675 op.)
+  mom_w10    n=782 media +0.40% win 38% pf 1.07 | A +0.81% pf 1.13 | B +0.00% pf 1.00 | portafoglio +15.7% dd -36.1% (552 op.)
+  mom_t15s12 n=781 media +2.15% win 34% pf 1.30 | A +3.35% pf 1.46 | B +0.99% pf 1.14 | portafoglio +43.8% dd -39.6% (495 op.)
 
 ## squeeze · attuale · brokerage (n=378)
 fwd netto: 1d -0.40% win 41% · 3d -0.52% win 47% · 7d -0.19% win 51%
@@ -211,6 +302,13 @@ per anno (mom_cur): 2022 n=49 +0.43% win 43% x3 -0.17% · 2023 n=104 -0.02% win 
   mom_cur    n=377 media +0.34% win 49% pf 1.14 | A +0.37% pf 1.15 | B +0.30% pf 1.13 | portafoglio +8.2% dd -8.8% (319 op.)
   mom_wide   n=375 media +0.80% win 53% pf 1.25 | A +0.98% pf 1.31 | B +0.61% pf 1.19 | portafoglio +28.1% dd -9.3% (289 op.)
   mom_short  n=378 media -0.19% win 48% pf 0.90 | A -0.23% pf 0.88 | B -0.14% pf 0.92 | portafoglio -4.9% dd -12.2% (332 op.)
+  mom_t3     n=378 media -0.46% win 47% pf 0.72 | A -0.65% pf 0.62 | B -0.25% pf 0.83 | portafoglio -16.4% dd -18.8% (344 op.)
+  mom_t7     n=377 media -0.03% win 51% pf 0.99 | A -0.14% pf 0.94 | B +0.09% pf 1.04 | portafoglio -0.2% dd -13.4% (321 op.)
+  mom_t10    n=377 media +0.29% win 49% pf 1.12 | A +0.26% pf 1.10 | B +0.32% pf 1.14 | portafoglio +6.5% dd -9.5% (319 op.)
+  mom_t5s12  n=378 media -0.33% win 48% pf 0.84 | A -0.39% pf 0.82 | B -0.27% pf 0.86 | portafoglio -9.5% dd -16.0% (332 op.)
+  mom_t5s5   n=378 media -0.11% win 47% pf 0.94 | A -0.20% pf 0.89 | B -0.02% pf 0.99 | portafoglio -2.1% dd -10.5% (332 op.)
+  mom_w10    n=377 media +0.07% win 49% pf 1.03 | A +0.10% pf 1.04 | B +0.04% pf 1.02 | portafoglio +0.8% dd -12.6% (319 op.)
+  mom_t15s12 n=376 media +0.52% win 52% pf 1.18 | A +0.60% pf 1.20 | B +0.44% pf 1.16 | portafoglio +18.9% dd -8.5% (306 op.)
 
 ## squeeze · attuale · tutti (n=1161)
 fwd netto: 1d -0.14% win 43% · 3d +0.23% win 46% · 7d +0.37% win 47%
@@ -219,6 +317,13 @@ per anno (mom_cur): 2021 n=5 -5.31% win 20% x3 -2.41% · 2022 n=178 -1.87% win 3
   mom_cur    n=1160 media +0.14% win 38% pf 1.03 | A +0.04% pf 1.01 | B +0.24% pf 1.06 | portafoglio -28.1% dd -45.3% (836 op.)
   mom_wide   n=1157 media +0.58% win 39% pf 1.10 | A +1.37% pf 1.24 | B -0.23% pf 0.96 | portafoglio +9.2% dd -44.7% (641 op.)
   mom_short  n=1161 media +0.29% win 42% pf 1.08 | A +0.50% pf 1.14 | B +0.08% pf 1.02 | portafoglio +21.8% dd -35.1% (933 op.)
+  mom_t3     n=1161 media +0.14% win 43% pf 1.05 | A -0.07% pf 0.98 | B +0.36% pf 1.12 | portafoglio +13.3% dd -26.4% (1041 op.)
+  mom_t7     n=1160 media +0.45% win 41% pf 1.11 | A +1.02% pf 1.26 | B -0.11% pf 0.97 | portafoglio +16.4% dd -36.9% (873 op.)
+  mom_t10    n=1160 media +0.71% win 38% pf 1.16 | A +1.45% pf 1.34 | B -0.03% pf 0.99 | portafoglio +7.8% dd -33.1% (814 op.)
+  mom_t5s12  n=1159 media +0.29% win 45% pf 1.07 | A +0.46% pf 1.12 | B +0.12% pf 1.03 | portafoglio +21.1% dd -35.6% (907 op.)
+  mom_t5s5   n=1161 media +0.16% win 35% pf 1.05 | A +0.11% pf 1.04 | B +0.21% pf 1.07 | portafoglio +25.5% dd -29.5% (969 op.)
+  mom_w10    n=1159 media +0.29% win 42% pf 1.06 | A +0.57% pf 1.12 | B +0.02% pf 1.00 | portafoglio -5.0% dd -37.3% (786 op.)
+  mom_t15s12 n=1157 media +1.62% win 40% pf 1.28 | A +2.42% pf 1.41 | B +0.82% pf 1.14 | portafoglio +48.0% dd -41.4% (682 op.)
 
 ## squeeze · regime · crypto (n=628)
 fwd netto: 1d +0.28% win 47% · 3d +1.26% win 48% · 7d +2.05% win 48%
@@ -227,6 +332,13 @@ per anno (mom_cur): 2022 n=82 -1.64% win 33% x3 -0.02% · 2023 n=130 +1.94% win 
   mom_cur    n=628 media +0.76% win 36% pf 1.16 | A +0.82% pf 1.17 | B +0.71% pf 1.15 | portafoglio +25.2% dd -22.2% (454 op.)
   mom_wide   n=627 media +1.26% win 34% pf 1.18 | A +2.77% pf 1.40 | B -0.10% pf 0.98 | portafoglio +67.6% dd -26.5% (369 op.)
   mom_short  n=628 media +1.24% win 41% pf 1.31 | A +1.91% pf 1.46 | B +0.65% pf 1.16 | portafoglio +73.6% dd -17.8% (495 op.)
+  mom_t3     n=628 media +0.92% win 44% pf 1.27 | A +0.86% pf 1.26 | B +0.98% pf 1.28 | portafoglio +55.5% dd -14.8% (572 op.)
+  mom_t7     n=628 media +1.61% win 39% pf 1.35 | A +2.92% pf 1.66 | B +0.43% pf 1.09 | portafoglio +89.2% dd -18.0% (464 op.)
+  mom_t10    n=628 media +1.89% win 35% pf 1.37 | A +3.34% pf 1.67 | B +0.59% pf 1.11 | portafoglio +72.2% dd -20.6% (437 op.)
+  mom_t5s12  n=626 media +1.43% win 45% pf 1.33 | A +1.99% pf 1.46 | B +0.93% pf 1.21 | portafoglio +85.0% dd -17.7% (474 op.)
+  mom_t5s5   n=628 media +0.79% win 31% pf 1.22 | A +0.97% pf 1.26 | B +0.63% pf 1.18 | portafoglio +57.5% dd -15.0% (530 op.)
+  mom_w10    n=627 media +1.18% win 41% pf 1.20 | A +1.86% pf 1.32 | B +0.57% pf 1.10 | portafoglio +56.6% dd -24.5% (416 op.)
+  mom_t15s12 n=626 media +3.61% win 36% pf 1.52 | A +5.26% pf 1.74 | B +2.12% pf 1.31 | portafoglio +100.7% dd -23.1% (367 op.)
 
 ## squeeze · regime · brokerage (n=351)
 fwd netto: 1d -0.43% win 40% · 3d -0.52% win 46% · 7d -0.23% win 50%
@@ -235,6 +347,13 @@ per anno (mom_cur): 2022 n=32 +0.90% win 38% x3 +0.17% · 2023 n=98 -0.33% win 5
   mom_cur    n=350 media +0.26% win 48% pf 1.11 | A +0.23% pf 1.10 | B +0.29% pf 1.13 | portafoglio +5.5% dd -11.4% (295 op.)
   mom_wide   n=348 media +0.77% win 53% pf 1.25 | A +0.91% pf 1.29 | B +0.64% pf 1.21 | portafoglio +23.7% dd -8.8% (266 op.)
   mom_short  n=351 media -0.19% win 47% pf 0.90 | A -0.23% pf 0.88 | B -0.14% pf 0.92 | portafoglio -4.6% dd -12.4% (307 op.)
+  mom_t3     n=351 media -0.47% win 46% pf 0.71 | A -0.69% pf 0.59 | B -0.26% pf 0.83 | portafoglio -15.4% dd -18.2% (319 op.)
+  mom_t7     n=350 media -0.04% win 50% pf 0.98 | A -0.17% pf 0.92 | B +0.09% pf 1.05 | portafoglio +0.0% dd -13.0% (297 op.)
+  mom_t10    n=350 media +0.21% win 48% pf 1.09 | A +0.11% pf 1.04 | B +0.31% pf 1.14 | portafoglio +3.8% dd -12.1% (295 op.)
+  mom_t5s12  n=351 media -0.31% win 47% pf 0.84 | A -0.38% pf 0.82 | B -0.25% pf 0.87 | portafoglio -8.1% dd -14.9% (307 op.)
+  mom_t5s5   n=351 media -0.12% win 46% pf 0.93 | A -0.21% pf 0.88 | B -0.04% pf 0.98 | portafoglio -2.4% dd -10.8% (307 op.)
+  mom_w10    n=350 media +0.00% win 48% pf 1.00 | A -0.04% pf 0.99 | B +0.04% pf 1.02 | portafoglio -0.9% dd -14.3% (295 op.)
+  mom_t15s12 n=349 media +0.56% win 52% pf 1.19 | A +0.64% pf 1.21 | B +0.49% pf 1.17 | portafoglio +18.6% dd -8.5% (282 op.)
 
 ## squeeze · regime · tutti (n=979)
 fwd netto: 1d +0.02% win 45% · 3d +0.62% win 47% · 7d +1.23% win 49%
@@ -243,6 +362,13 @@ per anno (mom_cur): 2022 n=114 -0.93% win 34% x3 +0.11% · 2023 n=228 +0.97% win
   mom_cur    n=978 media +0.58% win 40% pf 1.15 | A +0.61% pf 1.16 | B +0.56% pf 1.15 | portafoglio +9.7% dd -22.6% (685 op.)
   mom_wide   n=975 media +1.09% win 41% pf 1.20 | A +2.09% pf 1.38 | B +0.16% pf 1.03 | portafoglio +34.4% dd -23.0% (530 op.)
   mom_short  n=979 media +0.73% win 44% pf 1.22 | A +1.12% pf 1.34 | B +0.37% pf 1.11 | portafoglio +67.9% dd -22.8% (766 op.)
+  mom_t3     n=979 media +0.42% win 45% pf 1.15 | A +0.29% pf 1.11 | B +0.54% pf 1.19 | portafoglio +37.8% dd -19.9% (868 op.)
+  mom_t7     n=978 media +1.02% win 43% pf 1.28 | A +1.79% pf 1.49 | B +0.31% pf 1.08 | portafoglio +70.3% dd -21.6% (716 op.)
+  mom_t10    n=978 media +1.29% win 40% pf 1.31 | A +2.15% pf 1.53 | B +0.49% pf 1.12 | portafoglio +52.3% dd -21.0% (665 op.)
+  mom_t5s12  n=977 media +0.80% win 46% pf 1.23 | A +1.12% pf 1.32 | B +0.51% pf 1.15 | portafoglio +73.1% dd -23.8% (744 op.)
+  mom_t5s5   n=979 media +0.46% win 37% pf 1.16 | A +0.53% pf 1.18 | B +0.39% pf 1.14 | portafoglio +53.0% dd -18.9% (802 op.)
+  mom_w10    n=977 media +0.76% win 43% pf 1.16 | A +1.16% pf 1.25 | B +0.38% pf 1.08 | portafoglio +32.2% dd -26.0% (642 op.)
+  mom_t15s12 n=975 media +2.52% win 42% pf 1.46 | A +3.57% pf 1.63 | B +1.55% pf 1.29 | portafoglio +104.7% dd -19.2% (551 op.)
 
 ## connors · rsi2<10 & >MA200 · crypto (n=2007)
 fwd netto: 1d -0.78% win 45% · 3d -0.28% win 46% · 7d +0.39% win 46%
@@ -250,13 +376,13 @@ eccesso 3g vs universo: +0.17% t=0.66 giorni=587 · A +0.49% t=1.32 · B -0.14% 
 per anno (rev_ma5): 2021 n=42 -3.13% win 38% x3 +1.02% · 2022 n=103 -3.01% win 38% x3 +0.47% · 2023 n=353 +0.96% win 65% x3 +0.87% · 2024 n=746 -2.03% win 47% x3 -0.37% · 2025 n=504 -0.88% win 54% x3 +0.32% · 2026 n=246 +0.35% win 61% x3 -0.30%
   rev_ma5    n=1994 media -0.99% win 53% pf 0.74 | A -0.95% pf 0.75 | B -1.04% pf 0.73 | portafoglio -124.7% dd -138.1% (1309 op.)
   rev_cur    n=1996 media -1.22% win 39% pf 0.58 | A -1.21% pf 0.58 | B -1.23% pf 0.59 | portafoglio -155.5% dd -163.7% (1528 op.)
-  rev_wide   n=1994 media -1.31% win 48% pf 0.64 | A -1.12% pf 0.68 | B -1.51% pf 0.61 | portafoglio -155.9% dd -168.9% (1358 op.)
+  rev_wide   n=1994 media -1.31% win 48% pf 0.64 | A -1.12% pf 0.68 | B -1.51% pf 0.61 | portafoglio -154.6% dd -167.6% (1358 op.)
 
 ## connors · rsi2<10 & >MA200 · brokerage (n=1548)
 fwd netto: 1d -0.32% win 41% · 3d -0.12% win 49% · 7d +0.33% win 52%
 eccesso 3g vs universo: +0.11% t=1.14 giorni=660 · A +0.16% t=1.28 · B +0.07% t=0.48
 per anno (rev_ma5): 2022 n=67 +0.04% win 66% x3 -0.16% · 2023 n=407 +0.01% win 62% x3 +0.13% · 2024 n=420 +0.18% win 61% x3 +0.24% · 2025 n=364 -0.50% win 58% x3 -0.21% · 2026 n=283 +0.12% win 65% x3 +0.36%
-  rev_ma5    n=1541 media -0.04% win 62% pf 0.96 | A +0.06% pf 1.05 | B -0.14% pf 0.90 | portafoglio +0.0% dd -17.1% (1150 op.)
+  rev_ma5    n=1541 media -0.04% win 62% pf 0.96 | A +0.06% pf 1.05 | B -0.14% pf 0.90 | portafoglio +0.2% dd -17.1% (1150 op.)
   rev_cur    n=1545 media -0.12% win 48% pf 0.91 | A -0.17% pf 0.85 | B -0.07% pf 0.95 | portafoglio -13.7% dd -25.7% (1302 op.)
   rev_wide   n=1541 media -0.02% win 50% pf 0.98 | A -0.06% pf 0.96 | B +0.01% pf 1.01 | portafoglio +3.2% dd -20.5% (1097 op.)
 
@@ -264,7 +390,7 @@ per anno (rev_ma5): 2022 n=67 +0.04% win 66% x3 -0.16% · 2023 n=407 +0.01% win 
 fwd netto: 1d -0.58% win 43% · 3d -0.21% win 47% · 7d +0.37% win 48%
 eccesso 3g vs universo: +0.14% t=1.01 giorni=988 · A +0.35% t=1.67 · B -0.05% t=-0.25
 per anno (rev_ma5): 2021 n=42 -3.13% win 38% x3 +1.02% · 2022 n=170 -1.81% win 49% x3 +0.44% · 2023 n=760 +0.45% win 63% x3 +0.59% · 2024 n=1166 -1.24% win 52% x3 -0.13% · 2025 n=868 -0.72% win 56% x3 -0.03% · 2026 n=529 +0.22% win 63% x3 +0.05%
-  rev_ma5    n=3535 media -0.58% win 57% pf 0.79 | A -0.53% pf 0.80 | B -0.63% pf 0.77 | portafoglio -98.1% dd -110.5% (2158 op.)
+  rev_ma5    n=3535 media -0.58% win 57% pf 0.79 | A -0.53% pf 0.80 | B -0.63% pf 0.77 | portafoglio -97.9% dd -110.3% (2158 op.)
   rev_cur    n=3541 media -0.74% win 43% pf 0.66 | A -0.77% pf 0.64 | B -0.70% pf 0.69 | portafoglio -159.2% dd -163.9% (2537 op.)
   rev_wide   n=3535 media -0.75% win 49% pf 0.73 | A -0.68% pf 0.74 | B -0.82% pf 0.71 | portafoglio -118.5% dd -129.5% (2062 op.)
 
@@ -274,13 +400,13 @@ eccesso 3g vs universo: -0.00% t=-0.00 giorni=304 · A +0.48% t=0.94 · B -0.44%
 per anno (rev_ma5): 2022 n=19 -0.35% win 63% x3 +2.15% · 2023 n=240 +2.59% win 74% x3 +0.49% · 2024 n=569 -2.27% win 45% x3 -0.45% · 2025 n=200 -1.26% win 53% x3 +0.37% · 2026 n=190 +0.79% win 64% x3 -0.82%
   rev_ma5    n=1218 media -0.64% win 55% pf 0.82 | A -0.10% pf 0.97 | B -1.22% pf 0.70 | portafoglio -26.2% dd -59.1% (731 op.)
   rev_cur    n=1220 media -1.07% win 40% pf 0.63 | A -0.53% pf 0.79 | B -1.66% pf 0.49 | portafoglio -60.3% dd -74.9% (870 op.)
-  rev_wide   n=1218 media -1.00% win 51% pf 0.71 | A -0.32% pf 0.89 | B -1.73% pf 0.57 | portafoglio -48.8% dd -71.5% (764 op.)
+  rev_wide   n=1218 media -1.00% win 51% pf 0.71 | A -0.32% pf 0.89 | B -1.73% pf 0.57 | portafoglio -47.5% dd -70.9% (764 op.)
 
 ## connors · +regime · brokerage (n=1439)
 fwd netto: 1d -0.31% win 41% · 3d -0.16% win 49% · 7d +0.18% win 50%
 eccesso 3g vs universo: +0.10% t=1.03 giorni=630 · A +0.13% t=1.04 · B +0.08% t=0.54
 per anno (rev_ma5): 2022 n=38 +0.53% win 66% x3 -0.27% · 2023 n=382 -0.07% win 61% x3 +0.07% · 2024 n=395 +0.15% win 61% x3 +0.27% · 2025 n=341 -0.54% win 57% x3 -0.25% · 2026 n=276 +0.10% win 65% x3 +0.39%
-  rev_ma5    n=1432 media -0.07% win 61% pf 0.94 | A +0.04% pf 1.04 | B -0.18% pf 0.88 | portafoglio -3.3% dd -19.1% (1087 op.)
+  rev_ma5    n=1432 media -0.07% win 61% pf 0.94 | A +0.04% pf 1.04 | B -0.18% pf 0.88 | portafoglio -3.1% dd -19.1% (1087 op.)
   rev_cur    n=1436 media -0.14% win 48% pf 0.89 | A -0.16% pf 0.86 | B -0.12% pf 0.91 | portafoglio -15.4% dd -25.7% (1229 op.)
   rev_wide   n=1432 media -0.07% win 50% pf 0.96 | A -0.07% pf 0.95 | B -0.06% pf 0.96 | portafoglio -2.8% dd -23.8% (1039 op.)
 
@@ -288,6 +414,6 @@ per anno (rev_ma5): 2022 n=38 +0.53% win 66% x3 -0.27% · 2023 n=382 -0.07% win 
 fwd netto: 1d -0.55% win 43% · 3d -0.18% win 48% · 7d +0.44% win 48%
 eccesso 3g vs universo: +0.03% t=0.24 giorni=806 · A +0.20% t=1.08 · B -0.11% t=-0.71
 per anno (rev_ma5): 2022 n=57 +0.24% win 65% x3 +0.73% · 2023 n=622 +0.96% win 66% x3 +0.25% · 2024 n=964 -1.28% win 51% x3 -0.02% · 2025 n=541 -0.80% win 56% x3 -0.17% · 2026 n=466 +0.38% win 64% x3 -0.05%
-  rev_ma5    n=2650 media -0.33% win 58% pf 0.86 | A -0.03% pf 0.99 | B -0.64% pf 0.75 | portafoglio -15.1% dd -50.8% (1618 op.)
+  rev_ma5    n=2650 media -0.33% win 58% pf 0.86 | A -0.03% pf 0.99 | B -0.64% pf 0.75 | portafoglio -14.9% dd -50.7% (1618 op.)
   rev_cur    n=2656 media -0.57% win 45% pf 0.72 | A -0.34% pf 0.81 | B -0.80% pf 0.63 | portafoglio -69.4% dd -78.1% (1910 op.)
   rev_wide   n=2650 media -0.49% win 50% pf 0.80 | A -0.19% pf 0.91 | B -0.80% pf 0.71 | portafoglio -35.3% dd -56.5% (1548 op.)
