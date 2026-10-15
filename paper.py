@@ -206,7 +206,7 @@ class PaperBook:
                 snap[key] = {"label": V1_LABELS.get(key, key), **{k: (None if isinstance(v, float) and not math.isfinite(v) else v)
                                                                  for k, v in st.items()}}
             d.setdefault("archive", []).insert(0, {
-                "label": "Modello v2 (fine settembre – metà ottobre 2026)",
+                "label": "Modello v2 · portafogli automatici",
                 "from": d.get("started"), "to": _iso(now),
                 "bench": _bench_ret(d.get("bench_start", {}), bench_prices, ["BTC", "SPY"]),
                 "portfolios": snap,

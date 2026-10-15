@@ -82,6 +82,21 @@
   .lens .lc { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); }
   .lens .ld { font-size: 11.5px; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
   .lens .ico { font-family: 'JetBrains Mono', monospace; color: var(--amber-2); margin-right: 6px; }
+  .lens .tagline { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px; }
+  .lens .tagline.op { color: var(--green); }
+  .lens .tagline.info { color: var(--text-faint); }
+
+  /* Regime di mercato */
+  .regime { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 8px; }
+  .rg { font-size: 11.5px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-dim); display: inline-flex; gap: 6px; align-items: center; white-space: nowrap; }
+  .rg .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-faint); flex: none; }
+  .rg.on { color: #a7f3d0; border-color: rgba(16,185,129,0.35); background: var(--green-soft); }
+  .rg.on .dot { background: var(--green); }
+  .rg.off { color: #fecaca; border-color: rgba(239,68,68,0.35); background: var(--red-soft); }
+  .rg.off .dot { background: var(--red); }
+  .rg .d { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; opacity: 0.75; }
+  .regime-note { font-size: 12.5px; color: var(--text-dim); margin: 0 0 18px; line-height: 1.5; }
+  .regime-note strong { color: var(--text); font-weight: 500; }
 
   .stats {
     margin: 0 0 18px; display: flex; flex-wrap: wrap; gap: 8px 22px;
@@ -122,6 +137,17 @@
   .badge.bn { background: rgba(56,189,248,0.1); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.22); }
   .badge.cm { background: rgba(217,119,6,0.12); color: #fdba74; border: 1px solid rgba(217,119,6,0.3); }
   .badge.hot { background: rgba(167,139,250,0.12); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.3); }
+  .badge.op { background: var(--green-soft); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.4); }
+  .badge.exp { background: rgba(255,255,255,0.04); color: #fde68a; border: 1px dashed rgba(253,230,138,0.4); }
+  .badge.pause { background: rgba(255,255,255,0.03); color: var(--text-faint); border: 1px solid var(--line-strong); }
+  .sig-line { margin-top: 10px; font-size: 12px; line-height: 1.5; color: var(--text-dim); padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,0.02); border-left: 2px solid var(--line-strong); }
+  .sig-line.op { border-left-color: var(--green); }
+  .sig-line.exp { border-left-color: #fde68a; }
+  .sig-line strong { color: var(--text); font-weight: 500; }
+  .lens-note { padding: 10px 16px; font-size: 12px; line-height: 1.5; color: var(--text-dim); border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.015); }
+  .lens-note:empty { display: none; }
+  .lens-note.warn { color: var(--warn); background: var(--warn-soft); }
+  .lens-note strong { color: var(--text); font-weight: 500; }
   .signals { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
   .chip { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 6px; border-radius: 4px; display: inline-flex; gap: 4px; align-items: center; }
   .chip.bull { background: var(--green-soft); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.22); }
@@ -177,6 +203,28 @@
   .rules-body code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--amber); background: rgba(245,158,11,0.08); padding: 1px 5px; border-radius: 4px; }
   .rules-body ul { margin: 6px 0 10px; padding-left: 18px; }
   .rules-body strong { color: var(--text); font-weight: 500; }
+  .pf-card.exp { border-style: dashed; }
+  .pf-meta { font-size: 11px; color: var(--text-faint); margin-top: 3px; }
+  .pf-bench { font-size: 11.5px; color: var(--text-dim); margin-top: 6px; }
+  .arc { margin-top: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: rgba(255,255,255,0.01); }
+  .arc h4 { margin: 0; font-family: 'Fraunces', serif; font-weight: 500; font-size: 15px; color: var(--text-dim); }
+  .arc .arc-sub { font-size: 11px; color: var(--text-faint); margin: 2px 0 8px; }
+  .arc-rows { display: grid; gap: 8px; font-size: 12.5px; }
+  .arc-row { color: var(--text-dim); }
+  .arc-l { display: flex; justify-content: space-between; gap: 10px; }
+  .arc-l span:last-child { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+  .arc-row .k { color: var(--text-faint); font-size: 11px; margin-top: 1px; }
+  .arc-note { font-size: 11.5px; color: var(--text-faint); margin-top: 8px; line-height: 1.5; }
+  table.bt { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 8px 0 12px; }
+  table.bt th { text-align: right; font-weight: 500; color: var(--text-faint); font-size: 11px; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  table.bt th:first-child, table.bt td:first-child { text-align: left; }
+  table.bt td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+  table.bt tr.tot td { border-bottom: 0; font-weight: 600; color: var(--text); }
+  table.bt .rsub { font-size: 10.5px; color: var(--text-faint); font-weight: 400; margin-top: 2px; }
+  .perf-op { border: 1px solid rgba(16,185,129,0.35); background: rgba(16,185,129,0.04); border-radius: 12px; padding: 12px 13px; margin-bottom: 8px; }
+  .perf-op h4 { margin: 0 0 2px; font-family: 'Fraunces', serif; font-weight: 500; font-size: 17px; }
+  .perf-op .n { font-size: 11px; color: var(--text-faint); margin-bottom: 10px; }
+  .perf-op .hz { max-width: 420px; }
 
   /* Registro segnali */
   section.perf { margin-top: 34px; }
@@ -266,16 +314,22 @@
     <button class="lens" data-lens="momentum" role="tab">
       <div class="ln"><span class="lt"><span class="ico">↗</span>Accelerazioni</span><span class="lc" id="lc-momentum">—</span></div>
       <div class="ld">Rompono i massimi con volume. Movimenti presi all'innesco.</div>
+      <div class="tagline op">● alert · crypto con BTC in salita</div>
     </button>
     <button class="lens" data-lens="setup" role="tab">
       <div class="ln"><span class="lt"><span class="ico">◎</span>In carica</span><span class="lc" id="lc-setup">—</span></div>
       <div class="ld">Volatilità compressa sotto il tetto. Da tenere d'occhio.</div>
+      <div class="tagline info">watchlist · alert quando scatta</div>
     </button>
     <button class="lens" data-lens="reversion" role="tab">
       <div class="ln"><span class="lt"><span class="ico">↺</span>Rimbalzi</span><span class="lc" id="lc-reversion">—</span></div>
-      <div class="ld">Scesi troppo e in fretta. Candidati a rientrare.</div>
+      <div class="ld">Scesi troppo e in fretta. Solo informativa: nel backtest non rende.</div>
+      <div class="tagline info">solo lista · nessun alert</div>
     </button>
   </div>
+
+  <div class="regime" id="regime"></div>
+  <p class="regime-note" id="regime-note"></p>
 
   <div class="stats">
     <div class="stat"><div class="label">Crypto analizzate</div><div class="value" id="stat-crypto">—</div></div>
@@ -295,6 +349,7 @@
       <span id="panel-title">Top 10</span>
       <span class="hint">tap per dettagli</span>
     </div>
+    <div class="lens-note" id="lens-note"></div>
     <div id="list-container">
       <div class="loading"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
     </div>
@@ -303,7 +358,6 @@
   <section class="paper" id="paper">
     <h2 class="sec-title">Portafogli simulati</h2>
     <p class="sec-sub" id="paper-intro">Soldi finti per capire se i segnali funzionano prima di usare soldi veri.</p>
-    <div class="bench-line" id="paper-bench"></div>
     <div class="pf-grid" id="pf-grid"><div class="empty"><p>In attesa del primo aggiornamento con la simulazione attiva.</p></div></div>
 
     <div class="sub-title">Posizioni aperte</div>
@@ -322,10 +376,36 @@
       </table>
     </div>
 
+    <div id="pf-archive"></div>
+
+    <details class="rules" id="why-v3">
+      <summary>Perché queste regole: il backtest 2021–2026</summary>
+      <div class="rules-body">
+        <p>A metà ottobre, dopo due settimane di simulazione in perdita, abbiamo rifatto i segnali dello scanner su
+        <strong>5 anni di dati</strong> (99 crypto liquide, 30 azioni, 10 commodity), con gli stessi punteggi del sito e i costi inclusi. Cosa è emerso:</p>
+        <ul>
+          <li><strong>Rimbalzi</strong>: dopo i costi perdono (profit factor 0,75 sulle crypto, circa 0,9 sulle azioni). Comprare chi crolla, nelle crypto, spesso vuol dire prendere un coltello che cade. Restano visibili, ma senza alert.</li>
+          <li><strong>Accelerazioni crypto</strong>: funzionano, ma solo quando <strong>BTC è sopra la media a 50 giorni</strong>. Con BTC in discesa perdono (profit factor 0,55).</li>
+          <li><strong>Score</strong>: tra 80 e 100 i breakout crypto non rendono (profit factor 1,03); sopra 100 sì (1,29, oltre 130: 1,46). Da qui la soglia a 100.</li>
+          <li><strong>Uscita</strong>: vendere dopo 5 giorni (o allo stop −8%) ha reso più del trailing, che restituiva buona parte dei guadagni.</li>
+          <li><strong>Azioni</strong>: i breakout danno poco e solo con uscite larghe. Restano in un portafoglio sperimentale, senza alert.</li>
+        </ul>
+        <p>Accelerazioni + Squeeze crypto, un portafoglio da 10.000 all'anno (1.000 a operazione, massimo 10 aperte, costi inclusi):</p>
+        <div class="table-wrap" style="margin-top:0"><table class="bt" id="bt-table">
+          <thead><tr><th>Anno</th><th>Regole v2</th><th>Regole v3</th></tr></thead>
+          <tbody id="bt-body"></tbody>
+        </table></div>
+        <p><strong>Limiti, da prendere sul serio.</strong> Il backtest usa le crypto liquide di oggi (quelle sparite nel frattempo non ci sono),
+        barre giornaliere (il sito controlla ogni 30 minuti) e regole di uscita scelte guardando questi stessi dati: nella realtà aspettati meno.
+        E aspettati <strong>poche operazioni vincenti, circa 1 su 3</strong>: si guadagna perché le vincenti sono molto più grandi delle perdenti, non perché si vince spesso.
+        È per questo che prima dei soldi veri servono almeno 20–50 operazioni simulate.</p>
+      </div>
+    </details>
+
     <details class="rules">
       <summary>Come funziona e quando passare ai soldi veri</summary>
       <div class="rules-body" id="pf-rules">
-        <p><strong>I tre portafogli automatici</strong> comprano <span id="pf-size">1.000</span> a ogni alert della loro modalità e vendono da soli:</p>
+        <p><strong>I portafogli automatici</strong> comprano <span id="pf-size">1.000</span> a ogni segnale del modello e vendono da soli:</p>
         <ul id="pf-rules-list"></ul>
         <p><strong>Costi inclusi</strong> a ogni acquisto e vendita: crypto 0,25%, azioni 1 € + 0,10%, commodity (ETF) 1 € + 0,15%.
         Le operazioni avvengono al prezzo dell'aggiornamento dello scanner: niente senno di poi. I rendimenti sono nella valuta dell'asset (senza cambio euro/dollaro).</p>
@@ -333,14 +413,14 @@
         <ul>
           <li><code>/compra QNT 500</code> compra 500 di Quant (senza importo: 1.000)</li>
           <li><code>/vendi QNT</code> vende tutto · <code>/vendi QNT 50%</code> vende metà</li>
-          <li><code>/portafoglio</code> ti risponde con la situazione</li>
+          <li><code>/portafoglio</code> ti risponde con la situazione · <code>/riepilogo</code> tutti i portafogli</li>
         </ul>
-        <p>Vale il ticker o il nome: QNT, Quant, NVDA, ENI.MI, Oro. L'ordine viene eseguito al prossimo aggiornamento (oggi ogni 2–4 ore) e il bot ti conferma prezzo e costi.
+        <p>Vale il ticker o il nome: QNT, Quant, NVDA, ENI.MI, Oro. L'ordine viene eseguito al prossimo aggiornamento (ogni 30 minuti) e il bot ti conferma prezzo e costi.
         Ogni acquisto viene segnato come <em>suggerito</em> se in quel momento l'asset era in una delle liste: così vediamo se scegli meglio dentro o fuori dai suggerimenti.</p>
         <p><strong>Prima di usare soldi veri</strong>, un portafoglio dovrebbe avere:</p>
         <ul>
           <li>almeno <span id="pf-min">20</span> operazioni chiuse (meglio 50: con poche operazioni conta la fortuna);</li>
-          <li>un rendimento migliore del mercato nello stesso periodo (media di BTC e S&amp;P 500);</li>
+          <li>un rendimento migliore del mercato nello stesso periodo (BTC per le crypto, S&amp;P 500 per le azioni);</li>
           <li>un <em>profit factor</em> di almeno 1,3: i guadagni totali almeno 1,3 volte le perdite totali;</li>
           <li>un calo massimo (drawdown) che reggeresti anche con soldi veri.</li>
         </ul>
@@ -352,6 +432,7 @@
   <section class="perf">
     <h2 class="sec-title">Registro segnali</h2>
     <p class="sec-sub">Ultimi 30 giorni. Ogni segnale nuovo viene seguito per una settimana. <strong style="color:var(--text);font-weight:500">Positivi</strong> = quota di segnali in guadagno dopo 1, 3 e 7 giorni dal prezzo di segnalazione; sotto, il rendimento medio. Servono almeno 5 segnali per una statistica.</p>
+    <div class="perf-op" id="perf-op"></div>
     <div class="perf-grid" id="perf-grid"></div>
     <div class="table-wrap">
       <table class="recent">
@@ -377,7 +458,8 @@
             <strong>volume sopra la media</strong> e fa meglio del mercato di riferimento (BTC per le crypto,
             l'indice per le azioni). È il tipo di movimento di QNT a fine settembre:
             non si può prevedere la notizia, ma si può vedere l'innesco nelle prime ore.
-            I breakout falliscono spesso: <em>serve sempre uno stop</em>.
+            I breakout falliscono spesso: <em>serve sempre uno stop</em>. È l'unica modalità con alert:
+            solo crypto con score ≥ 100 e solo quando BTC è in salita (vedi <strong>Regime di mercato</strong>).
           </div>
         </div>
         <div class="term">
@@ -393,9 +475,32 @@
         <div class="term">
           <div class="t">Rimbalzi <span class="sub">mean-reversion · la logica originale</span></div>
           <div class="d">
-            Asset scesi troppo e troppo in fretta (RSI basso, sotto la media, sotto la banda di Bollinger inferiore)
-            che tendono a rientrare verso la media in 1–3 giorni. Funziona nei mercati laterali,
-            fallisce nei crolli veri: "ipervenduto" può diventare "ancora più ipervenduto".
+            Asset scesi troppo e troppo in fretta (RSI basso, sotto la media, sotto la banda di Bollinger inferiore).
+            L'idea è che rientrino verso la media in 1–3 giorni, ma nel backtest 2021–2026, dopo i costi,
+            <em>non ha dato vantaggio</em>: "ipervenduto" diventa spesso "ancora più ipervenduto".
+            Resta come lista informativa, senza alert e senza simulazione.
+          </div>
+        </div>
+      </div>
+
+      <h5>Quando un segnale vale</h5>
+      <div class="glossary">
+        <div class="term">
+          <div class="t">Regime di mercato <span class="sub">il semaforo in alto</span></div>
+          <div class="d">
+            Si compra un breakout solo se il mercato di riferimento è in salita: per le crypto <strong>BTC sopra la sua media a 50 giorni</strong>,
+            per le azioni l'<strong>indice sopra la media a 200 giorni</strong> (S&amp;P 500, Euro Stoxx 50, FTSE MIB).
+            Conta l'ultima chiusura giornaliera, quindi il semaforo cambia al massimo una volta al giorno; quando cambia ti arriva un messaggio.
+            Con il semaforo rosso gli alert crypto vanno in pausa: <em>nel backtest i breakout in quella fase perdevano</em>.
+          </div>
+        </div>
+        <div class="term">
+          <div class="t">Operativo · Sperimentale · In pausa <span class="sub">badge nella lista Accelerazioni</span></div>
+          <div class="d">
+            <strong>Operativo</strong>: soddisfa tutte le regole del modello; quando entra in top 10 ti arriva l'alert e il portafoglio simulato compra.
+            <strong>Sperimentale</strong>: azioni e commodity, seguite solo dal portafoglio «Breakout azioni», senza alert, finché i numeri non dicono che funziona.
+            <strong>In pausa</strong>: sarebbe un segnale, ma il regime è negativo. Senza badge: score o volume sotto soglia.
+            Aprendo la riga vedi il piano: <em>prezzo di stop e giorni massimi</em>.
           </div>
         </div>
       </div>
@@ -433,7 +538,7 @@
         </div>
         <div class="term">
           <div class="t">Score <span class="sub">il numero grande a destra</span></div>
-          <div class="d">Somma pesata dei segnali della modalità. Serve solo a ordinare la lista: <em>non è una previsione di guadagno</em>. Il registro segnali qui sopra dirà, con i numeri, quale modalità funziona davvero.</div>
+          <div class="d">Somma pesata dei segnali della modalità. Serve a ordinare la lista: <em>non è una previsione di guadagno</em>. Nelle Accelerazioni crypto conta anche come soglia: sotto 100 il backtest non trova vantaggio.</div>
         </div>
         <div class="term">
           <div class="t">In tendenza <span class="sub">badge viola</span></div>
@@ -487,10 +592,23 @@
 <script>
 const TR_CRYPTO = new Set(["BTC","ETH","SOL","XRP","ADA","DOGE","LINK","DOT","AVAX","MATIC","POL","LTC","BCH","UNI","AAVE","ATOM","TRX","XLM","ETC","FIL","ALGO","EOS","SHIB","ARB","OP","INJ"]);
 const LENS_INFO = {
-  momentum: { title: "Accelerazioni", lead: "Asset che <em>rompono i massimi</em> con volume e battono il mercato. È qui che si vede l'innesco di movimenti come QNT." },
+  momentum: { title: "Accelerazioni", lead: "Asset che <em>rompono i massimi</em> con volume e battono il mercato. I segnali operativi sono le crypto con score ≥ 100, quando BTC è in salita." },
   setup: { title: "In carica", lead: "Volatilità <em>compressa</em> sotto il tetto del range. Da tenere d'occhio: l'alert arriva solo quando scattano verso l'alto." },
-  reversion: { title: "Rimbalzi", lead: "Asset scesi troppo e troppo in fretta: candidati a un <em>rimbalzo</em> di 1–3 giorni." },
+  reversion: { title: "Rimbalzi", lead: "Asset scesi troppo e troppo in fretta. Lista <em>informativa</em>: nel backtest comprarli non ha reso." },
 };
+// Risultati del backtest (backtest.py, sezione "Confronto modelli"): crypto Accelerazioni + Squeeze
+const BACKTEST = {
+  date: "15 ottobre 2026",
+  rows: [["2022", -43.3, -11.4], ["2023", 25.4, 49.0], ["2024", 30.2, 90.2], ["2025", -16.3, 21.2], ["2026 (a ottobre)", -26.8, 13.7]],
+  total: { v2: -34.5, v3: 162.6, dd2: -47.5, dd3: -21.1 },
+};
+const SIG_BADGE = {
+  operativo: ["op", "Operativo"],
+  sperimentale: ["exp", "Sperimentale"],
+  regime_negativo: ["pause", "In pausa"],
+  regime_nd: ["pause", "In pausa"],
+};
+const PF_RULE = { crypto_breakout: "crypto_breakout", crypto_squeeze: "crypto_breakout", brokerage_breakout: "brokerage_breakout" };
 const TABS = ["combined", "crypto", "brokerage"];
 
 let data = null;
@@ -521,6 +639,8 @@ function fmtDate(iso) {
 
 function badgesFor(a) {
   let b = "";
+  const sb = a.signal && SIG_BADGE[a.signal.status];
+  if (sb) b += `<span class="badge ${sb[0]}">${sb[1]}</span> `;
   if (a.type === "crypto") {
     const base = a.symbol.replace(/USDT$/, "");
     b += TR_CRYPTO.has(base) ? '<span class="badge tr">Trade Republic</span>' : '<span class="badge bn">Binance/altri</span>';
@@ -539,6 +659,54 @@ function flagChip(f) {
   return `<span class="chip flag"><span>⚠ ${esc(f.label)}</span>${f.value ? `<span class="v">${esc(f.value)}</span>` : ""}</span>`;
 }
 function metric(label, value) { return `<div class="metric"><div class="ml">${label}</div><div class="mv">${value}</div></div>`; }
+function pctIt(v, d = 1) { return (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(d).replace(".", ",") + "%"; }
+
+function regimeRef(a) {
+  if (a.type === "crypto") return "BTC sotto la media a 50 giorni";
+  if (a.type === "stock") return "indice di riferimento sotto la media a 200 giorni";
+  return "regime negativo";
+}
+function signalLine(a) {
+  const s = a.signal;
+  if (!s) return "";
+  const r = (data?.paper?.rules || {})[PF_RULE[s.portfolio]];
+  let plan = "";
+  if (r && a.price) {
+    const stop = a.price * (1 + r.stop / 100);
+    plan = ` Piano: stop a <strong>${fmtPrice(stop)}</strong> (${pctIt(r.stop, 0)})` +
+      (r.trail ? `, dopo ${pctIt(r.trail_from, 0)} uscita se perde ${r.trail}% dal massimo` : "") +
+      `, uscita entro <strong>${r.max_days} giorni</strong>.`;
+  }
+  const thr = a.type === "crypto" ? (s.kind === "squeeze" ? 50 : 100) : null;
+  const txt = {
+    operativo: [`op`, `<strong>Segnale operativo</strong> (${s.kind === "squeeze" ? "squeeze" : "accelerazione"}): rispetta le regole del modello; all'ingresso in top 10 arriva l'alert.${plan}`],
+    sperimentale: [`exp`, `<strong>Sperimentale</strong>: lo segue solo il portafoglio simulato «Breakout azioni», senza alert.${plan}`],
+    regime_negativo: [``, `<strong>In pausa</strong>: ${regimeRef(a)}. Nel backtest i breakout in questa fase perdevano.`],
+    regime_nd: [``, `<strong>In pausa</strong>: regime di mercato non disponibile in questo aggiornamento.`],
+    volume_debole: [``, `Non operativo: volume non confermato.`],
+    sotto_soglia: [``, `Non operativo: score sotto la soglia del modello${thr ? ` (${thr})` : ""}.`],
+  }[s.status];
+  return txt ? `<div class="sig-line ${txt[0]}">${txt[1]}</div>` : "";
+}
+
+function renderRegime() {
+  const R = data?.stats?.regime;
+  const box = $("regime"), note = $("regime-note");
+  if (!R) { box.innerHTML = ""; note.innerHTML = ""; return; }
+  const order = ["crypto", "US", "EU", "IT"];
+  box.innerHTML = order.filter(k => R[k]).map(k => {
+    const r = R[k];
+    const st = r.on === true ? "on" : (r.on === false ? "off" : "");
+    const d = r.dist_pct != null ? `<span class="d">${pctIt(r.dist_pct)} vs MA${r.ma_days}</span>` : `<span class="d">n/d</span>`;
+    return `<span class="rg ${st}" title="Ultima chiusura giornaliera rispetto alla media a ${r.ma_days} giorni"><span class="dot"></span>${esc(r.label)} ${d}</span>`;
+  }).join("");
+  const c = R.crypto?.on;
+  note.innerHTML = c === true
+    ? `<strong>Regime crypto positivo</strong>: BTC sopra la media a 50 giorni, gli alert Accelerazioni e Squeeze crypto sono attivi.`
+    : c === false
+      ? `<strong>Regime crypto negativo</strong>: BTC sotto la media a 50 giorni. Alert crypto in pausa: nel backtest i breakout in questa fase perdevano.`
+      : `Regime crypto non disponibile in questo aggiornamento: alert crypto in pausa per prudenza.`;
+}
 
 function detailsFor(a) {
   const d = a.daily || {};
@@ -593,6 +761,7 @@ function renderRow(a, i) {
       <div class="score">${score}<div class="lbl">score</div></div>
       <div class="details">
         <div class="grid-4">${detailsFor(a)}</div>
+        ${lens === "momentum" ? signalLine(a) : ""}
         <div class="venue">📍 ${esc(a.venue || "")}${rankInfo}</div>
       </div>
     </div>`;
@@ -609,6 +778,11 @@ function render() {
   document.querySelectorAll(".lens").forEach(b => { const on = b.dataset.lens === lens; b.classList.toggle("active", on); b.setAttribute("aria-selected", on); });
   document.querySelectorAll(".tab").forEach(b => { const on = b.dataset.tab === tab; b.classList.toggle("active", on); b.setAttribute("aria-selected", on); });
   $("lead").innerHTML = LENS_INFO[lens].lead;
+  const ln = $("lens-note");
+  ln.className = "lens-note" + (lens === "reversion" ? " warn" : "");
+  ln.innerHTML = lens === "reversion"
+    ? "⚠ <strong>Solo informativa.</strong> Nel backtest 2021–2026 comprare questi titoli, dopo i costi, ha perso in media. Niente alert e niente simulazione."
+    : lens === "setup" ? "Watchlist: nessun alert all'ingresso. Se rompe verso l'alto con volume diventa uno <strong>⚡ Squeeze</strong> nelle Accelerazioni." : "";
 
   const lists = currentLists();
   for (const t of TABS) $("count-" + t).textContent = lists?.[t]?.length ?? 0;
@@ -635,26 +809,32 @@ function render() {
   });
 }
 
+function hzCells(s) {
+  return ["1d", "3d", "7d"].map(h => {
+    const x = s?.horizons?.[h];
+    const lbl = { "1d": "1 giorno", "3d": "3 giorni", "7d": "7 giorni" }[h];
+    if (!x || x.n < 5) return `<div><div class="h">${lbl}</div><div class="na">in raccolta<br>${x?.n ?? 0}/5</div></div>`;
+    return `<div><div class="h">${lbl}</div><div class="w">${Math.round(x.win)}%<span class="u"> positivi</span></div><div class="a ${cls(x.avg)}">media ${sign(x.avg, Math.abs(x.avg) >= 10 ? 0 : 1)}</div></div>`;
+  }).join("");
+}
+
 function renderPerf() {
   const p = data?.performance;
   const grid = $("perf-grid");
+  const op = p?.operational;
+  $("perf-op").innerHTML = `<h4>Segnali operativi · modello v3</h4><div class="n">${op?.signals ?? 0} segnali${op?.since ? " dal " + new Date(op.since).toLocaleDateString("it-IT", { day: "numeric", month: "long" }) : ""} · quelli che mandano l'alert. È il numero da guardare.</div><div class="hz">${hzCells(op)}</div>`;
   const order = ["momentum", "setup", "reversion"];
   grid.innerHTML = order.map(l => {
     const s = p?.lenses?.[l];
-    const hz = ["1d", "3d", "7d"].map(h => {
-      const x = s?.horizons?.[h];
-      const lbl = { "1d": "1 giorno", "3d": "3 giorni", "7d": "7 giorni" }[h];
-      if (!x || x.n < 5) return `<div><div class="h">${lbl}</div><div class="na">in raccolta<br>${x?.n ?? 0}/5</div></div>`;
-      return `<div><div class="h">${lbl}</div><div class="w">${Math.round(x.win)}%<span class="u"> positivi</span></div><div class="a ${cls(x.avg)}">media ${sign(x.avg, Math.abs(x.avg) >= 10 ? 0 : 1)}</div></div>`;
-    }).join("");
-    return `<div class="perf-card"><h4>${LENS_INFO[l].title}</h4><div class="n">${s?.signals ?? 0} segnali registrati</div><div class="hz">${hz}</div></div>`;
+    return `<div class="perf-card"><h4>${LENS_INFO[l].title}</h4><div class="n">${s?.signals ?? 0} segnali registrati · tutti</div><div class="hz">${hzCells(s)}</div></div>`;
   }).join("");
 
   const rows = (p?.recent || []).slice(0, 15).map(e => {
     const r = e.rets || {};
     const started = r["1d"] != null;
     const cell = v => `<td class="num ${cls(v)}">${v == null ? "·" : sign(v, Math.abs(v) >= 10 ? 0 : 1)}</td>`;
-    return `<tr><td><div>${esc(e.name)}</div><div class="rsub">${fmtDate(e.ts)} · ${LENS_INFO[e.lens]?.title || e.lens}${e.alerted ? " · alert" : ""}</div></td>
+    const tag = e.operational ? " · <span class=\"pos\">operativo</span>" : (e.status === "sperimentale" ? " · sperimentale" : "");
+    return `<tr><td><div>${esc(e.name)}</div><div class="rsub">${fmtDate(e.ts)} · ${e.kind === "squeeze" ? "Squeeze" : (LENS_INFO[e.lens]?.title || e.lens)}${tag}${e.alerted ? " · alert" : ""}</div></td>
       <td class="num">${fmtPrice(e.price)}</td>${cell(r["1d"])}${cell(r["3d"])}${cell(r["7d"])}${cell(started ? e.max_up : null)}</tr>`;
   }).join("");
   $("recent-body").innerHTML = rows || `<tr><td colspan="6" class="muted">Nessun segnale registrato finora: il registro parte dal primo aggiornamento con il nuovo modello.</td></tr>`;
@@ -662,7 +842,11 @@ function renderPerf() {
 
 function fmtMoney(v) { return v == null ? "—" : v.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
 const VERDICT_ICON = { raccolta: "◷", promettente: "✓", debole: "~", negativo: "✕" };
-const PF_ORDER = ["manual", "momentum", "setup", "reversion"];
+const PF_ORDER = ["crypto_breakout", "crypto_squeeze", "brokerage_breakout", "manual"];
+const PF_SHORT = { crypto_breakout: "Accelerazioni", crypto_squeeze: "Squeeze", brokerage_breakout: "Azioni", manual: "Mie",
+                   momentum: "Accelerazioni", setup: "Squeeze", reversion: "Rimbalzi" };
+const BENCH_NAME = { BTC: "BTC", SPY: "S&P 500" };
+function fmtDay(iso) { return iso ? new Date(iso).toLocaleDateString("it-IT", { day: "numeric", month: "short" }) : "—"; }
 
 function sparkline(hist, initial) {
   if (!hist || hist.length < 2) return `<svg class="spark" viewBox="0 0 100 30" aria-hidden="true"><line x1="0" y1="15" x2="100" y2="15" stroke="rgba(255,255,255,0.15)" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/></svg>`;
@@ -682,18 +866,16 @@ function sparkline(hist, initial) {
 function renderPaper() {
   const pp = data?.paper;
   if (!pp?.portfolios) return;
-  const since = pp.started ? new Date(pp.started).toLocaleDateString("it-IT", { day: "numeric", month: "long" }) : "—";
-  $("paper-intro").innerHTML = `10.000 finti ciascuno, dal ${since}. I tre automatici comprano ${fmtMoney(pp.trade_size)} a ogni alert e vendono con regole fisse; <strong style="color:var(--text);font-weight:500">Le mie scelte</strong> sono i tuoi acquisti da Telegram. Costi inclusi.`;
-  const b = pp.bench || {};
-  $("paper-bench").innerHTML = `Mercato nello stesso periodo: BTC <span class="${cls(b.BTC)}">${sign(b.BTC)}</span> · S&amp;P 500 <span class="${cls(b.SPY)}">${sign(b.SPY)}</span>`;
+  $("paper-intro").innerHTML = `10.000 finti ciascuno. I portafogli automatici seguono i segnali del modello v3: comprano ${fmtMoney(pp.trade_size)} a ogni segnale e vendono con regole fisse. <strong style="color:var(--text);font-weight:500">Le mie scelte</strong> sono i tuoi acquisti da Telegram. Costi inclusi.`;
   $("pf-size").textContent = fmtMoney(pp.trade_size);
   $("pf-min").textContent = pp.min_trades;
   const R = pp.rules || {};
-  const rl = (k, label) => { const r = R[k]; if (!r) return ""; const parts = [`stop ${r.stop}%`];
+  const rl = (k, label) => { const r = R[k]; if (!r) return ""; const parts = [`stop ${pctIt(r.stop, 0)}`];
     if (r.take != null) parts.push(`obiettivo +${r.take}%`);
-    if (r.trail != null) parts.push(`trailing ${r.trail}% dal massimo (attivo sopra +${r.trail_from}%)`);
-    parts.push(`massimo ${r.max_days} giorni`); return `<li><strong>${label}</strong>: ${parts.join(", ")}</li>`; };
-  $("pf-rules-list").innerHTML = rl("momentum", "Accelerazioni") + rl("squeeze", "In carica → squeeze") + rl("reversion", "Rimbalzi") + `<li>al massimo 10 posizioni aperte per portafoglio</li>`;
+    if (r.trail != null) parts.push(`dopo +${r.trail_from}% uscita se perde ${r.trail}% dal massimo`);
+    parts.push(`${r.trail != null || r.take != null ? "massimo" : "altrimenti vende dopo"} ${r.max_days} giorni`); return `<li><strong>${label}</strong>: ${parts.join(", ")}</li>`; };
+  $("pf-rules-list").innerHTML = rl("crypto_breakout", "Accelerazioni e Squeeze crypto") + rl("brokerage_breakout", "Breakout azioni (sperimentale)") +
+    `<li>comprano solo con il regime di mercato positivo; al massimo 10 posizioni aperte per portafoglio</li>`;
 
   $("pf-grid").innerHTML = PF_ORDER.filter(k => pp.portfolios[k]).map(k => {
     const p = pp.portfolios[k];
@@ -704,8 +886,12 @@ function renderPaper() {
       const s = p.split.suggested, o = p.split.other;
       split = `<div class="pf-split">Scelte dai suggerimenti: ${s.n} chiuse${s.avg_pct != null ? `, media <span class="${cls(s.avg_pct)}">${sign(s.avg_pct)}</span>` : ""} · Altre: ${o.n}${o.avg_pct != null ? `, media <span class="${cls(o.avg_pct)}">${sign(o.avg_pct)}</span>` : ""}</div>`;
     }
-    return `<div class="pf-card ${k === "manual" ? "manual" : ""}">
-      <div class="pf-head"><h4>${esc(p.label)}</h4><span class="kind">${k === "manual" ? "tue scelte · Telegram" : "automatico"}</span></div>
+    const bench = Object.entries(p.bench || {}).filter(([, v]) => v != null)
+      .map(([bk, v]) => `${BENCH_NAME[bk] || bk} <span class="${cls(v)}">${sign(v)}</span>`).join(" · ");
+    const kind = k === "manual" ? "tue scelte · Telegram" : (p.experimental ? "automatico · sperimentale" : "automatico · operativo");
+    return `<div class="pf-card ${k === "manual" ? "manual" : ""} ${p.experimental ? "exp" : ""}">
+      <div class="pf-head"><h4>${esc(p.label)}</h4><span class="kind">${kind}</span></div>
+      <div class="pf-meta">dal ${fmtDay(p.started)}</div>
       <div class="pf-val"><span class="eq">${fmtMoney(p.equity)}</span><span class="r ${cls(p.ret_pct)}">${sign(p.ret_pct)}</span></div>
       ${sparkline(p.history, p.initial)}
       <span class="verdict ${v.code || ""}">${VERDICT_ICON[v.code] || ""} ${esc(v.label || "")}</span>
@@ -716,10 +902,11 @@ function renderPaper() {
         <span>Profit factor <b>${pf}</b></span>
         <span>Calo max <b>${p.max_dd != null ? sign(p.max_dd) : "—"}</b></span>
       </div>${split}
+      ${bench ? `<div class="pf-bench">Mercato nello stesso periodo: ${bench}</div>` : ""}
     </div>`;
   }).join("");
 
-  const short = { manual: "Mie", momentum: "Accelerazioni", setup: "Squeeze", reversion: "Rimbalzi" };
+  const short = PF_SHORT;
   const open = PF_ORDER.flatMap(k => (pp.portfolios[k]?.open || []).map(x => ({ ...x, pf: k })))
     .sort((a, b) => b.entry_ts.localeCompare(a.entry_ts));
   $("pf-open").innerHTML = open.length ? open.map(x => `<tr>
@@ -734,6 +921,26 @@ function renderPaper() {
       <td><div>${esc(x.name)}</div><div class="rsub">${short[x.pf]} · ${fmtDate(x.exit_ts)}</div></td>
       <td class="num ${cls(x.pnl_pct)}">${sign(x.pnl_pct)}</td><td class="lens-tag">${esc(x.reason)}</td></tr>`).join("")
     : `<tr><td colspan="3" class="muted">Ancora nessuna operazione chiusa.</td></tr>`;
+
+  $("pf-archive").innerHTML = (pp.archive || []).map(a => {
+    const rows = ["momentum", "setup", "reversion"].filter(k => a.portfolios?.[k]).map(k => {
+      const x = a.portfolios[k];
+      const pf = x.profit_factor != null ? x.profit_factor.toFixed(2).replace(".", ",") : "—";
+      return `<div class="arc-row"><div class="arc-l"><span>${esc(x.label)}</span><span class="${cls(x.ret_pct)}">${sign(x.ret_pct)}</span></div><div class="k">${x.n_closed} chiuse · positive ${x.win_rate != null ? Math.round(x.win_rate) + "%" : "—"} · profit factor ${pf}</div></div>`;
+    }).join("");
+    const b = a.bench || {};
+    const bl = Object.entries(b).filter(([, v]) => v != null).map(([k, v]) => `${BENCH_NAME[k] || k} ${sign(v)}`).join(" · ");
+    return `<div class="sub-title">Archivio</div><div class="arc"><h4>${esc(a.label)}</h4>
+      <div class="arc-sub">${fmtDay(a.from)} → ${fmtDay(a.to)}${bl ? " · mercato: " + bl : ""}</div>
+      <div class="arc-rows">${rows}</div>${a.note ? `<div class="arc-note">${esc(a.note)}</div>` : ""}</div>`;
+  }).join("");
+}
+
+function renderBacktest() {
+  const f = v => `<span class="${cls(v)}">${pctIt(v)}</span>`;
+  $("bt-body").innerHTML = BACKTEST.rows.map(([y, a, b]) => `<tr><td>${y}</td><td>${f(a)}</td><td>${f(b)}</td></tr>`).join("") +
+    `<tr class="tot"><td>Tutto il periodo</td><td>${f(BACKTEST.total.v2)}<div class="rsub">calo max ${pctIt(BACKTEST.total.dd2)}</div></td>` +
+    `<td>${f(BACKTEST.total.v3)}<div class="rsub">calo max ${pctIt(BACKTEST.total.dd3)}</div></td></tr>`;
 }
 
 function setLens(l) { lens = l; try { sessionStorage.setItem("lens", l); } catch (e) {} render(); }
@@ -756,6 +963,7 @@ async function load() {
       $("lc-" + l).textContent = n != null ? n + " asset" : (l === "reversion" ? (s.scored_count ?? "—") + " asset" : "—");
     }
     updateAgo();
+    renderRegime();
     render();
     renderPaper();
     renderPerf();
@@ -774,6 +982,7 @@ document.querySelectorAll(".lens").forEach(b => b.addEventListener("click", () =
 document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab)));
 $("refresh-btn").addEventListener("click", load);
 $("lead").innerHTML = LENS_INFO[lens].lead;
+renderBacktest();
 load();
 setInterval(updateAgo, 60_000);
 setInterval(load, 5 * 60_000);

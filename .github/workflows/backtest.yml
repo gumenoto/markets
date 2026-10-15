@@ -4,9 +4,6 @@ name: Backtest
 # ricostruisce i segnali e salva il report in backtest_results/ (≈ 25 minuti).
 on:
   workflow_dispatch:
-  push:  # TEMPORANEO: solo per generare il report sul branch del modello v3
-    branches: [model-v3]
-    paths: ['backtest.py']
 
 concurrency:
   group: backtest
