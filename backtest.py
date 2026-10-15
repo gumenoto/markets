@@ -108,6 +108,15 @@ def load_data():
     if "BTC" not in bases:
         bases.insert(0, "BTC")
     names = {u["base"]: u["name"] for u in uni}
+    ref_px = {u["base"]: u["price"] for u in uni}
+    fresh_after = pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=5)
+
+    def alive(base, df):
+        """Coppia ancora quotata e con prezzo coerente con quello di mercato (no coppie morte o ridenominate)."""
+        if df is None or df.index[-1] < fresh_after:
+            return False
+        p = ref_px.get(base)
+        return p is None or abs(df["c"].iloc[-1] / p - 1) <= 0.15
     log(f"  {len(bases)} crypto candidate")
 
     def get(base):
@@ -118,9 +127,12 @@ def load_data():
     crypto_d, crypto_4h = {}, {}
     with ThreadPoolExecutor(max_workers=6) as ex:
         for base, d1, h4 in ex.map(get, bases):
-            if d1 is not None:
-                crypto_d[base] = d1
-            if h4 is not None:
+            if not alive(base, d1):
+                if d1 is not None:
+                    log(f"  · scartato {base}: coppia ferma al {d1.index[-1].date()} o prezzo incoerente")
+                continue
+            crypto_d[base] = d1
+            if alive(base, h4):
                 crypto_4h[base] = h4
     log(f"  crypto con storico: giornaliero {len(crypto_d)}, 4h {len(crypto_4h)} · {S.SRC_BINANCE.summary()}")
 
