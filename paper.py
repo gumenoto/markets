@@ -1,21 +1,22 @@
 """
 Paper trading — soldi finti per verificare se i segnali valgono qualcosa.
 
-Quattro portafogli da 10.000 (unità di conto, "€" indicativi):
-  momentum   segue ogni alert 🚀 Accelerazione
-  setup      segue ogni alert ⚡ Squeeze scattato (asset usciti da "In carica")
-  reversion  segue ogni alert 🔄 Rimbalzo
-  manual     le tue scelte, via Telegram: /compra QNT 500 · /vendi QNT · /portafoglio
+Modello v3 (validato dal backtest 2021–2026, vedi backtest.py):
+  crypto_breakout     segue ogni alert 🚀 Accelerazione crypto (regime BTC positivo, score ≥ 100)
+  crypto_squeeze      segue ogni alert ⚡ Squeeze crypto (regime BTC positivo)
+  brokerage_breakout  breakout/squeeze su azioni e commodity · sperimentale, senza alert
+  manual              le tue scelte, via Telegram: /compra QNT 500 · /vendi QNT · /portafoglio
 
-Regole dei portafogli automatici (PAPER_RULES): taglio fisso per operazione,
-stop loss, take profit o trailing stop, durata massima. Costi realistici per
-operazione (spread/commissioni). Prezzi senza cambio valuta: i rendimenti sono
-nella valuta dell'asset (USD per crypto e azioni USA, EUR per quelle europee).
+Regole di uscita in PAPER_RULES, costi realistici in COSTS. Ogni portafoglio ha
+la sua data di partenza e il suo benchmark (BTC per le crypto, S&P 500 per le
+azioni). Prezzi senza cambio valuta: rendimenti nella valuta dell'asset.
 
 Le operazioni vengono eseguite al prezzo dell'aggiornamento in cui sono
-processate: niente "senno di poi". Stop e target sono controllati solo agli
-aggiornamenti: se il prezzo scavalca lo stop tra un run e l'altro, l'uscita
-avviene al prezzo osservato (conservativo).
+processate: niente "senno di poi". Stop e scadenze sono controllati agli
+aggiornamenti (ogni 30'): se il prezzo scavalca lo stop tra un run e l'altro,
+l'uscita avviene al prezzo osservato (conservativo).
+
+I portafogli del modello precedente (v2) vengono archiviati, non cancellati.
 """
 
 from __future__ import annotations
@@ -23,11 +24,11 @@ from __future__ import annotations
 import json
 import math
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 PAPER_FILE = Path("paper.json")
-PAPER_VERSION = 1
+PAPER_VERSION = 2
 
 INITIAL_CAPITAL = 10_000.0
 TRADE_SIZE = 1_000.0          # importo per operazione nei portafogli automatici
@@ -36,19 +37,21 @@ DEFAULT_MANUAL_SIZE = 1_000.0
 MIN_TRADES_FOR_VERDICT = 20   # operazioni chiuse prima di dare un giudizio
 
 PORTFOLIOS = {
-    "momentum": {"label": "Accelerazioni", "kind": "auto", "signal": "momentum"},
-    "setup": {"label": "In carica → squeeze", "kind": "auto", "signal": "squeeze"},
-    "reversion": {"label": "Rimbalzi", "kind": "auto", "signal": "reversion"},
-    "manual": {"label": "Le mie scelte", "kind": "manual", "signal": None},
+    "crypto_breakout": {"label": "Accelerazioni crypto", "kind": "auto", "rule": "crypto_breakout",
+                        "bench": ["BTC"], "experimental": False},
+    "crypto_squeeze": {"label": "Squeeze crypto", "kind": "auto", "rule": "crypto_breakout",
+                       "bench": ["BTC"], "experimental": False},
+    "brokerage_breakout": {"label": "Breakout azioni", "kind": "auto", "rule": "brokerage_breakout",
+                           "bench": ["SPY"], "experimental": True},
+    "manual": {"label": "Le mie scelte", "kind": "manual", "rule": None,
+               "bench": ["BTC", "SPY"], "experimental": False},
 }
 
-# Regole di uscita per tipo di segnale (percentuali)
+# Regole di uscita (percentuali). Scelte col backtest: per le crypto l'uscita a
+# tempo (5 giorni) con stop -8% batte il trailing; per le azioni serve più spazio.
 PAPER_RULES = {
-    # rimbalzo veloce: obiettivo +6%, stop -5%, massimo 3 giorni
-    "reversion": {"stop": -5.0, "take": 6.0, "trail": None, "trail_from": None, "max_days": 3},
-    # breakout: stop -8%, poi trailing 15% dal massimo quando è sopra +8%; massimo 10 giorni
-    "momentum": {"stop": -8.0, "take": None, "trail": 15.0, "trail_from": 8.0, "max_days": 10},
-    "squeeze": {"stop": -8.0, "take": None, "trail": 15.0, "trail_from": 8.0, "max_days": 10},
+    "crypto_breakout": {"stop": -8.0, "take": None, "trail": None, "trail_from": None, "max_days": 5},
+    "brokerage_breakout": {"stop": -12.0, "take": None, "trail": 20.0, "trail_from": 10.0, "max_days": 20},
 }
 
 # Costi per lato (acquisto o vendita): percentuale + fisso
@@ -58,15 +61,20 @@ COSTS = {
     "commodity": {"pct": 0.15, "fixed": 1.0},  # ETF/ETC: 1 € + spread più largo
 }
 
+# Nomi dei portafogli del modello v2 (per l'archivio)
+V1_LABELS = {"momentum": "Accelerazioni", "setup": "In carica → squeeze", "reversion": "Rimbalzi",
+             "manual": "Le mie scelte"}
+
 HELP_TEXT = (
     "📒 <b>Portafoglio simulato</b> (soldi finti, 10.000 di partenza)\n\n"
     "<code>/compra QNT 500</code> — compra 500 di QNT\n"
     "<code>/compra NVDA</code> — compra 1.000 (importo predefinito)\n"
     "<code>/vendi QNT</code> — vende tutto QNT\n"
     "<code>/vendi QNT 50%</code> — vende metà\n"
-    "<code>/portafoglio</code> — situazione attuale\n\n"
+    "<code>/portafoglio</code> — il tuo portafoglio\n"
+    "<code>/riepilogo</code> — tutti i portafogli simulati\n\n"
     "Puoi usare il ticker (QNT, NVDA, ENI.MI, GC=F) o il nome (Quant, Oro).\n"
-    "Gli ordini vengono eseguiti al prezzo del prossimo aggiornamento dello scanner."
+    "Gli ordini vengono eseguiti al prezzo del prossimo aggiornamento dello scanner (entro 30')."
 )
 
 
@@ -113,11 +121,65 @@ def trade_cost(asset_type: str, amount: float) -> float:
     return amount * c["pct"] / 100 + c["fixed"]
 
 
+def exit_plan(rule_name: str, price: float, now: datetime) -> dict | None:
+    """Prezzo di stop e data di uscita di una nuova posizione (per gli alert)."""
+    r = PAPER_RULES.get(rule_name)
+    if not r:
+        return None
+    return {"stop_price": price * (1 + r["stop"] / 100), "stop_pct": r["stop"],
+            "exit_by": now + timedelta(days=r["max_days"]), "max_days": r["max_days"],
+            "trail": r["trail"], "trail_from": r["trail_from"]}
+
+
+def _new_portfolio(now: datetime | None, bench_start: dict) -> dict:
+    return {"cash": INITIAL_CAPITAL, "initial": INITIAL_CAPITAL, "positions": [], "closed": [],
+            "history": [], "seq": 0, "started": _iso(now) if now else None, "bench_start": dict(bench_start)}
+
+
+def _equity(p: dict) -> float:
+    return p["cash"] + sum(x["qty"] * x["last_price"] for x in p["positions"])
+
+
+def _stats(p: dict) -> dict:
+    closed = p["closed"]
+    wins = [c["pnl"] for c in closed if c["pnl"] > 0]
+    losses = [c["pnl"] for c in closed if c["pnl"] <= 0]
+    eq = _equity(p)
+    peak, mdd = p["initial"], 0.0
+    for _, v in p["history"]:
+        peak = max(peak, v)
+        mdd = min(mdd, (v / peak - 1) * 100)
+    pf = None
+    if losses and sum(losses) != 0:
+        pf = sum(wins) / abs(sum(losses))
+    elif wins:
+        pf = float("inf")
+    return {
+        "equity": eq,
+        "ret_pct": (eq / p["initial"] - 1) * 100,
+        "n_open": len(p["positions"]),
+        "n_closed": len(closed),
+        "win_rate": len(wins) / len(closed) * 100 if closed else None,
+        "profit_factor": pf,
+        "avg_trade_pct": sum(c["pnl_pct"] for c in closed) / len(closed) if closed else None,
+        "realized": sum(c["pnl"] for c in closed),
+        "max_dd": mdd,
+    }
+
+
+def _bench_ret(start: dict, prices: dict, keys: list[str]) -> dict:
+    out = {}
+    for k in keys:
+        p0, p1 = start.get(k), prices.get(k)
+        out[k] = (p1 / p0 - 1) * 100 if p0 and p1 else None
+    return out
+
+
 class PaperBook:
     def __init__(self, data: dict):
         self.data = data
 
-    # ── persistenza ──
+    # ── persistenza e migrazione ──
     @classmethod
     def load(cls, path: Path = PAPER_FILE) -> "PaperBook":
         data = None
@@ -126,32 +188,60 @@ class PaperBook:
                 data = json.loads(path.read_text())
             except (json.JSONDecodeError, OSError):
                 print(f"  ! {path} illeggibile: riparto con portafogli nuovi")
-        if not isinstance(data, dict) or data.get("version") != PAPER_VERSION:
-            data = {"version": PAPER_VERSION, "started": None, "bench_start": {},
-                    "telegram_offset": None, "portfolios": {}}
-        for key, meta in PORTFOLIOS.items():
-            p = data["portfolios"].setdefault(key, {})
-            p.setdefault("cash", INITIAL_CAPITAL)
-            p.setdefault("initial", INITIAL_CAPITAL)
-            p.setdefault("positions", [])
-            p.setdefault("closed", [])
-            p.setdefault("history", [])
-            p.setdefault("seq", 0)
+        if not isinstance(data, dict):
+            data = {"version": PAPER_VERSION, "telegram_offset": None, "portfolios": {}, "archive": []}
         return cls(data)
+
+    def prepare(self, now: datetime, bench_prices: dict[str, float]) -> list[str]:
+        """Migra dal formato v1 (archiviando i vecchi portafogli) e avvia i portafogli nuovi."""
+        notes = []
+        d = self.data
+        if d.get("version") == 1:
+            old = d.get("portfolios", {})
+            snap = {}
+            for key, p in old.items():
+                if key == "manual":
+                    continue
+                st = _stats(p)
+                snap[key] = {"label": V1_LABELS.get(key, key), **{k: (None if isinstance(v, float) and not math.isfinite(v) else v)
+                                                                 for k, v in st.items()}}
+            d.setdefault("archive", []).insert(0, {
+                "label": "Modello v2 (fine settembre – metà ottobre 2026)",
+                "from": d.get("started"), "to": _iso(now),
+                "bench": _bench_ret(d.get("bench_start", {}), bench_prices, ["BTC", "SPY"]),
+                "portfolios": snap,
+                "note": "Sostituito dal modello v3 dopo il backtest: i Rimbalzi non hanno vantaggio, "
+                        "le Accelerazioni crypto sì ma solo con regime BTC positivo e uscita a 5 giorni.",
+            })
+            manual = old.get("manual")
+            new_ports = {}
+            if manual:
+                manual.setdefault("started", d.get("started"))
+                manual.setdefault("bench_start", d.get("bench_start", {}))
+                new_ports["manual"] = manual
+            d["portfolios"] = new_ports
+            d.pop("started", None)
+            d.pop("bench_start", None)
+            d["version"] = PAPER_VERSION
+            notes.append("portafogli v2 archiviati, nuovi portafogli v3 avviati")
+        d.setdefault("archive", [])
+        d.setdefault("telegram_offset", None)
+        for key in PORTFOLIOS:
+            p = d["portfolios"].get(key)
+            if p is None:
+                d["portfolios"][key] = _new_portfolio(now, bench_prices)
+                continue
+            for k, v in _new_portfolio(None, {}).items():
+                p.setdefault(k, v)
+            if not p.get("started"):
+                p["started"] = _iso(now)
+            for k, v in bench_prices.items():
+                if v and k not in p["bench_start"]:
+                    p["bench_start"][k] = v
+        return notes
 
     def to_json(self) -> dict:
         return self.data
-
-    @property
-    def started(self) -> bool:
-        return bool(self.data.get("started"))
-
-    def ensure_started(self, now: datetime, bench_prices: dict[str, float]) -> None:
-        if not self.data.get("started"):
-            self.data["started"] = _iso(now)
-        for k, v in bench_prices.items():
-            if v and k not in self.data["bench_start"]:
-                self.data["bench_start"][k] = v
 
     # ── operazioni ──
     def _p(self, key: str) -> dict:
@@ -230,13 +320,13 @@ class PaperBook:
         return closed
 
     # ── portafogli automatici ──
-    def open_auto(self, signal_kind: str, asset: dict, score: float, now: datetime) -> str | None:
-        key = next((k for k, m in PORTFOLIOS.items() if m["signal"] == signal_kind), None)
-        if not key or self.find_position(key, asset["asset_id"]):
+    def open_auto(self, key: str, asset: dict, score: float, now: datetime, signal_kind: str) -> str | None:
+        meta = PORTFOLIOS.get(key)
+        if not meta or meta["kind"] != "auto" or self.find_position(key, asset["asset_id"]):
             return None
-        ok, msg = self.buy(key, asset, TRADE_SIZE, now, reason=f"alert {signal_kind} (score {score:.0f})",
-                           rule=signal_kind)
-        return f"{PORTFOLIOS[key]['label']}: {asset['symbol']} {msg}" if ok else None
+        ok, msg = self.buy(key, asset, TRADE_SIZE, now, reason=f"{signal_kind} (score {score:.0f})",
+                           rule=meta["rule"])
+        return f"{meta['label']}: {asset['symbol']} {msg}" if ok else None
 
     def update(self, prices: dict[str, float], now: datetime) -> list[str]:
         """Aggiorna i prezzi e applica le regole di uscita dei portafogli automatici."""
@@ -251,7 +341,9 @@ class PaperBook:
                     pos["peak"] = max(pos.get("peak", price), price)
                 if meta["kind"] != "auto":
                     continue
-                rule = PAPER_RULES.get(pos.get("rule") or meta["signal"])
+                rule = PAPER_RULES.get(pos.get("rule") or meta["rule"])
+                if not rule:
+                    continue
                 px = pos["last_price"]
                 ret = (px / pos["entry_price"] - 1) * 100
                 peak_ret = (pos["peak"] / pos["entry_price"] - 1) * 100
@@ -271,18 +363,16 @@ class PaperBook:
         return events
 
     def equity(self, key: str) -> float:
-        p = self._p(key)
-        return p["cash"] + sum(x["qty"] * x["last_price"] for x in p["positions"])
+        return _equity(self._p(key))
 
     def record_history(self, now: datetime) -> None:
         for key in PORTFOLIOS:
             h = self._p(key)["history"]
-            eq = round(self.equity(key), 2)
-            h.append([_iso(now), eq])
+            h.append([_iso(now), round(self.equity(key), 2)])
             if len(h) > 1500:
                 del h[: len(h) - 1500]
 
-    # ── comandi Telegram (portafoglio manuale) ──
+    # ── comandi Telegram ──
     def handle_command(self, text: str, resolve, suggested_by, now: datetime, order_ts: str | None = None) -> str:
         t = (text or "").strip()
         parts = t.split()
@@ -294,6 +384,8 @@ class PaperBook:
             return HELP_TEXT
         if cmd in ("portafoglio", "p", "saldo", "portfolio"):
             return self.portfolio_text("manual")
+        if cmd in ("riepilogo", "r", "simulazioni", "tutti"):
+            return self.overview_text()
         if cmd in ("compra", "buy", "c"):
             if not args:
                 return "Scrivi cosa comprare, es. <code>/compra QNT 500</code>"
@@ -311,9 +403,7 @@ class PaperBook:
             if not ok:
                 return f"⛔ {_esc(asset['name'])}: {msg}."
             tag = f"\n💡 Era tra i suggerimenti: {', '.join(sug)}" if sug else "\n(non era tra i suggerimenti dello scanner)"
-            when = ""
-            if order_ts:
-                when = f"\nOrdine delle {_hm(order_ts)} · eseguito alle {_hm(_iso(now))}"
+            when = f"\nOrdine delle {_hm(order_ts)} · eseguito alle {_hm(_iso(now))}" if order_ts else ""
             return (f"✅ <b>Comprato</b> {_esc(asset['name'])} ({_esc(asset['symbol'])})\n"
                     f"{fmt_money(amount)} a <code>{asset['price']:.6g}</code> · costi {fmt_money(trade_cost(asset['type'], amount))}"
                     f"{when}{tag}\nLiquidità: {fmt_money(self._p('manual')['cash'])}")
@@ -362,40 +452,23 @@ class PaperBook:
         for pos in p["positions"]:
             r = (pos["last_price"] / pos["entry_price"] - 1) * 100
             lines.append(f"• {_esc(pos['name'])}: {fmt_money(pos['qty'] * pos['last_price'])} ({fmt_pct(r)})")
-        s = self.stats(key)
+        s = _stats(p)
         if s["n_closed"]:
             lines += ["", f"Chiuse: {s['n_closed']} · positive {s['win_rate']:.0f}% · risultato {fmt_money(s['realized'])}"]
         return "\n".join(lines)
 
+    def overview_text(self) -> str:
+        lines = ["📊 <b>Portafogli simulati</b> (10.000 di partenza ciascuno)", ""]
+        for key, meta in PORTFOLIOS.items():
+            s = _stats(self._p(key))
+            tag = " · sperimentale" if meta["experimental"] else ""
+            lines.append(f"• <b>{meta['label']}</b>{tag}: {fmt_money(s['equity'])} ({fmt_pct(s['ret_pct'])}) · "
+                         f"{s['n_open']} aperte, {s['n_closed']} chiuse")
+        return "\n".join(lines)
+
     # ── statistiche ──
     def stats(self, key: str) -> dict:
-        p = self._p(key)
-        closed = p["closed"]
-        wins = [c["pnl"] for c in closed if c["pnl"] > 0]
-        losses = [c["pnl"] for c in closed if c["pnl"] <= 0]
-        eq = self.equity(key)
-        peak, mdd = p["initial"], 0.0
-        for _, v in p["history"]:
-            peak = max(peak, v)
-            mdd = min(mdd, (v / peak - 1) * 100)
-        return {
-            "equity": eq,
-            "ret_pct": (eq / p["initial"] - 1) * 100,
-            "n_open": len(p["positions"]),
-            "n_closed": len(closed),
-            "win_rate": len(wins) / len(closed) * 100 if closed else None,
-            "profit_factor": (sum(wins) / abs(sum(losses))) if losses and sum(losses) != 0 else (None if not wins else float("inf")),
-            "avg_trade_pct": sum(c["pnl_pct"] for c in closed) / len(closed) if closed else None,
-            "realized": sum(c["pnl"] for c in closed),
-            "max_dd": mdd,
-        }
-
-    def bench_returns(self, bench_prices: dict[str, float]) -> dict[str, float | None]:
-        out = {}
-        for k, p0 in self.data["bench_start"].items():
-            p1 = bench_prices.get(k)
-            out[k] = (p1 / p0 - 1) * 100 if p1 and p0 else None
-        return out
+        return _stats(self._p(key))
 
     def verdict(self, st: dict, bench: dict) -> dict:
         n = st["n_closed"]
@@ -412,11 +485,11 @@ class PaperBook:
         return {"code": "negativo", "label": "Non funziona finora", "market": market}
 
     def summary(self, bench_prices: dict[str, float], now: datetime) -> dict:
-        bench = self.bench_returns(bench_prices)
         out = {}
         for key, meta in PORTFOLIOS.items():
             p = self._p(key)
-            st = self.stats(key)
+            st = _stats(p)
+            bench = _bench_ret(p.get("bench_start", {}), bench_prices, meta["bench"])
             hist = p["history"]
             step = max(1, len(hist) // 120)
             sampled = hist[::step]
@@ -425,6 +498,10 @@ class PaperBook:
             out[key] = {
                 "label": meta["label"],
                 "kind": meta["kind"],
+                "experimental": meta["experimental"],
+                "rule": meta["rule"],
+                "started": p.get("started"),
+                "bench": bench,
                 "initial": p["initial"],
                 "cash": p["cash"],
                 **{k: (None if isinstance(v, float) and not math.isfinite(v) else v) for k, v in st.items()},
@@ -447,13 +524,12 @@ class PaperBook:
                     "other": {"n": len(other), "avg_pct": (sum(c["pnl_pct"] for c in other) / len(other)) if other else None},
                 }
         return {
-            "started": self.data.get("started"),
-            "bench": bench,
             "rules": PAPER_RULES,
             "costs": COSTS,
             "trade_size": TRADE_SIZE,
             "min_trades": MIN_TRADES_FOR_VERDICT,
             "portfolios": out,
+            "archive": self.data.get("archive", []),
         }
 
 

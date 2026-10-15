@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 """
-Mercati Screener v2 — tre modalità di lettura del mercato.
+Mercati Screener v3 — tre modalità di lettura del mercato.
 
-  RIMBALZI       mean-reversion (logica originale, invariata): ipervenduti,
-                 sotto MA20 / Bollinger inferiore, candidati a un rimbalzo.
+  RIMBALZI       mean-reversion (logica originale): ipervenduti, sotto MA20 /
+                 Bollinger inferiore. Solo lista informativa: nel backtest
+                 2021–2026 non hanno vantaggio, quindi niente alert.
   ACCELERAZIONI  momentum/breakout: rottura del massimo a 20/55 giorni con
                  volume, forza relativa vs BTC o vs indice, trend (ADX).
   IN CARICA      watchlist pre-breakout: volatilità compressa (Bollinger
                  squeeze), prezzo vicino al tetto del range, accumulo volumi.
                  Nessun alert all'ingresso: alert solo quando "scatta".
+
+Segnali operativi (alert + portafoglio simulato), vedi SIGNAL_POLICY:
+  solo Accelerazioni crypto (score ≥ 100) e Squeeze crypto, e solo quando
+  BTC ha chiuso sopra la media a 50 giorni (regime positivo). Uscita: stop
+  −8% oppure dopo 5 giorni. Azioni e commodity: portafoglio sperimentale,
+  senza alert. Regole validate con backtest.py.
 
 Universo:
   crypto     CoinGecko /coins/markets (top 250 per capitalizzazione, filtrate
@@ -40,11 +47,12 @@ import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 import requests
 
-from paper import PAPER_FILE, PORTFOLIOS, PaperBook, build_resolver
+from paper import PAPER_FILE, PORTFOLIOS, PaperBook, build_resolver, exit_plan
 
 try:
     import yfinance as yf
@@ -56,7 +64,7 @@ except ImportError:  # pragma: no cover
 
 # ══ CONFIG ═══════════════════════════════════════════════════════════════
 
-MODEL_VERSION = 2
+MODEL_VERSION = 3
 
 BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
@@ -101,7 +109,7 @@ MOMENTUM_WEIGHTS = {
 ALERT_MIN_SCORE = {
     ("reversion", "crypto"): 60,
     ("reversion", "brokerage"): 40,
-    ("momentum", "crypto"): 80,
+    ("momentum", "crypto"): 100,      # backtest: sotto 100 nessun vantaggio (PF 1,03 tra 80 e 100)
     ("momentum", "brokerage"): 60,
     ("squeeze", "crypto"): 50,
     ("squeeze", "brokerage"): 40,
@@ -117,6 +125,21 @@ ALERT_MIN_VOLUME = {
     ("squeeze", "crypto"): 1.5,
     ("squeeze", "brokerage"): 1.3,
 }
+# Cosa produce ogni segnale (modello v3, validato dal backtest 2021–2026: vedi backtest.py).
+#   alert True  → messaggio Telegram + portafoglio simulato (segnale "operativo")
+#   alert False → solo portafoglio simulato (segnale "sperimentale")
+# I Rimbalzi non compaiono: nel backtest non hanno vantaggio (restano come lista informativa).
+SIGNAL_POLICY = {
+    ("momentum", "crypto"): {"alert": True, "portfolio": "crypto_breakout"},
+    ("squeeze", "crypto"): {"alert": True, "portfolio": "crypto_squeeze"},
+    ("momentum", "brokerage"): {"alert": False, "portfolio": "brokerage_breakout"},
+    ("squeeze", "brokerage"): {"alert": False, "portfolio": "brokerage_breakout"},
+    ("momentum", "commodity"): {"alert": False, "portfolio": "brokerage_breakout"},
+    ("squeeze", "commodity"): {"alert": False, "portfolio": "brokerage_breakout"},
+}
+# Filtro di regime: si compra solo quando il mercato di riferimento è in salita.
+# Crypto: BTC sopra la media a 50 giorni. Azioni: indice della regione sopra la media a 200 giorni.
+REGIME_MA = {"crypto": 50, "index": 200}
 ALERT_COOLDOWN_H = 24        # stesso asset + stessa modalità: max 1 alert/24h
 LOG_DEDUP_H = 72             # stesso asset + modalità: 1 voce di registro/72h
 SETUP_MEMORY_DAYS = 5        # "In carica" ricordato per 5 giorni
@@ -187,6 +210,7 @@ COMMODITY_UNIVERSE = [
 
 # Indici di riferimento per la forza relativa delle azioni
 BENCHMARKS = {"US": "SPY", "EU": "^STOXX50E", "IT": "FTSEMIB.MI"}
+BENCHMARK_NAMES = {"US": "S&P 500", "EU": "Euro Stoxx 50", "IT": "FTSE MIB"}
 
 HTTP_HEADERS = {"User-Agent": "mercati-screener/2.0 (+github actions)"}
 
@@ -1051,13 +1075,17 @@ def build_crypto_assets() -> tuple[list[dict], dict]:
             if a["change_7d"] is None and len(d1["closes"]) >= 8:
                 a["change_7d"] = (d1["closes"][-1] / d1["closes"][-8] - 1) * 100
         a["m"] = daily_metrics(d1, vr_rolling)
+        if u["base"] == "BTC" and d1:
+            a["_daily_closes"] = d1["closes"]
         return a
 
     with ThreadPoolExecutor(max_workers=8) as ex:
         assets = [a for a in ex.map(enrich, universe) if a]
 
+    btc_a = next((a for a in assets if a["base"] == "BTC"), None)
+    info["regime"] = regime_info("Bitcoin", btc_a.pop("_daily_closes", None) if btc_a else None,
+                                 REGIME_MA["crypto"])
     if info["btc_7d"] is None:
-        btc_a = next((a for a in assets if a["base"] == "BTC"), None)
         info["btc_7d"] = btc_a["change_7d"] if btc_a else None
     for a in assets:
         if a["change_7d"] is not None:
@@ -1128,17 +1156,30 @@ def fetch_yf_asset(symbol: str, name: str, asset_type: str, bench: dict) -> dict
     return a
 
 
-def build_brokerage_assets() -> tuple[list[dict], list[dict], dict, dict]:
-    bench, bench_px = {}, {}
+def regime_info(label: str, closes: list[float] | None, ma_days: int) -> dict:
+    """Regime di mercato: ultima chiusura giornaliera completa sopra (on) o sotto (off)
+    la sua media mobile. La barra della giornata in corso è esclusa, così il regime
+    cambia al massimo una volta al giorno invece di oscillare durante la seduta."""
+    done = list(closes[:-1]) if closes else []
+    ma = sma(done, ma_days) if len(done) >= ma_days else None
+    last = done[-1] if done else None
+    return {"label": label, "ma_days": ma_days, "price": last, "ma": ma,
+            "on": (last > ma) if (last is not None and ma) else None,
+            "dist_pct": (last / ma - 1) * 100 if (last is not None and ma) else None}
+
+
+def build_brokerage_assets() -> tuple[list[dict], list[dict], dict, dict, dict]:
+    bench, bench_px, regimes = {}, {}, {}
     for region, sym in BENCHMARKS.items():
         d = yf_daily(sym)
         if d and len(d["closes"]) >= 6:
             bench[region] = (d["closes"][-1] / d["closes"][-6] - 1) * 100
             bench_px[sym] = d["closes"][-1]
+        regimes[region] = regime_info(BENCHMARK_NAMES[region], d["closes"] if d else None, REGIME_MA["index"])
     # sequenziale di proposito: Yahoo limita le richieste parallele
     stocks = [a for a in (fetch_yf_asset(s, n, "stock", bench) for s, n in STOCK_UNIVERSE) if a]
     commodities = [a for a in (fetch_yf_asset(s, n, "commodity", bench) for s, n in COMMODITY_UNIVERSE) if a]
-    return stocks, commodities, bench, bench_px
+    return stocks, commodities, bench, bench_px, regimes
 
 
 # ══ TELEGRAM ═════════════════════════════════════════════════════════════
@@ -1220,10 +1261,62 @@ LENS_HEADERS = {
     "momentum": "🚀 <b>Accelerazione</b>",
     "squeeze": "⚡ <b>Squeeze scattato</b>",
 }
+KIND_NAMES = {"momentum": "Accelerazione", "squeeze": "Squeeze"}
+
+
+def regime_change_text(r: dict) -> str:
+    if r["on"]:
+        head = f"🟢 <b>Regime {html.escape(r['label'])} tornato positivo</b>"
+        body = (f"Ha chiuso sopra la media a {r['ma_days']} giorni: da ora gli alert "
+                "Accelerazioni e Squeeze crypto sono di nuovo attivi.")
+    else:
+        head = f"🔴 <b>Regime {html.escape(r['label'])} negativo</b>"
+        body = (f"Ha chiuso sotto la media a {r['ma_days']} giorni: alert crypto in pausa "
+                "(nel backtest i breakout in questa fase perdevano). Le posizioni aperte seguono le loro regole.")
+    return f"{head}\n{body}"
+
+
+def model_intro_text(regimes: dict) -> str:
+    rl = regime_line(regimes.get("crypto")) or "Regime crypto non disponibile"
+    return (
+        f"🛠 <b>Modello v{MODEL_VERSION} attivo</b>\n"
+        "Rivisto dopo il backtest 2021–2026 e le prime settimane di simulazione:\n\n"
+        "• Alert solo per 🚀 Accelerazioni crypto forti (score ≥ 100) e ⚡ Squeeze crypto\n"
+        "• Solo quando BTC è sopra la media a 50 giorni\n"
+        "• Ogni alert ha un piano: stop −8% oppure uscita dopo 5 giorni\n"
+        "• Rimbalzi: solo lista informativa (nessun vantaggio nel backtest)\n"
+        "• Azioni e commodity: simulazione sperimentale, senza alert\n\n"
+        f"{html.escape(rl)}\n"
+        "Portafogli simulati ripartiti da zero: i risultati vecchi restano in archivio. "
+        "Scrivi /riepilogo per vederli."
+    )
+
+
+try:
+    LOCAL_TZ = ZoneInfo("Europe/Rome")
+except Exception:  # pragma: no cover - tzdata mancante
+    LOCAL_TZ = timezone.utc
+WEEKDAYS_IT = ("lun", "mar", "mer", "gio", "ven", "sab", "dom")
+
+
+def fmt_local(dt: datetime) -> str:
+    d = dt.astimezone(LOCAL_TZ)
+    return f"{WEEKDAYS_IT[d.weekday()]} {d:%d/%m} ore {d:%H:%M}"
+
+
+def regime_line(r: dict | None) -> str | None:
+    if not r or r.get("on") is None:
+        return None
+    dist = r.get("dist_pct")
+    where = (f"{abs(dist):.1f}".replace(".", ",") + f"% {'sopra' if dist >= 0 else 'sotto'} la media {r['ma_days']}g"
+             if dist is not None else "")
+    return (f"{'🟢' if r['on'] else '🔴'} Regime {r['label']} {'positivo' if r['on'] else 'negativo'}"
+            f"{' (' + where + ')' if where else ''}")
 
 
 def format_alert(kind: str, a: dict, score: float, signals: list, flags: list,
-                 paper_note: str | None = None) -> str:
+                 paper_note: str | None = None, plan: dict | None = None,
+                 regime: dict | None = None) -> str:
     e = html.escape
     ch = a.get("change_24h") or 0
     bull = [s for s in signals if s[0] == "bull"][:4]
@@ -1238,6 +1331,14 @@ def format_alert(kind: str, a: dict, score: float, signals: list, flags: list,
     if flags:
         lines.append("")
         lines += [f"⚠️ {e(f[1])}: {e(f[2])}" for f in flags]
+    if plan:
+        lines += ["", f"🎯 <b>Piano</b>: stop a <code>{fmt_num(plan['stop_price'])}</code> (−{abs(plan['stop_pct']):.0f}%) "
+                      f"· uscita entro {fmt_local(plan['exit_by'])} ({plan['max_days']} giorni)"]
+        if plan.get("trail"):
+            lines.append(f"Dopo +{plan['trail_from']:.0f}%: uscita se perde {plan['trail']:.0f}% dal massimo")
+    rl = regime_line(regime)
+    if rl:
+        lines.append(e(rl))
     lines += ["", f"📍 {e(venue_for(a))}"]
     if paper_note:
         lines.append(f"📒 {e(paper_note)}")
@@ -1281,7 +1382,7 @@ def write_json(path: Path, obj) -> None:
     tmp.replace(path)
 
 
-def serialize(item: tuple) -> dict:
+def serialize(item: tuple, sig: dict | None = None) -> dict:
     a, score, signals = item
     m = a.get("m") or {}
     return {
@@ -1317,6 +1418,8 @@ def serialize(item: tuple) -> dict:
             "accum": m.get("accum"),
             "above_ma50": (m["last"] > m["ma50"]) if m.get("ma50") else None,
         } if m else None,
+        "signal": {"kind": sig["kind"], "status": sig["status"], "alert": sig["alert"],
+                   "portfolio": sig["portfolio"], "regime": sig["regime"]} if sig else None,
     }
 
 
@@ -1343,26 +1446,35 @@ def update_signal_log(log: list[dict], prices: dict[str, float], now: datetime) 
             e["closed"] = True
 
 
+def _horizons(entries: list[dict]) -> dict:
+    hz = {}
+    for h in ("1d", "3d", "7d"):
+        vals = [e["rets"][h] for e in entries if e["rets"].get(h) is not None]
+        hz[h] = {
+            "n": len(vals),
+            "win": (sum(1 for v in vals if v > 0) / len(vals) * 100) if vals else None,
+            "avg": statistics.mean(vals) if vals else None,
+            "median": statistics.median(vals) if vals else None,
+        }
+    return hz
+
+
 def perf_summary(log: list[dict]) -> dict:
     lenses = {}
     for lens in LENSES:
         entries = [e for e in log if e["lens"] == lens]
-        hz = {}
-        for h in ("1d", "3d", "7d"):
-            vals = [e["rets"][h] for e in entries if e["rets"].get(h) is not None]
-            hz[h] = {
-                "n": len(vals),
-                "win": (sum(1 for v in vals if v > 0) / len(vals) * 100) if vals else None,
-                "avg": statistics.mean(vals) if vals else None,
-                "median": statistics.median(vals) if vals else None,
-            }
-        lenses[lens] = {"signals": len(entries), "horizons": hz}
+        lenses[lens] = {"signals": len(entries), "horizons": _horizons(entries)}
+    op = [e for e in log if e.get("operational")]
     recent = sorted(log, key=lambda e: e["ts"], reverse=True)[:20]
     return {
         "since": min((e["ts"] for e in log), default=None),
         "lenses": lenses,
+        # segnali operativi del modello v3 (quelli che mandano un alert)
+        "operational": {"signals": len(op), "since": min((e["ts"] for e in op), default=None),
+                        "horizons": _horizons(op)},
         "recent": [{k: e.get(k) for k in ("lens", "symbol", "name", "type", "ts", "price", "score",
-                                          "rets", "last_ret", "max_up", "max_down", "alerted")}
+                                          "rets", "last_ret", "max_up", "max_down", "alerted",
+                                          "kind", "status", "operational")}
                    for e in recent],
     }
 
@@ -1387,6 +1499,58 @@ def alert_class(a: dict) -> str:
     return {"crypto": "crypto", "commodity": "commodity"}.get(a["type"], "brokerage")
 
 
+def regime_key(a: dict) -> str | None:
+    """Quale regime vale per l'asset: crypto → BTC, azioni → indice della regione, commodity → nessuno."""
+    if a["type"] == "crypto":
+        return "crypto"
+    if a["type"] == "commodity":
+        return None
+    return _region(a["symbol"])
+
+
+def regime_for(a: dict, regimes: dict) -> bool | None:
+    k = regime_key(a)
+    if k is None:
+        return True  # commodity: nessun indice di riferimento (come nel backtest)
+    return (regimes.get(k) or {}).get("on")
+
+
+SIGNAL_STATUS = {
+    "operativo": "Operativo: alert e simulazione",
+    "sperimentale": "Sperimentale: solo simulazione",
+    "regime_negativo": "In pausa: mercato di riferimento sotto la media",
+    "regime_nd": "In pausa: regime di mercato non disponibile",
+    "volume_debole": "Volume non confermato",
+    "sotto_soglia": "Sotto soglia",
+}
+
+
+def classify_signal(lens: str, a: dict, score: float, regimes: dict) -> dict | None:
+    """Che cosa vale un titolo della lista Accelerazioni secondo SIGNAL_POLICY."""
+    if lens != "momentum":
+        return None
+    kind = "squeeze" if a.get("from_squeeze") else "momentum"
+    cls = alert_class(a)
+    policy = SIGNAL_POLICY.get((kind, cls))
+    if not policy:
+        return None
+    min_vr = ALERT_MIN_VOLUME.get((kind, asset_class(a)))
+    vr = (a.get("m") or {}).get("vr")
+    regime = regime_for(a, regimes)
+    if score < ALERT_MIN_SCORE[(kind, cls)]:
+        status = "sotto_soglia"
+    elif min_vr and vr is not None and vr < min_vr:  # vr None = volume non disponibile (commodity)
+        status = "volume_debole"
+    elif regime is None:
+        status = "regime_nd"
+    elif not regime:
+        status = "regime_negativo"
+    else:
+        status = "operativo" if policy["alert"] else "sperimentale"
+    return {"kind": kind, "status": status, "alert": policy["alert"],
+            "portfolio": policy["portfolio"], "regime": regime}
+
+
 def main() -> int:
     now = now_utc()
     print(f"[{iso(now)}] Avvio screener v{MODEL_VERSION}")
@@ -1405,10 +1569,17 @@ def main() -> int:
         print(f"  · {s.summary()}")
 
     print("Brokerage (Yahoo Finance)...")
-    stocks, commodities, bench, bench_px = build_brokerage_assets()
+    stocks, commodities, bench, bench_px, index_regimes = build_brokerage_assets()
     print(f"  {len(stocks)}/{len(STOCK_UNIVERSE)} azioni, {len(commodities)}/{len(COMMODITY_UNIVERSE)} commodity, "
           f"indici {', '.join(f'{k} {v:+.1f}%' for k, v in bench.items()) or 'n/d'}")
     print(f"  dati raccolti in {time.monotonic() - t0:.0f}s")
+
+    # ── Regime di mercato (filtro dei segnali operativi) ──
+    regimes = {"crypto": cinfo["regime"], **index_regimes}
+    print("Regime: " + " · ".join(
+        f"{r['label']} {'ON' if r['on'] else ('OFF' if r['on'] is False else 'n/d')}"
+        + (f" ({r['dist_pct']:+.1f}% vs MA{r['ma_days']})" if r.get("dist_pct") is not None else "")
+        for r in regimes.values()))
 
     all_assets = crypto + stocks + commodities
     if not all_assets:
@@ -1487,49 +1658,62 @@ def main() -> int:
                          "flags": [f[0] for f in a["flags"]], "rets": {"1d": None, "3d": None, "7d": None},
                          "alerted": False}
                 log.append(entry)
-            if lens == "setup":
-                continue  # "In carica" non manda alert all'ingresso
-            kind = "squeeze" if (lens == "momentum" and a.get("from_squeeze")) else lens
-            if score < ALERT_MIN_SCORE[(kind, alert_class(a))]:
+            # Rimbalzi e In carica: solo registro (nessun alert, nessuna simulazione)
+            sig = classify_signal(lens, a, score, regimes)
+            if not sig:
                 continue
-            min_vr = ALERT_MIN_VOLUME.get((kind, asset_class(a)))
-            vr = (a.get("m") or {}).get("vr")
-            if min_vr and vr is not None and vr < min_vr:  # vr None = volume non disponibile (commodity)
+            if entry is not None:
+                entry.update({"kind": sig["kind"], "status": sig["status"],
+                              "operational": sig["status"] == "operativo"})
+            if sig["status"] not in ("operativo", "sperimentale"):
                 continue
-            qualified.append((kind, a, score))
+            qualified.append((sig, a, score))
+            if not sig["alert"]:
+                continue
             last_alert = parse_iso(alert_hist.get(f"{lens}|{aid}"))
             if last_alert and last_alert > now - timedelta(hours=ALERT_COOLDOWN_H):
                 continue
-            prio = {"squeeze": 0, "momentum": 1, "reversion": 2}[kind]
-            pending.append((prio, -score, kind, lens, item, entry))
+            prio = {"squeeze": 0, "momentum": 1}[sig["kind"]]
+            pending.append((prio, -score, sig, lens, item, entry))
 
     if baseline:
         print(f"\nNuovo modello (v{MODEL_VERSION}): registro lo stato senza inviare alert in questo run.")
+        if state.get("model_version"):  # aggiornamento di un modello già in uso: avviso una volta
+            send_telegram(model_intro_text(regimes))
+    prev_regime = (state.get("regime") or {}).get("crypto")
+    cur_regime = regimes["crypto"]["on"]
+    if not baseline and prev_regime is not None and cur_regime is not None and cur_regime != prev_regime:
+        print(f"\nCambio di regime crypto: {'ON' if cur_regime else 'OFF'}")
+        send_telegram(regime_change_text(regimes["crypto"]))
 
     # ── Portafogli simulati: uscite, poi nuove entrate sui segnali qualificati ──
     prices = {asset_id(a): a["price"] for a in all_assets}
     book = PaperBook.load()
     paper_bench_px = {"BTC": next((a["price"] for a in crypto if a.get("base") == "BTC"), None),
                       "SPY": bench_px.get("SPY")}
-    book.ensure_started(now, {k: v for k, v in paper_bench_px.items() if v})
-    paper_events = book.update(prices, now)
+    paper_events = book.prepare(now, {k: v for k, v in paper_bench_px.items() if v})
+    paper_events += book.update(prices, now)
     paper_notes = {}
-    for kind, a, score in qualified:
-        opened = book.open_auto(kind, a, score, now)
+    for sig, a, score in qualified:
+        key = sig["portfolio"]
+        opened = book.open_auto(key, a, score, now, KIND_NAMES[sig["kind"]])
         if opened:
             paper_events.append(opened)
-            label = next(m["label"] for m in PORTFOLIOS.values() if m["signal"] == kind)
-            paper_notes[(kind, a["asset_id"])] = f"Simulazione: comprati 1.000 nel portafoglio «{label}»"
+            paper_notes[(sig["kind"], a["asset_id"])] = \
+                f"Simulazione: comprati 1.000 nel portafoglio «{PORTFOLIOS[key]['label']}»"
     for ev in paper_events:
         print(f"  📒 {ev}")
 
     pending.sort(key=lambda x: (x[0], x[1]))
     sent = 0
-    for prio, _, kind, lens, (a, score, signals), entry in pending[:MAX_ALERTS_PER_RUN - 1] \
+    for prio, _, sig, lens, (a, score, signals), entry in pending[:MAX_ALERTS_PER_RUN - 1] \
             if len(pending) > MAX_ALERTS_PER_RUN else pending:
+        kind = sig["kind"]
         print(f"  -> alert {kind}: {a['symbol']} (score {int(round(score))})")
+        plan = exit_plan(PORTFOLIOS[sig["portfolio"]]["rule"], a["price"], now)
         if send_telegram(format_alert(kind, a, score, signals, a["flags"],
-                                      paper_notes.get((kind, a["asset_id"])))):
+                                      paper_notes.get((kind, a["asset_id"])), plan,
+                                      regimes.get(regime_key(a) or ""))):
             sent += 1
         alert_hist[f"{lens}|{asset_id(a)}"] = iso(now)
         if entry:
@@ -1579,11 +1763,14 @@ def main() -> int:
         "lenses": new_lens_state,
         "setup_seen": setup_seen,
         "alert_history": alert_hist,
+        # se il dato manca in questo run teniamo l'ultimo noto (niente falsi cambi di regime)
+        "regime": {"crypto": cur_regime if cur_regime is not None else prev_regime},
     }
 
     # ── Dashboard ──
     lenses_out = {
-        lens: {k: [serialize(x) for x in v] for k, v in lists[lens].items() if not k.startswith("_")}
+        lens: {k: [serialize(x, classify_signal(lens, x[0], x[1], regimes)) for x in v]
+               for k, v in lists[lens].items() if not k.startswith("_")}
         for lens in LENSES
     }
     rev = lenses_out["reversion"]
@@ -1602,6 +1789,7 @@ def main() -> int:
             "crypto_sources": by_src,
             "btc_7d": cinfo["btc_7d"],
             "benchmarks_7d": bench,
+            "regime": regimes,
             "trending": cinfo["trending"],
             "sources": {s.name: s.diag() for s in ALL_SOURCES},
         },

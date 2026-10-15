@@ -1,0 +1,51 @@
+name: Backtest
+
+# Solo a mano (Actions → Backtest → Run workflow): scarica 5 anni di dati,
+# ricostruisce i segnali e salva il report in backtest_results/ (≈ 25 minuti).
+on:
+  workflow_dispatch:
+  push:  # TEMPORANEO: solo per generare il report sul branch del modello v3
+    branches: [model-v3]
+    paths: ['backtest.py']
+
+concurrency:
+  group: backtest
+  cancel-in-progress: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install --quiet requests yfinance pandas numpy
+      - name: Backtest
+        run: python backtest.py
+      - name: Salva il report
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # solo il report: gli eventi grezzi (≈ 7 MB) restano negli artifact del run
+          git add backtest_results/report.md backtest_results/report.json
+          if git diff --staged --quiet; then echo "Report invariato"; exit 0; fi
+          git commit -m "backtest: report aggiornato [skip ci]"
+          for i in 1 2 3; do
+            git push && exit 0
+            echo "Push rifiutato (tentativo $i): riallineo e riprovo"
+            git pull --rebase origin "$GITHUB_REF_NAME" || exit 1
+            sleep 5
+          done
+          exit 1
+      - name: Eventi grezzi
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-events
+          path: backtest_results/events.json
+          if-no-files-found: ignore
+          retention-days: 30
