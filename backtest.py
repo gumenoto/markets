@@ -47,9 +47,18 @@ RULES = {
     "mom_cur": {"stop": -8, "take": None, "trail": 15, "trail_from": 8, "max_days": 10, "ma_exit": False},
     "mom_wide": {"stop": -12, "take": None, "trail": 20, "trail_from": 10, "max_days": 20, "ma_exit": False},
     "mom_short": {"stop": -8, "take": None, "trail": None, "trail_from": None, "max_days": 5, "ma_exit": False},
+    # sensibilità della regola di uscita (per verificare che 5 giorni non sia un caso)
+    "mom_t3": {"stop": -8, "take": None, "trail": None, "trail_from": None, "max_days": 3, "ma_exit": False},
+    "mom_t7": {"stop": -8, "take": None, "trail": None, "trail_from": None, "max_days": 7, "ma_exit": False},
+    "mom_t10": {"stop": -8, "take": None, "trail": None, "trail_from": None, "max_days": 10, "ma_exit": False},
+    "mom_t5s12": {"stop": -12, "take": None, "trail": None, "trail_from": None, "max_days": 5, "ma_exit": False},
+    "mom_t5s5": {"stop": -5, "take": None, "trail": None, "trail_from": None, "max_days": 5, "ma_exit": False},
+    "mom_w10": {"stop": -12, "take": None, "trail": 20, "trail_from": 10, "max_days": 10, "ma_exit": False},
+    "mom_t15s12": {"stop": -12, "take": None, "trail": None, "trail_from": None, "max_days": 15, "ma_exit": False},
 }
 RULESETS = {"reversion": ["rev_cur", "rev_wide", "rev_ma5"], "connors": ["rev_ma5", "rev_cur", "rev_wide"],
-            "momentum": ["mom_cur", "mom_wide", "mom_short"], "squeeze": ["mom_cur", "mom_wide", "mom_short"]}
+            "momentum": ["mom_cur", "mom_wide", "mom_short", "mom_t3", "mom_t7", "mom_t10", "mom_t5s12", "mom_t5s5", "mom_w10", "mom_t15s12"],
+            "squeeze": ["mom_cur", "mom_wide", "mom_short", "mom_t3", "mom_t7", "mom_t10", "mom_t5s12", "mom_t5s5", "mom_w10", "mom_t15s12"]}
 
 
 def log(msg):
