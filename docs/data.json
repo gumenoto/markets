@@ -1,16 +1,16 @@
 {
- "generated_at": "2026-10-27T18:01:31+00:00",
+ "generated_at": "2026-10-27T18:31:13+00:00",
  "model_version": 3,
  "stats": {
   "crypto_count": 142,
   "stocks_count": 30,
   "commodities_count": 10,
   "brokerage_count": 40,
-  "scored_count": 127,
+  "scored_count": 122,
   "lens_counts": {
-   "reversion": 127,
+   "reversion": 122,
    "momentum": 3,
-   "setup": 36
+   "setup": 37
   },
   "top_n": 10,
   "crypto_universe": "coingecko",
@@ -19,9 +19,9 @@
    "kraken": 14,
    "coinbase": 14
   },
-  "btc_7d": -2.4545,
+  "btc_7d": -2.7248,
   "benchmarks_7d": {
-   "US": 0.05981691,
+   "US": 0.01170624,
    "EU": 0.7029104,
    "IT": 1.134986
   },
@@ -74,13 +74,13 @@
     "last_error": null
    },
    "binance": {
-    "calls": 274,
+    "calls": 275,
     "ok": 232,
     "disabled": false,
     "last_error": "HTTP 400"
    },
    "coinbase": {
-    "calls": 60,
+    "calls": 61,
     "ok": 30,
     "disabled": false,
     "last_error": "HTTP 404"
@@ -92,7 +92,7 @@
     "last_error": null
    },
    "binance.us": {
-    "calls": 36,
+    "calls": 38,
     "ok": 0,
     "disabled": false,
     "last_error": "HTTP 400"
@@ -105,65 +105,137 @@
     "type": "crypto",
     "symbol": "AKEUSDT",
     "name": "Akedo",
-    "price": 0.02316226,
-    "change_24h": -24.34065,
-    "change_7d": -24.523,
-    "rel_7d": -22.0685,
-    "rsi": 31.34211,
-    "dist_from_ma20": -21.63157,
-    "volume_ratio": 2.882695,
+    "price": 0.0225615,
+    "change_24h": -25.89709,
+    "change_7d": -26.1782,
+    "rel_7d": -23.4534,
+    "rsi": 32.72127,
+    "dist_from_ma20": -23.71822,
+    "volume_ratio": 3.019579,
     "macd": {
-     "macd": -0.001476095,
-     "signal": -0.000537225,
-     "histogram": -0.0009388699,
+     "macd": -0.001442711,
+     "signal": -0.0005305482,
+     "histogram": -0.0009121628,
      "crossover": null
     },
     "bollinger": {
-     "upper": 0.03492394,
-     "lower": 0.02418726,
-     "middle": 0.0295556,
-     "percent_b": -0.157149
+     "upper": 0.03483687,
+     "lower": 0.02431617,
+     "middle": 0.02957652,
+     "percent_b": -0.1328509
     },
-    "score": 175.1,
+    "score": 177.7,
     "signals": [
      {
       "kind": "bull",
       "label": "Crollo 24h",
-      "value": "-24.34%"
+      "value": "-25.90%"
      },
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-21.6%"
+      "value": "-23.7%"
      },
      {
       "kind": "bull",
-      "label": "Volume 2.9x",
+      "label": "Volume 3.0x",
       "value": ""
      },
      {
       "kind": "bull",
       "label": "Sotto BB inf",
-      "value": "%B -0.16"
+      "value": "%B -0.13"
      }
     ],
     "flags": [],
     "trending": false,
-    "mcap_rank": 106,
-    "volume_24h": 32104730.0,
+    "mcap_rank": 107,
+    "volume_24h": 32111860.0,
     "venue": "Binance o altri exchange",
     "daily": {
      "breakout20": false,
      "breakout55": false,
      "hi20": 0.04025714,
-     "dist_top20": 44.10929,
-     "ext": -22.54035,
-     "vr": 1.527145,
-     "rsi_d": 42.12431,
+     "dist_top20": 43.06975,
+     "ext": -21.15643,
+     "vr": 1.59341,
+     "rsi_d": 42.48656,
      "adx": 44.89919,
      "bbw_pct": 0.1916667,
-     "accum": 0.4358659,
+     "accum": 0.4383198,
      "above_ma50": false
+    },
+    "signal": null
+   },
+   {
+    "type": "crypto",
+    "symbol": "QUSDT",
+    "name": "Quack AI",
+    "price": 0.054823,
+    "change_24h": -27.34338,
+    "change_7d": -54.9394,
+    "rel_7d": -52.2146,
+    "rsi": 41.76951,
+    "dist_from_ma20": -36.07165,
+    "volume_ratio": 2.578597,
+    "macd": {
+     "macd": -0.0006926616,
+     "signal": 0.000206164,
+     "histogram": -0.0008988256,
+     "crossover": "bear"
+    },
+    "bollinger": {
+     "upper": 0.1719197,
+     "lower": -0.0004058482,
+     "middle": 0.08575695,
+     "percent_b": 0.3197485
+    },
+    "score": 100.8,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "Crollo 24h",
+      "value": "-27.34%"
+     },
+     {
+      "kind": "bull",
+      "label": "Sotto MA20",
+      "value": "-36.1%"
+     },
+     {
+      "kind": "bull",
+      "label": "Volume 2.6x",
+      "value": ""
+     },
+     {
+      "kind": "bear",
+      "label": "MACD cross DOWN",
+      "value": "-0.0009"
+     }
+    ],
+    "flags": [
+     {
+      "code": "volume_anomalo",
+      "label": "Volume anomalo",
+      "value": "50% della cap"
+     }
+    ],
+    "trending": false,
+    "mcap_rank": 149,
+    "volume_24h": 129343200.0,
+    "venue": "Binance o altri exchange",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 0.21498,
+     "dist_top20": 74.5581,
+     "ext": -30.59574,
+     "vr": 3.437932,
+     "rsi_d": 47.35081,
+     "adx": 71.42853,
+     "bbw_pct": 0.925,
+     "accum": 2.442261,
+     "above_ma50": true
     },
     "signal": null
    },
@@ -171,41 +243,41 @@
     "type": "commodity",
     "symbol": "ZW=F",
     "name": "Grano",
-    "price": 612.0,
-    "change_24h": -0.6493506,
-    "change_7d": -4.858142,
-    "rel_7d": -4.858142,
-    "rsi": 24.02391,
-    "dist_from_ma20": -7.472503,
+    "price": 611.0,
+    "change_24h": -0.8116883,
+    "change_7d": -5.013603,
+    "rel_7d": -5.013603,
+    "rsi": 23.80129,
+    "dist_from_ma20": -7.616708,
     "volume_ratio": null,
     "macd": {
-     "macd": -21.23406,
-     "signal": -15.65242,
-     "histogram": -5.581648,
+     "macd": -21.31384,
+     "signal": -15.66837,
+     "histogram": -5.645465,
      "crossover": null
     },
     "bollinger": {
-     "upper": 714.6155,
-     "lower": 608.2345,
-     "middle": 661.425,
-     "percent_b": 0.03539621
+     "upper": 714.7528,
+     "lower": 607.9972,
+     "middle": 661.375,
+     "percent_b": 0.02812763
     },
-    "score": 84.9,
+    "score": 85.9,
     "signals": [
      {
       "kind": "bull",
       "label": "RSI ipervenduto",
-      "value": "24.0"
+      "value": "23.8"
      },
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-7.5%"
+      "value": "-7.6%"
      },
      {
       "kind": "bull",
       "label": "Sotto BB inf",
-      "value": "%B 0.04"
+      "value": "%B 0.03"
      }
     ],
     "flags": [],
@@ -217,12 +289,12 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 706.5,
-     "dist_top20": 13.3758,
-     "ext": -7.472503,
+     "dist_top20": 13.51734,
+     "ext": -7.616708,
      "vr": null,
-     "rsi_d": 24.02391,
-     "adx": 28.21862,
-     "bbw_pct": 0.6916667,
+     "rsi_d": 23.80129,
+     "adx": 28.22731,
+     "bbw_pct": 0.7,
      "accum": null,
      "above_ma50": false
     },
@@ -232,31 +304,31 @@
     "type": "stock",
     "symbol": "META",
     "name": "Meta Platforms",
-    "price": 623.2,
-    "change_24h": -1.167214,
-    "change_7d": -10.23406,
-    "rel_7d": -10.29388,
-    "rsi": 32.42732,
-    "dist_from_ma20": -11.92969,
-    "volume_ratio": 1.128411,
+    "price": 622.2,
+    "change_24h": -1.325803,
+    "change_7d": -10.3781,
+    "rel_7d": -10.38981,
+    "rsi": 32.26542,
+    "dist_from_ma20": -12.0648,
+    "volume_ratio": 1.159741,
     "macd": {
-     "macd": -11.59826,
-     "signal": 4.471503,
-     "histogram": -16.06976,
+     "macd": -11.67803,
+     "signal": 4.455549,
+     "histogram": -16.13358,
      "crossover": null
     },
     "bollinger": {
-     "upper": 786.0196,
-     "lower": 629.2134,
-     "middle": 707.6165,
-     "percent_b": -0.03834924
+     "upper": 786.1858,
+     "lower": 628.9472,
+     "middle": 707.5665,
+     "percent_b": -0.04291021
     },
-    "score": 73.9,
+    "score": 74.1,
     "signals": [
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-11.9%"
+      "value": "-12.1%"
      },
      {
       "kind": "bull",
@@ -273,13 +345,13 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 771.27,
-     "dist_top20": 19.19821,
-     "ext": -11.92969,
-     "vr": 1.602805,
-     "rsi_d": 32.42732,
+     "dist_top20": 19.32786,
+     "ext": -12.0648,
+     "vr": 1.640063,
+     "rsi_d": 32.26542,
      "adx": 27.43122,
      "bbw_pct": 0.6916667,
-     "accum": 1.220252,
+     "accum": 1.231225,
      "above_ma50": false
     },
     "signal": null
@@ -288,26 +360,26 @@
     "type": "stock",
     "symbol": "NFLX",
     "name": "Netflix",
-    "price": 62.585,
-    "change_24h": -2.057907,
-    "change_7d": -8.887761,
-    "rel_7d": -8.947578,
-    "rsi": 31.22919,
-    "dist_from_ma20": -8.634705,
-    "volume_ratio": 0.9449991,
+    "price": 62.605,
+    "change_24h": -2.026607,
+    "change_7d": -8.858644,
+    "rel_7d": -8.87035,
+    "rsi": 31.26093,
+    "dist_from_ma20": -8.606841,
+    "volume_ratio": 0.9626175,
     "macd": {
-     "macd": -2.258458,
-     "signal": -1.750172,
-     "histogram": -0.5082862,
+     "macd": -2.256863,
+     "signal": -1.749853,
+     "histogram": -0.5070098,
      "crossover": null
     },
     "bollinger": {
-     "upper": 73.62805,
-     "lower": 63.37145,
-     "middle": 68.49975,
-     "percent_b": -0.07667708
+     "upper": 73.62445,
+     "lower": 63.37705,
+     "middle": 68.50075,
+     "percent_b": -0.07534156
     },
-    "score": 67.3,
+    "score": 67.2,
     "signals": [
      {
       "kind": "bull",
@@ -329,13 +401,13 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 73.07,
-     "dist_top20": 14.34926,
-     "ext": -8.634705,
+     "dist_top20": 14.32188,
+     "ext": -8.606841,
      "vr": 1.281211,
-     "rsi_d": 31.22919,
+     "rsi_d": 31.26093,
      "adx": 26.98135,
      "bbw_pct": 0.525,
-     "accum": 1.585206,
+     "accum": 1.592174,
      "above_ma50": false
     },
     "signal": null
@@ -344,26 +416,26 @@
     "type": "commodity",
     "symbol": "PL=F",
     "name": "Platino",
-    "price": 1535.8,
-    "change_24h": -0.05856071,
-    "change_7d": -6.729013,
-    "rel_7d": -6.729013,
-    "rsi": 30.81301,
-    "dist_from_ma20": -6.084508,
+    "price": 1534.7,
+    "change_24h": -0.130149,
+    "change_7d": -6.795823,
+    "rel_7d": -6.795823,
+    "rsi": 30.70866,
+    "dist_from_ma20": -6.148623,
     "volume_ratio": null,
     "macd": {
-     "macd": -49.47378,
-     "signal": -41.09796,
-     "histogram": -8.375826,
+     "macd": -49.56154,
+     "signal": -41.11551,
+     "histogram": -8.446031,
      "crossover": null
     },
     "bollinger": {
-     "upper": 1742.572,
-     "lower": 1528.028,
-     "middle": 1635.3,
-     "percent_b": 0.03622414
+     "upper": 1742.722,
+     "lower": 1527.768,
+     "middle": 1635.245,
+     "percent_b": 0.03224659
     },
-    "score": 62.2,
+    "score": 62.3,
     "signals": [
      {
       "kind": "bull",
@@ -373,7 +445,7 @@
      {
       "kind": "bull",
       "label": "Sotto BB inf",
-      "value": "%B 0.04"
+      "value": "%B 0.03"
      }
     ],
     "flags": [],
@@ -385,10 +457,10 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 1744.5,
-     "dist_top20": 11.96331,
-     "ext": -6.084508,
+     "dist_top20": 12.02637,
+     "ext": -6.148623,
      "vr": null,
-     "rsi_d": 30.81301,
+     "rsi_d": 30.70866,
      "adx": 18.20088,
      "bbw_pct": 0.475,
      "accum": null,
@@ -397,217 +469,39 @@
     "signal": null
    },
    {
-    "type": "crypto",
-    "symbol": "QUSDT",
-    "name": "Quack AI",
-    "price": 0.055673,
-    "change_24h": -12.15226,
-    "change_7d": -54.3122,
-    "rel_7d": -51.8577,
-    "rsi": 41.7969,
-    "dist_from_ma20": -35.08699,
-    "volume_ratio": 2.541562,
-    "macd": {
-     "macd": -0.0006789408,
-     "signal": 0.0002089082,
-     "histogram": -0.000887849,
-     "crossover": "bear"
-    },
-    "bollinger": {
-     "upper": 0.171916,
-     "lower": -0.0003848786,
-     "middle": 0.08576555,
-     "percent_b": 0.3206709
-    },
-    "score": 62.1,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "Crollo 24h",
-      "value": "-12.15%"
-     },
-     {
-      "kind": "bull",
-      "label": "Sotto MA20",
-      "value": "-35.1%"
-     },
-     {
-      "kind": "bull",
-      "label": "Volume 2.5x",
-      "value": ""
-     },
-     {
-      "kind": "bear",
-      "label": "MACD cross DOWN",
-      "value": "-0.0009"
-     }
-    ],
-    "flags": [],
-    "trending": true,
-    "mcap_rank": 148,
-    "volume_24h": 91692820.0,
-    "venue": "Binance o altri exchange",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 0.21498,
-     "dist_top20": 74.47809,
-     "ext": -30.38508,
-     "vr": 3.413219,
-     "rsi_d": 47.37044,
-     "adx": 71.42853,
-     "bbw_pct": 0.925,
-     "accum": 2.437592,
-     "above_ma50": true
-    },
-    "signal": null
-   },
-   {
-    "type": "crypto",
-    "symbol": "ATOMUSDT",
-    "name": "Cosmos Hub",
-    "price": 1.61,
-    "change_24h": -2.45673,
-    "change_7d": -7.99,
-    "rel_7d": -5.5355,
-    "rsi": 38.33887,
-    "dist_from_ma20": -1.275448,
-    "volume_ratio": 1.091792,
-    "macd": {
-     "macd": -0.02168372,
-     "signal": -0.02216952,
-     "histogram": 0.0004858044,
-     "crossover": null
-    },
-    "bollinger": {
-     "upper": 1.656213,
-     "lower": 1.605387,
-     "middle": 1.6308,
-     "percent_b": 0.0120681
-    },
-    "score": 62.0,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "MACD ripresa",
-      "value": ""
-     },
-     {
-      "kind": "bull",
-      "label": "Sotto BB inf",
-      "value": "%B 0.01"
-     }
-    ],
-    "flags": [],
-    "trending": false,
-    "mcap_rank": 80,
-    "volume_24h": 41165810.0,
-    "venue": "Trade Republic o Binance",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 2.087,
-     "dist_top20": 23.04744,
-     "ext": -8.840641,
-     "vr": 0.364319,
-     "rsi_d": 39.20585,
-     "adx": 12.89743,
-     "bbw_pct": 0.675,
-     "accum": 0.5597142,
-     "above_ma50": false
-    },
-    "signal": null
-   },
-   {
-    "type": "crypto",
-    "symbol": "DOTUSDT",
-    "name": "Polkadot",
-    "price": 0.992673,
-    "change_24h": -2.20281,
-    "change_7d": -14.5328,
-    "rel_7d": -12.0783,
-    "rsi": 33.50249,
-    "dist_from_ma20": -2.621836,
-    "volume_ratio": 0.6002195,
-    "macd": {
-     "macd": -0.02807006,
-     "signal": -0.02817752,
-     "histogram": 0.0001074643,
-     "crossover": "bull"
-    },
-    "bollinger": {
-     "upper": 1.058018,
-     "lower": 0.9807819,
-     "middle": 1.0194,
-     "percent_b": 0.1452443
-    },
-    "score": 60.0,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "MACD cross UP",
-      "value": "0.0001"
-     },
-     {
-      "kind": "bull",
-      "label": "BB inferiore",
-      "value": "%B 0.15"
-     }
-    ],
-    "flags": [],
-    "trending": false,
-    "mcap_rank": 58,
-    "volume_24h": 116508200.0,
-    "venue": "Trade Republic o Binance",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 1.296,
-     "dist_top20": 23.45679,
-     "ext": -12.26674,
-     "vr": 0.458075,
-     "rsi_d": 34.55445,
-     "adx": 16.99674,
-     "bbw_pct": 0.6083333,
-     "accum": 0.6250841,
-     "above_ma50": false
-    },
-    "signal": null
-   },
-   {
     "type": "commodity",
     "symbol": "ZC=F",
     "name": "Mais",
-    "price": 449.25,
-    "change_24h": -1.263736,
-    "change_7d": -2.75974,
-    "rel_7d": -2.75974,
-    "rsi": 23.63091,
-    "dist_from_ma20": -6.403813,
+    "price": 450.0,
+    "change_24h": -1.098901,
+    "change_7d": -2.597403,
+    "rel_7d": -2.597403,
+    "rsi": 23.89973,
+    "dist_from_ma20": -6.254883,
     "volume_ratio": null,
     "macd": {
-     "macd": -13.98027,
-     "signal": -10.53453,
-     "histogram": -3.445736,
+     "macd": -13.92044,
+     "signal": -10.52257,
+     "histogram": -3.397872,
      "crossover": null
     },
     "bollinger": {
-     "upper": 516.2392,
-     "lower": 443.7358,
-     "middle": 479.9875,
-     "percent_b": 0.07605455
+     "upper": 516.1508,
+     "lower": 443.8992,
+     "middle": 480.025,
+     "percent_b": 0.08443812
     },
-    "score": 59.0,
+    "score": 57.8,
     "signals": [
      {
       "kind": "bull",
       "label": "RSI ipervenduto",
-      "value": "23.6"
+      "value": "23.9"
      },
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-6.4%"
+      "value": "-6.3%"
      },
      {
       "kind": "bull",
@@ -624,11 +518,11 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 526.5,
-     "dist_top20": 14.67236,
-     "ext": -6.403813,
+     "dist_top20": 14.52991,
+     "ext": -6.254883,
      "vr": null,
-     "rsi_d": 23.63091,
-     "adx": 37.75199,
+     "rsi_d": 23.89973,
+     "adx": 37.78913,
      "bbw_pct": 0.725,
      "accum": null,
      "above_ma50": false
@@ -637,483 +531,43 @@
    },
    {
     "type": "crypto",
-    "symbol": "AAVEUSDT",
-    "name": "Aave",
-    "price": 131.94,
-    "change_24h": -3.06545,
-    "change_7d": -12.9891,
-    "rel_7d": -10.5346,
-    "rsi": 33.0006,
-    "dist_from_ma20": -2.435417,
-    "volume_ratio": 1.519205,
-    "macd": {
-     "macd": -3.348447,
-     "signal": -3.427357,
-     "histogram": 0.07890989,
-     "crossover": null
-    },
-    "bollinger": {
-     "upper": 139.3563,
-     "lower": 131.1107,
-     "middle": 135.2335,
-     "percent_b": 0.09329598
-    },
-    "score": 52.6,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "Crollo 24h",
-      "value": "-3.07%"
-     },
-     {
-      "kind": "bull",
-      "label": "Volume 1.5x",
-      "value": ""
-     },
-     {
-      "kind": "bull",
-      "label": "MACD ripresa",
-      "value": ""
-     },
-     {
-      "kind": "bull",
-      "label": "BB inferiore",
-      "value": "%B 0.09"
-     }
-    ],
-    "flags": [],
-    "trending": true,
-    "mcap_rank": 48,
-    "volume_24h": 240409000.0,
-    "venue": "Trade Republic o Binance",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 179.73,
-     "dist_top20": 26.62327,
-     "ext": -13.6408,
-     "vr": 1.177958,
-     "rsi_d": 32.65389,
-     "adx": 22.61706,
-     "bbw_pct": 0.5916667,
-     "accum": 0.7298615,
-     "above_ma50": false
-    },
-    "signal": null
-   }
-  ],
-  "crypto": [
-   {
-    "type": "crypto",
-    "symbol": "AKEUSDT",
-    "name": "Akedo",
-    "price": 0.02316226,
-    "change_24h": -24.34065,
-    "change_7d": -24.523,
-    "rel_7d": -22.0685,
-    "rsi": 31.34211,
-    "dist_from_ma20": -21.63157,
-    "volume_ratio": 2.882695,
-    "macd": {
-     "macd": -0.001476095,
-     "signal": -0.000537225,
-     "histogram": -0.0009388699,
-     "crossover": null
-    },
-    "bollinger": {
-     "upper": 0.03492394,
-     "lower": 0.02418726,
-     "middle": 0.0295556,
-     "percent_b": -0.157149
-    },
-    "score": 175.1,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "Crollo 24h",
-      "value": "-24.34%"
-     },
-     {
-      "kind": "bull",
-      "label": "Sotto MA20",
-      "value": "-21.6%"
-     },
-     {
-      "kind": "bull",
-      "label": "Volume 2.9x",
-      "value": ""
-     },
-     {
-      "kind": "bull",
-      "label": "Sotto BB inf",
-      "value": "%B -0.16"
-     }
-    ],
-    "flags": [],
-    "trending": false,
-    "mcap_rank": 106,
-    "volume_24h": 32104730.0,
-    "venue": "Binance o altri exchange",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 0.04025714,
-     "dist_top20": 44.10929,
-     "ext": -22.54035,
-     "vr": 1.527145,
-     "rsi_d": 42.12431,
-     "adx": 44.89919,
-     "bbw_pct": 0.1916667,
-     "accum": 0.4358659,
-     "above_ma50": false
-    },
-    "signal": null
-   },
-   {
-    "type": "crypto",
-    "symbol": "QUSDT",
-    "name": "Quack AI",
-    "price": 0.055673,
-    "change_24h": -12.15226,
-    "change_7d": -54.3122,
-    "rel_7d": -51.8577,
-    "rsi": 41.7969,
-    "dist_from_ma20": -35.08699,
-    "volume_ratio": 2.541562,
-    "macd": {
-     "macd": -0.0006789408,
-     "signal": 0.0002089082,
-     "histogram": -0.000887849,
-     "crossover": "bear"
-    },
-    "bollinger": {
-     "upper": 0.171916,
-     "lower": -0.0003848786,
-     "middle": 0.08576555,
-     "percent_b": 0.3206709
-    },
-    "score": 62.1,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "Crollo 24h",
-      "value": "-12.15%"
-     },
-     {
-      "kind": "bull",
-      "label": "Sotto MA20",
-      "value": "-35.1%"
-     },
-     {
-      "kind": "bull",
-      "label": "Volume 2.5x",
-      "value": ""
-     },
-     {
-      "kind": "bear",
-      "label": "MACD cross DOWN",
-      "value": "-0.0009"
-     }
-    ],
-    "flags": [],
-    "trending": true,
-    "mcap_rank": 148,
-    "volume_24h": 91692820.0,
-    "venue": "Binance o altri exchange",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 0.21498,
-     "dist_top20": 74.47809,
-     "ext": -30.38508,
-     "vr": 3.413219,
-     "rsi_d": 47.37044,
-     "adx": 71.42853,
-     "bbw_pct": 0.925,
-     "accum": 2.437592,
-     "above_ma50": true
-    },
-    "signal": null
-   },
-   {
-    "type": "crypto",
-    "symbol": "ATOMUSDT",
-    "name": "Cosmos Hub",
-    "price": 1.61,
-    "change_24h": -2.45673,
-    "change_7d": -7.99,
-    "rel_7d": -5.5355,
-    "rsi": 38.33887,
-    "dist_from_ma20": -1.275448,
-    "volume_ratio": 1.091792,
-    "macd": {
-     "macd": -0.02168372,
-     "signal": -0.02216952,
-     "histogram": 0.0004858044,
-     "crossover": null
-    },
-    "bollinger": {
-     "upper": 1.656213,
-     "lower": 1.605387,
-     "middle": 1.6308,
-     "percent_b": 0.0120681
-    },
-    "score": 62.0,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "MACD ripresa",
-      "value": ""
-     },
-     {
-      "kind": "bull",
-      "label": "Sotto BB inf",
-      "value": "%B 0.01"
-     }
-    ],
-    "flags": [],
-    "trending": false,
-    "mcap_rank": 80,
-    "volume_24h": 41165810.0,
-    "venue": "Trade Republic o Binance",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 2.087,
-     "dist_top20": 23.04744,
-     "ext": -8.840641,
-     "vr": 0.364319,
-     "rsi_d": 39.20585,
-     "adx": 12.89743,
-     "bbw_pct": 0.675,
-     "accum": 0.5597142,
-     "above_ma50": false
-    },
-    "signal": null
-   },
-   {
-    "type": "crypto",
-    "symbol": "DOTUSDT",
-    "name": "Polkadot",
-    "price": 0.992673,
-    "change_24h": -2.20281,
-    "change_7d": -14.5328,
-    "rel_7d": -12.0783,
-    "rsi": 33.50249,
-    "dist_from_ma20": -2.621836,
-    "volume_ratio": 0.6002195,
-    "macd": {
-     "macd": -0.02807006,
-     "signal": -0.02817752,
-     "histogram": 0.0001074643,
-     "crossover": "bull"
-    },
-    "bollinger": {
-     "upper": 1.058018,
-     "lower": 0.9807819,
-     "middle": 1.0194,
-     "percent_b": 0.1452443
-    },
-    "score": 60.0,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "MACD cross UP",
-      "value": "0.0001"
-     },
-     {
-      "kind": "bull",
-      "label": "BB inferiore",
-      "value": "%B 0.15"
-     }
-    ],
-    "flags": [],
-    "trending": false,
-    "mcap_rank": 58,
-    "volume_24h": 116508200.0,
-    "venue": "Trade Republic o Binance",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 1.296,
-     "dist_top20": 23.45679,
-     "ext": -12.26674,
-     "vr": 0.458075,
-     "rsi_d": 34.55445,
-     "adx": 16.99674,
-     "bbw_pct": 0.6083333,
-     "accum": 0.6250841,
-     "above_ma50": false
-    },
-    "signal": null
-   },
-   {
-    "type": "crypto",
-    "symbol": "AAVEUSDT",
-    "name": "Aave",
-    "price": 131.94,
-    "change_24h": -3.06545,
-    "change_7d": -12.9891,
-    "rel_7d": -10.5346,
-    "rsi": 33.0006,
-    "dist_from_ma20": -2.435417,
-    "volume_ratio": 1.519205,
-    "macd": {
-     "macd": -3.348447,
-     "signal": -3.427357,
-     "histogram": 0.07890989,
-     "crossover": null
-    },
-    "bollinger": {
-     "upper": 139.3563,
-     "lower": 131.1107,
-     "middle": 135.2335,
-     "percent_b": 0.09329598
-    },
-    "score": 52.6,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "Crollo 24h",
-      "value": "-3.07%"
-     },
-     {
-      "kind": "bull",
-      "label": "Volume 1.5x",
-      "value": ""
-     },
-     {
-      "kind": "bull",
-      "label": "MACD ripresa",
-      "value": ""
-     },
-     {
-      "kind": "bull",
-      "label": "BB inferiore",
-      "value": "%B 0.09"
-     }
-    ],
-    "flags": [],
-    "trending": true,
-    "mcap_rank": 48,
-    "volume_24h": 240409000.0,
-    "venue": "Trade Republic o Binance",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 179.73,
-     "dist_top20": 26.62327,
-     "ext": -13.6408,
-     "vr": 1.177958,
-     "rsi_d": 32.65389,
-     "adx": 22.61706,
-     "bbw_pct": 0.5916667,
-     "accum": 0.7298615,
-     "above_ma50": false
-    },
-    "signal": null
-   },
-   {
-    "type": "crypto",
-    "symbol": "CVXUSDT",
-    "name": "Convex Finance",
-    "price": 2.31,
-    "change_24h": -5.96888,
-    "change_7d": 5.3931,
-    "rel_7d": 7.8476,
-    "rsi": 42.44546,
-    "dist_from_ma20": -4.133466,
-    "volume_ratio": 0.8166618,
-    "macd": {
-     "macd": -0.02625459,
-     "signal": -0.005213758,
-     "histogram": -0.02104083,
-     "crossover": null
-    },
-    "bollinger": {
-     "upper": 2.561035,
-     "lower": 2.258165,
-     "middle": 2.4096,
-     "percent_b": 0.1909565
-    },
-    "score": 51.2,
-    "signals": [
-     {
-      "kind": "bull",
-      "label": "Crollo 24h",
-      "value": "-5.97%"
-     },
-     {
-      "kind": "bull",
-      "label": "Sotto MA20",
-      "value": "-4.1%"
-     },
-     {
-      "kind": "bull",
-      "label": "BB inferiore",
-      "value": "%B 0.19"
-     }
-    ],
-    "flags": [
-     {
-      "code": "liquidita",
-      "label": "Liquidità bassa",
-      "value": "9.5M$/24h"
-     }
-    ],
-    "trending": false,
-    "mcap_rank": 170,
-    "volume_24h": 9524034.0,
-    "venue": "Binance o altri exchange",
-    "daily": {
-     "breakout20": false,
-     "breakout55": false,
-     "hi20": 2.715,
-     "dist_top20": 14.69613,
-     "ext": 5.719633,
-     "vr": 0.8858312,
-     "rsi_d": 53.43808,
-     "adx": 26.78121,
-     "bbw_pct": 0.8333333,
-     "accum": 1.603016,
-     "above_ma50": true
-    },
-    "signal": null
-   },
-   {
-    "type": "crypto",
     "symbol": "KMNOUSDT",
     "name": "Kamino",
-    "price": 0.03991655,
-    "change_24h": -7.75325,
-    "change_7d": 0.3406,
-    "rel_7d": 2.7951,
-    "rsi": 43.20304,
-    "dist_from_ma20": -3.990211,
-    "volume_ratio": 0.7515539,
+    "price": 0.0398175,
+    "change_24h": -7.95062,
+    "change_7d": -1.0914,
+    "rel_7d": 1.6334,
+    "rsi": 42.77914,
+    "dist_from_ma20": -4.215781,
+    "volume_ratio": 0.7745371,
     "macd": {
-     "macd": 0.0001035862,
-     "signal": 0.0004042901,
-     "histogram": -0.0003007039,
+     "macd": 9.481129e-05,
+     "signal": 0.0004025351,
+     "histogram": -0.0003077239,
      "crossover": null
     },
     "bollinger": {
-     "upper": 0.04397913,
-     "lower": 0.03917187,
-     "middle": 0.0415755,
-     "percent_b": 0.1639464
+     "upper": 0.04398885,
+     "lower": 0.03915115,
+     "middle": 0.04157,
+     "percent_b": 0.1444593
     },
-    "score": 48.3,
+    "score": 57.3,
     "signals": [
      {
       "kind": "bull",
       "label": "Crollo 24h",
-      "value": "-7.75%"
+      "value": "-7.95%"
+     },
+     {
+      "kind": "bull",
+      "label": "Sotto MA20",
+      "value": "-4.2%"
      },
      {
       "kind": "bull",
       "label": "BB inferiore",
-      "value": "%B 0.16"
+      "value": "%B 0.14"
      }
     ],
     "flags": [
@@ -1125,19 +579,19 @@
     ],
     "trending": false,
     "mcap_rank": 159,
-    "volume_24h": 9245528.0,
+    "volume_24h": 9159918.0,
     "venue": "Binance o altri exchange",
     "daily": {
      "breakout20": false,
      "breakout55": false,
      "hi20": 0.04458,
-     "dist_top20": 10.36339,
-     "ext": 1.940076,
-     "vr": 0.8552461,
-     "rsi_d": 51.66715,
-     "adx": 33.60827,
+     "dist_top20": 10.61014,
+     "ext": 1.673726,
+     "vr": 0.8680597,
+     "rsi_d": 51.43422,
+     "adx": 33.58058,
      "bbw_pct": 0.5833333,
-     "accum": 0.8020482,
+     "accum": 0.8032561,
      "above_ma50": true
     },
     "signal": null
@@ -1146,31 +600,31 @@
     "type": "crypto",
     "symbol": "SKYUSDT",
     "name": "Sky",
-    "price": 0.065467,
-    "change_24h": -4.19299,
-    "change_7d": -11.5414,
-    "rel_7d": -9.0869,
-    "rsi": 32.63026,
-    "dist_from_ma20": -3.677547,
-    "volume_ratio": 2.187507,
+    "price": 0.06541,
+    "change_24h": -4.35114,
+    "change_7d": -12.9125,
+    "rel_7d": -10.1877,
+    "rsi": 32.5634,
+    "dist_from_ma20": -3.759996,
+    "volume_ratio": 2.237029,
     "macd": {
-     "macd": -0.001613382,
-     "signal": -0.001384058,
-     "histogram": -0.0002293234,
+     "macd": -0.001614977,
+     "signal": -0.001384378,
+     "histogram": -0.0002305998,
      "crossover": null
     },
     "bollinger": {
-     "upper": 0.07138969,
-     "lower": 0.06454331,
-     "middle": 0.0679665,
-     "percent_b": 0.1222095
+     "upper": 0.07139173,
+     "lower": 0.06453927,
+     "middle": 0.0679655,
+     "percent_b": 0.1197711
     },
-    "score": 46.8,
+    "score": 47.4,
     "signals": [
      {
       "kind": "bull",
       "label": "Crollo 24h",
-      "value": "-4.19%"
+      "value": "-4.35%"
      },
      {
       "kind": "bull",
@@ -1187,24 +641,550 @@
      {
       "code": "liquidita",
       "label": "Liquidità bassa",
-      "value": "14.5M$/24h"
+      "value": "14.7M$/24h"
      }
     ],
     "trending": false,
     "mcap_rank": 62,
-    "volume_24h": 14483980.0,
+    "volume_24h": 14696370.0,
     "venue": "Binance o altri exchange",
     "daily": {
      "breakout20": false,
      "breakout55": false,
      "hi20": 0.08993,
-     "dist_top20": 27.29901,
-     "ext": -10.23115,
-     "vr": 1.828247,
-     "rsi_d": 37.45358,
+     "dist_top20": 27.33237,
+     "ext": -10.27049,
+     "vr": 1.846132,
+     "rsi_d": 37.41945,
      "adx": 17.86084,
      "bbw_pct": 0.35,
-     "accum": 0.4970204,
+     "accum": 0.4981535,
+     "above_ma50": false
+    },
+    "signal": null
+   },
+   {
+    "type": "crypto",
+    "symbol": "ENSUSDT",
+    "name": "Ethereum Name Service",
+    "price": 5.16,
+    "change_24h": -1.13102,
+    "change_7d": -7.9784,
+    "rel_7d": -5.2536,
+    "rsi": 38.84928,
+    "dist_from_ma20": -1.45149,
+    "volume_ratio": 2.189184,
+    "macd": {
+     "macd": -0.08558819,
+     "signal": -0.08606737,
+     "histogram": 0.0004791781,
+     "crossover": "bull"
+    },
+    "bollinger": {
+     "upper": 5.386519,
+     "lower": 5.085481,
+     "middle": 5.236,
+     "percent_b": 0.2475403
+    },
+    "score": 44.2,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "Volume 2.2x",
+      "value": ""
+     },
+     {
+      "kind": "bull",
+      "label": "MACD cross UP",
+      "value": "0.0005"
+     }
+    ],
+    "flags": [
+     {
+      "code": "liquidita",
+      "label": "Liquidità bassa",
+      "value": "9.7M$/24h"
+     }
+    ],
+    "trending": false,
+    "mcap_rank": 168,
+    "volume_24h": 9657811.0,
+    "venue": "Binance o altri exchange",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 6.77,
+     "dist_top20": 23.78139,
+     "ext": -9.62431,
+     "vr": 1.004639,
+     "rsi_d": 30.54571,
+     "adx": 31.28588,
+     "bbw_pct": 0.55,
+     "accum": 0.4942132,
+     "above_ma50": false
+    },
+    "signal": null
+   }
+  ],
+  "crypto": [
+   {
+    "type": "crypto",
+    "symbol": "AKEUSDT",
+    "name": "Akedo",
+    "price": 0.0225615,
+    "change_24h": -25.89709,
+    "change_7d": -26.1782,
+    "rel_7d": -23.4534,
+    "rsi": 32.72127,
+    "dist_from_ma20": -23.71822,
+    "volume_ratio": 3.019579,
+    "macd": {
+     "macd": -0.001442711,
+     "signal": -0.0005305482,
+     "histogram": -0.0009121628,
+     "crossover": null
+    },
+    "bollinger": {
+     "upper": 0.03483687,
+     "lower": 0.02431617,
+     "middle": 0.02957652,
+     "percent_b": -0.1328509
+    },
+    "score": 177.7,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "Crollo 24h",
+      "value": "-25.90%"
+     },
+     {
+      "kind": "bull",
+      "label": "Sotto MA20",
+      "value": "-23.7%"
+     },
+     {
+      "kind": "bull",
+      "label": "Volume 3.0x",
+      "value": ""
+     },
+     {
+      "kind": "bull",
+      "label": "Sotto BB inf",
+      "value": "%B -0.13"
+     }
+    ],
+    "flags": [],
+    "trending": false,
+    "mcap_rank": 107,
+    "volume_24h": 32111860.0,
+    "venue": "Binance o altri exchange",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 0.04025714,
+     "dist_top20": 43.06975,
+     "ext": -21.15643,
+     "vr": 1.59341,
+     "rsi_d": 42.48656,
+     "adx": 44.89919,
+     "bbw_pct": 0.1916667,
+     "accum": 0.4383198,
+     "above_ma50": false
+    },
+    "signal": null
+   },
+   {
+    "type": "crypto",
+    "symbol": "QUSDT",
+    "name": "Quack AI",
+    "price": 0.054823,
+    "change_24h": -27.34338,
+    "change_7d": -54.9394,
+    "rel_7d": -52.2146,
+    "rsi": 41.76951,
+    "dist_from_ma20": -36.07165,
+    "volume_ratio": 2.578597,
+    "macd": {
+     "macd": -0.0006926616,
+     "signal": 0.000206164,
+     "histogram": -0.0008988256,
+     "crossover": "bear"
+    },
+    "bollinger": {
+     "upper": 0.1719197,
+     "lower": -0.0004058482,
+     "middle": 0.08575695,
+     "percent_b": 0.3197485
+    },
+    "score": 100.8,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "Crollo 24h",
+      "value": "-27.34%"
+     },
+     {
+      "kind": "bull",
+      "label": "Sotto MA20",
+      "value": "-36.1%"
+     },
+     {
+      "kind": "bull",
+      "label": "Volume 2.6x",
+      "value": ""
+     },
+     {
+      "kind": "bear",
+      "label": "MACD cross DOWN",
+      "value": "-0.0009"
+     }
+    ],
+    "flags": [
+     {
+      "code": "volume_anomalo",
+      "label": "Volume anomalo",
+      "value": "50% della cap"
+     }
+    ],
+    "trending": false,
+    "mcap_rank": 149,
+    "volume_24h": 129343200.0,
+    "venue": "Binance o altri exchange",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 0.21498,
+     "dist_top20": 74.5581,
+     "ext": -30.59574,
+     "vr": 3.437932,
+     "rsi_d": 47.35081,
+     "adx": 71.42853,
+     "bbw_pct": 0.925,
+     "accum": 2.442261,
+     "above_ma50": true
+    },
+    "signal": null
+   },
+   {
+    "type": "crypto",
+    "symbol": "KMNOUSDT",
+    "name": "Kamino",
+    "price": 0.0398175,
+    "change_24h": -7.95062,
+    "change_7d": -1.0914,
+    "rel_7d": 1.6334,
+    "rsi": 42.77914,
+    "dist_from_ma20": -4.215781,
+    "volume_ratio": 0.7745371,
+    "macd": {
+     "macd": 9.481129e-05,
+     "signal": 0.0004025351,
+     "histogram": -0.0003077239,
+     "crossover": null
+    },
+    "bollinger": {
+     "upper": 0.04398885,
+     "lower": 0.03915115,
+     "middle": 0.04157,
+     "percent_b": 0.1444593
+    },
+    "score": 57.3,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "Crollo 24h",
+      "value": "-7.95%"
+     },
+     {
+      "kind": "bull",
+      "label": "Sotto MA20",
+      "value": "-4.2%"
+     },
+     {
+      "kind": "bull",
+      "label": "BB inferiore",
+      "value": "%B 0.14"
+     }
+    ],
+    "flags": [
+     {
+      "code": "liquidita",
+      "label": "Liquidità bassa",
+      "value": "9.2M$/24h"
+     }
+    ],
+    "trending": false,
+    "mcap_rank": 159,
+    "volume_24h": 9159918.0,
+    "venue": "Binance o altri exchange",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 0.04458,
+     "dist_top20": 10.61014,
+     "ext": 1.673726,
+     "vr": 0.8680597,
+     "rsi_d": 51.43422,
+     "adx": 33.58058,
+     "bbw_pct": 0.5833333,
+     "accum": 0.8032561,
+     "above_ma50": true
+    },
+    "signal": null
+   },
+   {
+    "type": "crypto",
+    "symbol": "SKYUSDT",
+    "name": "Sky",
+    "price": 0.06541,
+    "change_24h": -4.35114,
+    "change_7d": -12.9125,
+    "rel_7d": -10.1877,
+    "rsi": 32.5634,
+    "dist_from_ma20": -3.759996,
+    "volume_ratio": 2.237029,
+    "macd": {
+     "macd": -0.001614977,
+     "signal": -0.001384378,
+     "histogram": -0.0002305998,
+     "crossover": null
+    },
+    "bollinger": {
+     "upper": 0.07139173,
+     "lower": 0.06453927,
+     "middle": 0.0679655,
+     "percent_b": 0.1197711
+    },
+    "score": 47.4,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "Crollo 24h",
+      "value": "-4.35%"
+     },
+     {
+      "kind": "bull",
+      "label": "Volume 2.2x",
+      "value": ""
+     },
+     {
+      "kind": "bull",
+      "label": "BB inferiore",
+      "value": "%B 0.12"
+     }
+    ],
+    "flags": [
+     {
+      "code": "liquidita",
+      "label": "Liquidità bassa",
+      "value": "14.7M$/24h"
+     }
+    ],
+    "trending": false,
+    "mcap_rank": 62,
+    "volume_24h": 14696370.0,
+    "venue": "Binance o altri exchange",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 0.08993,
+     "dist_top20": 27.33237,
+     "ext": -10.27049,
+     "vr": 1.846132,
+     "rsi_d": 37.41945,
+     "adx": 17.86084,
+     "bbw_pct": 0.35,
+     "accum": 0.4981535,
+     "above_ma50": false
+    },
+    "signal": null
+   },
+   {
+    "type": "crypto",
+    "symbol": "ENSUSDT",
+    "name": "Ethereum Name Service",
+    "price": 5.16,
+    "change_24h": -1.13102,
+    "change_7d": -7.9784,
+    "rel_7d": -5.2536,
+    "rsi": 38.84928,
+    "dist_from_ma20": -1.45149,
+    "volume_ratio": 2.189184,
+    "macd": {
+     "macd": -0.08558819,
+     "signal": -0.08606737,
+     "histogram": 0.0004791781,
+     "crossover": "bull"
+    },
+    "bollinger": {
+     "upper": 5.386519,
+     "lower": 5.085481,
+     "middle": 5.236,
+     "percent_b": 0.2475403
+    },
+    "score": 44.2,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "Volume 2.2x",
+      "value": ""
+     },
+     {
+      "kind": "bull",
+      "label": "MACD cross UP",
+      "value": "0.0005"
+     }
+    ],
+    "flags": [
+     {
+      "code": "liquidita",
+      "label": "Liquidità bassa",
+      "value": "9.7M$/24h"
+     }
+    ],
+    "trending": false,
+    "mcap_rank": 168,
+    "volume_24h": 9657811.0,
+    "venue": "Binance o altri exchange",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 6.77,
+     "dist_top20": 23.78139,
+     "ext": -9.62431,
+     "vr": 1.004639,
+     "rsi_d": 30.54571,
+     "adx": 31.28588,
+     "bbw_pct": 0.55,
+     "accum": 0.4942132,
+     "above_ma50": false
+    },
+    "signal": null
+   },
+   {
+    "type": "crypto",
+    "symbol": "AAVEUSDT",
+    "name": "Aave",
+    "price": 131.99,
+    "change_24h": -2.69672,
+    "change_7d": -13.7248,
+    "rel_7d": -11.0,
+    "rsi": 33.4011,
+    "dist_from_ma20": -2.406383,
+    "volume_ratio": 1.559702,
+    "macd": {
+     "macd": -3.330897,
+     "signal": -3.423847,
+     "histogram": 0.09294978,
+     "crossover": null
+    },
+    "bollinger": {
+     "upper": 139.3325,
+     "lower": 131.1565,
+     "middle": 135.2445,
+     "percent_b": 0.1153945
+    },
+    "score": 43.6,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "Volume 1.6x",
+      "value": ""
+     },
+     {
+      "kind": "bull",
+      "label": "MACD ripresa",
+      "value": ""
+     },
+     {
+      "kind": "bull",
+      "label": "BB inferiore",
+      "value": "%B 0.12"
+     }
+    ],
+    "flags": [],
+    "trending": false,
+    "mcap_rank": 48,
+    "volume_24h": 242372100.0,
+    "venue": "Trade Republic o Binance",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 179.73,
+     "dist_top20": 26.50086,
+     "ext": -13.50297,
+     "vr": 1.196428,
+     "rsi_d": 32.78228,
+     "adx": 22.61706,
+     "bbw_pct": 0.5916667,
+     "accum": 0.7312937,
+     "above_ma50": false
+    },
+    "signal": null
+   },
+   {
+    "type": "crypto",
+    "symbol": "FFUSDT",
+    "name": "Falcon Finance",
+    "price": 0.097462,
+    "change_24h": -2.25835,
+    "change_7d": -9.4422,
+    "rel_7d": -6.7174,
+    "rsi": 40.71267,
+    "dist_from_ma20": -1.55453,
+    "volume_ratio": 1.539554,
+    "macd": {
+     "macd": -0.001162161,
+     "signal": -0.001171904,
+     "histogram": 9.742909e-06,
+     "crossover": null
+    },
+    "bollinger": {
+     "upper": 0.1010243,
+     "lower": 0.09697766,
+     "middle": 0.099001,
+     "percent_b": 0.1241368
+    },
+    "score": 43.5,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "Volume 1.5x",
+      "value": ""
+     },
+     {
+      "kind": "bull",
+      "label": "MACD ripresa",
+      "value": ""
+     },
+     {
+      "kind": "bull",
+      "label": "BB inferiore",
+      "value": "%B 0.12"
+     }
+    ],
+    "flags": [
+     {
+      "code": "liquidita",
+      "label": "Liquidità bassa",
+      "value": "5.6M$/24h"
+     }
+    ],
+    "trending": false,
+    "mcap_rank": 133,
+    "volume_24h": 5614347.0,
+    "venue": "Binance o altri exchange",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 0.11785,
+     "dist_top20": 17.28468,
+     "ext": -7.671033,
+     "vr": 0.784047,
+     "rsi_d": 38.05336,
+     "adx": 13.11196,
+     "bbw_pct": 0.375,
+     "accum": 0.4587316,
      "above_ma50": false
     },
     "signal": null
@@ -1213,24 +1193,24 @@
     "type": "crypto",
     "symbol": "HBARUSDT",
     "name": "Hedera",
-    "price": 0.075875,
-    "change_24h": -1.48654,
-    "change_7d": -8.7427,
-    "rel_7d": -6.2882,
-    "rsi": 38.26723,
-    "dist_from_ma20": -1.483429,
-    "volume_ratio": 1.068049,
+    "price": 0.075828,
+    "change_24h": -1.32256,
+    "change_7d": -9.3099,
+    "rel_7d": -6.5851,
+    "rsi": 38.66757,
+    "dist_from_ma20": -1.550206,
+    "volume_ratio": 1.119127,
     "macd": {
-     "macd": -0.0009737756,
-     "signal": -0.001024218,
-     "histogram": 5.044285e-05,
+     "macd": -0.0009665961,
+     "signal": -0.001022783,
+     "histogram": 5.618644e-05,
      "crossover": null
     },
     "bollinger": {
-     "upper": 0.07851116,
-     "lower": 0.07552384,
-     "middle": 0.0770175,
-     "percent_b": 0.08909794
+     "upper": 0.07850132,
+     "lower": 0.07554268,
+     "middle": 0.077022,
+     "percent_b": 0.1140115
     },
     "score": 37.0,
     "signals": [
@@ -1242,25 +1222,25 @@
      {
       "kind": "bull",
       "label": "BB inferiore",
-      "value": "%B 0.09"
+      "value": "%B 0.11"
      }
     ],
     "flags": [],
     "trending": false,
     "mcap_rank": 32,
-    "volume_24h": 63306330.0,
+    "volume_24h": 64196240.0,
     "venue": "Binance o altri exchange",
     "daily": {
      "breakout20": false,
      "breakout55": false,
      "hi20": 0.09991,
-     "dist_top20": 24.14173,
-     "ext": -10.0095,
-     "vr": 0.5845803,
-     "rsi_d": 33.65756,
+     "dist_top20": 24.05165,
+     "ext": -9.90745,
+     "vr": 0.6002746,
+     "rsi_d": 33.76024,
      "adx": 21.05216,
      "bbw_pct": 0.6166667,
-     "accum": 0.7414291,
+     "accum": 0.7426894,
      "above_ma50": false
     },
     "signal": null
@@ -1269,13 +1249,13 @@
     "type": "crypto",
     "symbol": "WLFIUSDT",
     "name": "World Liberty Financial",
-    "price": 0.052373,
-    "change_24h": -1.5618,
-    "change_7d": -3.0474,
-    "rel_7d": -0.5929,
+    "price": 0.052374,
+    "change_24h": -1.19336,
+    "change_7d": -2.9648,
+    "rel_7d": -0.24,
     "rsi": 39.36885,
-    "dist_from_ma20": -1.052333,
-    "volume_ratio": 0.3809683,
+    "dist_from_ma20": -1.050444,
+    "volume_ratio": 0.3841453,
     "macd": {
      "macd": -0.0004499783,
      "signal": -0.0004557828,
@@ -1305,12 +1285,12 @@
      {
       "code": "liquidita",
       "label": "Liquidità bassa",
-      "value": "14.8M$/24h"
+      "value": "14.4M$/24h"
      }
     ],
     "trending": false,
     "mcap_rank": 59,
-    "volume_24h": 14778680.0,
+    "volume_24h": 14356530.0,
     "venue": "Binance o altri exchange",
     "daily": {
      "breakout20": false,
@@ -1318,11 +1298,67 @@
      "hi20": 0.0585,
      "dist_top20": 10.42735,
      "ext": -5.636593,
-     "vr": 0.3793242,
+     "vr": 0.3806568,
      "rsi_d": 36.31874,
      "adx": 18.34765,
      "bbw_pct": 0.8583333,
-     "accum": 0.7832074,
+     "accum": 0.7833117,
+     "above_ma50": false
+    },
+    "signal": null
+   },
+   {
+    "type": "crypto",
+    "symbol": "ATOMUSDT",
+    "name": "Cosmos Hub",
+    "price": 1.61,
+    "change_24h": -1.95299,
+    "change_7d": -8.2157,
+    "rel_7d": -5.4909,
+    "rsi": 39.0883,
+    "dist_from_ma20": -1.287554,
+    "volume_ratio": 1.143016,
+    "macd": {
+     "macd": -0.02136463,
+     "signal": -0.02210571,
+     "histogram": 0.000741075,
+     "crossover": null
+    },
+    "bollinger": {
+     "upper": 1.655682,
+     "lower": 1.606318,
+     "middle": 1.631,
+     "percent_b": 0.07458838
+    },
+    "score": 37.0,
+    "signals": [
+     {
+      "kind": "bull",
+      "label": "MACD ripresa",
+      "value": ""
+     },
+     {
+      "kind": "bull",
+      "label": "BB inferiore",
+      "value": "%B 0.07"
+     }
+    ],
+    "flags": [],
+    "trending": false,
+    "mcap_rank": 80,
+    "volume_24h": 41691420.0,
+    "venue": "Trade Republic o Binance",
+    "daily": {
+     "breakout20": false,
+     "breakout55": false,
+     "hi20": 2.087,
+     "dist_top20": 22.85577,
+     "ext": -8.623968,
+     "vr": 0.3752327,
+     "rsi_d": 39.47647,
+     "adx": 12.90903,
+     "bbw_pct": 0.6666667,
+     "accum": 0.5610821,
      "above_ma50": false
     },
     "signal": null
@@ -1333,41 +1369,41 @@
     "type": "commodity",
     "symbol": "ZW=F",
     "name": "Grano",
-    "price": 612.0,
-    "change_24h": -0.6493506,
-    "change_7d": -4.858142,
-    "rel_7d": -4.858142,
-    "rsi": 24.02391,
-    "dist_from_ma20": -7.472503,
+    "price": 611.0,
+    "change_24h": -0.8116883,
+    "change_7d": -5.013603,
+    "rel_7d": -5.013603,
+    "rsi": 23.80129,
+    "dist_from_ma20": -7.616708,
     "volume_ratio": null,
     "macd": {
-     "macd": -21.23406,
-     "signal": -15.65242,
-     "histogram": -5.581648,
+     "macd": -21.31384,
+     "signal": -15.66837,
+     "histogram": -5.645465,
      "crossover": null
     },
     "bollinger": {
-     "upper": 714.6155,
-     "lower": 608.2345,
-     "middle": 661.425,
-     "percent_b": 0.03539621
+     "upper": 714.7528,
+     "lower": 607.9972,
+     "middle": 661.375,
+     "percent_b": 0.02812763
     },
-    "score": 84.9,
+    "score": 85.9,
     "signals": [
      {
       "kind": "bull",
       "label": "RSI ipervenduto",
-      "value": "24.0"
+      "value": "23.8"
      },
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-7.5%"
+      "value": "-7.6%"
      },
      {
       "kind": "bull",
       "label": "Sotto BB inf",
-      "value": "%B 0.04"
+      "value": "%B 0.03"
      }
     ],
     "flags": [],
@@ -1379,12 +1415,12 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 706.5,
-     "dist_top20": 13.3758,
-     "ext": -7.472503,
+     "dist_top20": 13.51734,
+     "ext": -7.616708,
      "vr": null,
-     "rsi_d": 24.02391,
-     "adx": 28.21862,
-     "bbw_pct": 0.6916667,
+     "rsi_d": 23.80129,
+     "adx": 28.22731,
+     "bbw_pct": 0.7,
      "accum": null,
      "above_ma50": false
     },
@@ -1394,31 +1430,31 @@
     "type": "stock",
     "symbol": "META",
     "name": "Meta Platforms",
-    "price": 623.2,
-    "change_24h": -1.167214,
-    "change_7d": -10.23406,
-    "rel_7d": -10.29388,
-    "rsi": 32.42732,
-    "dist_from_ma20": -11.92969,
-    "volume_ratio": 1.128411,
+    "price": 622.2,
+    "change_24h": -1.325803,
+    "change_7d": -10.3781,
+    "rel_7d": -10.38981,
+    "rsi": 32.26542,
+    "dist_from_ma20": -12.0648,
+    "volume_ratio": 1.159741,
     "macd": {
-     "macd": -11.59826,
-     "signal": 4.471503,
-     "histogram": -16.06976,
+     "macd": -11.67803,
+     "signal": 4.455549,
+     "histogram": -16.13358,
      "crossover": null
     },
     "bollinger": {
-     "upper": 786.0196,
-     "lower": 629.2134,
-     "middle": 707.6165,
-     "percent_b": -0.03834924
+     "upper": 786.1858,
+     "lower": 628.9472,
+     "middle": 707.5665,
+     "percent_b": -0.04291021
     },
-    "score": 73.9,
+    "score": 74.1,
     "signals": [
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-11.9%"
+      "value": "-12.1%"
      },
      {
       "kind": "bull",
@@ -1435,13 +1471,13 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 771.27,
-     "dist_top20": 19.19821,
-     "ext": -11.92969,
-     "vr": 1.602805,
-     "rsi_d": 32.42732,
+     "dist_top20": 19.32786,
+     "ext": -12.0648,
+     "vr": 1.640063,
+     "rsi_d": 32.26542,
      "adx": 27.43122,
      "bbw_pct": 0.6916667,
-     "accum": 1.220252,
+     "accum": 1.231225,
      "above_ma50": false
     },
     "signal": null
@@ -1450,26 +1486,26 @@
     "type": "stock",
     "symbol": "NFLX",
     "name": "Netflix",
-    "price": 62.585,
-    "change_24h": -2.057907,
-    "change_7d": -8.887761,
-    "rel_7d": -8.947578,
-    "rsi": 31.22919,
-    "dist_from_ma20": -8.634705,
-    "volume_ratio": 0.9449991,
+    "price": 62.605,
+    "change_24h": -2.026607,
+    "change_7d": -8.858644,
+    "rel_7d": -8.87035,
+    "rsi": 31.26093,
+    "dist_from_ma20": -8.606841,
+    "volume_ratio": 0.9626175,
     "macd": {
-     "macd": -2.258458,
-     "signal": -1.750172,
-     "histogram": -0.5082862,
+     "macd": -2.256863,
+     "signal": -1.749853,
+     "histogram": -0.5070098,
      "crossover": null
     },
     "bollinger": {
-     "upper": 73.62805,
-     "lower": 63.37145,
-     "middle": 68.49975,
-     "percent_b": -0.07667708
+     "upper": 73.62445,
+     "lower": 63.37705,
+     "middle": 68.50075,
+     "percent_b": -0.07534156
     },
-    "score": 67.3,
+    "score": 67.2,
     "signals": [
      {
       "kind": "bull",
@@ -1491,13 +1527,13 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 73.07,
-     "dist_top20": 14.34926,
-     "ext": -8.634705,
+     "dist_top20": 14.32188,
+     "ext": -8.606841,
      "vr": 1.281211,
-     "rsi_d": 31.22919,
+     "rsi_d": 31.26093,
      "adx": 26.98135,
      "bbw_pct": 0.525,
-     "accum": 1.585206,
+     "accum": 1.592174,
      "above_ma50": false
     },
     "signal": null
@@ -1506,26 +1542,26 @@
     "type": "commodity",
     "symbol": "PL=F",
     "name": "Platino",
-    "price": 1535.8,
-    "change_24h": -0.05856071,
-    "change_7d": -6.729013,
-    "rel_7d": -6.729013,
-    "rsi": 30.81301,
-    "dist_from_ma20": -6.084508,
+    "price": 1534.7,
+    "change_24h": -0.130149,
+    "change_7d": -6.795823,
+    "rel_7d": -6.795823,
+    "rsi": 30.70866,
+    "dist_from_ma20": -6.148623,
     "volume_ratio": null,
     "macd": {
-     "macd": -49.47378,
-     "signal": -41.09796,
-     "histogram": -8.375826,
+     "macd": -49.56154,
+     "signal": -41.11551,
+     "histogram": -8.446031,
      "crossover": null
     },
     "bollinger": {
-     "upper": 1742.572,
-     "lower": 1528.028,
-     "middle": 1635.3,
-     "percent_b": 0.03622414
+     "upper": 1742.722,
+     "lower": 1527.768,
+     "middle": 1635.245,
+     "percent_b": 0.03224659
     },
-    "score": 62.2,
+    "score": 62.3,
     "signals": [
      {
       "kind": "bull",
@@ -1535,7 +1571,7 @@
      {
       "kind": "bull",
       "label": "Sotto BB inf",
-      "value": "%B 0.04"
+      "value": "%B 0.03"
      }
     ],
     "flags": [],
@@ -1547,10 +1583,10 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 1744.5,
-     "dist_top20": 11.96331,
-     "ext": -6.084508,
+     "dist_top20": 12.02637,
+     "ext": -6.148623,
      "vr": null,
-     "rsi_d": 30.81301,
+     "rsi_d": 30.70866,
      "adx": 18.20088,
      "bbw_pct": 0.475,
      "accum": null,
@@ -1562,36 +1598,36 @@
     "type": "commodity",
     "symbol": "ZC=F",
     "name": "Mais",
-    "price": 449.25,
-    "change_24h": -1.263736,
-    "change_7d": -2.75974,
-    "rel_7d": -2.75974,
-    "rsi": 23.63091,
-    "dist_from_ma20": -6.403813,
+    "price": 450.0,
+    "change_24h": -1.098901,
+    "change_7d": -2.597403,
+    "rel_7d": -2.597403,
+    "rsi": 23.89973,
+    "dist_from_ma20": -6.254883,
     "volume_ratio": null,
     "macd": {
-     "macd": -13.98027,
-     "signal": -10.53453,
-     "histogram": -3.445736,
+     "macd": -13.92044,
+     "signal": -10.52257,
+     "histogram": -3.397872,
      "crossover": null
     },
     "bollinger": {
-     "upper": 516.2392,
-     "lower": 443.7358,
-     "middle": 479.9875,
-     "percent_b": 0.07605455
+     "upper": 516.1508,
+     "lower": 443.8992,
+     "middle": 480.025,
+     "percent_b": 0.08443812
     },
-    "score": 59.0,
+    "score": 57.8,
     "signals": [
      {
       "kind": "bull",
       "label": "RSI ipervenduto",
-      "value": "23.6"
+      "value": "23.9"
      },
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-6.4%"
+      "value": "-6.3%"
      },
      {
       "kind": "bull",
@@ -1608,11 +1644,11 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 526.5,
-     "dist_top20": 14.67236,
-     "ext": -6.403813,
+     "dist_top20": 14.52991,
+     "ext": -6.254883,
      "vr": null,
-     "rsi_d": 23.63091,
-     "adx": 37.75199,
+     "rsi_d": 23.89973,
+     "adx": 37.78913,
      "bbw_pct": 0.725,
      "accum": null,
      "above_ma50": false
@@ -1623,36 +1659,36 @@
     "type": "commodity",
     "symbol": "SI=F",
     "name": "Argento",
-    "price": 54.38,
-    "change_24h": 0.5026971,
-    "change_7d": -5.763699,
-    "rel_7d": -5.763699,
-    "rsi": 32.948,
-    "dist_from_ma20": -6.259075,
+    "price": 54.31,
+    "change_24h": 0.3733268,
+    "change_7d": -5.885003,
+    "rel_7d": -5.885003,
+    "rsi": 32.6062,
+    "dist_from_ma20": -6.374092,
     "volume_ratio": null,
     "macd": {
-     "macd": -2.254237,
-     "signal": -1.95812,
-     "histogram": -0.2961162,
+     "macd": -2.259821,
+     "signal": -1.959237,
+     "histogram": -0.3005834,
      "crossover": null
     },
     "bollinger": {
-     "upper": 62.8845,
-     "lower": 53.1374,
-     "middle": 58.01095,
-     "percent_b": 0.1274839
+     "upper": 62.89151,
+     "lower": 53.12339,
+     "middle": 58.00745,
+     "percent_b": 0.1214781
     },
-    "score": 37.5,
+    "score": 37.7,
     "signals": [
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-6.3%"
+      "value": "-6.4%"
      },
      {
       "kind": "bull",
       "label": "BB inferiore",
-      "value": "%B 0.13"
+      "value": "%B 0.12"
      }
     ],
     "flags": [],
@@ -1664,10 +1700,10 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 61.615,
-     "dist_top20": 11.74227,
-     "ext": -6.259075,
+     "dist_top20": 11.85588,
+     "ext": -6.374092,
      "vr": null,
-     "rsi_d": 32.948,
+     "rsi_d": 32.6062,
      "adx": 35.28138,
      "bbw_pct": 0.4583333,
      "accum": null,
@@ -1679,36 +1715,36 @@
     "type": "stock",
     "symbol": "GOOGL",
     "name": "Alphabet",
-    "price": 322.14,
-    "change_24h": 1.685615,
-    "change_7d": -5.330899,
-    "rel_7d": -5.390716,
-    "rsi": 35.62423,
-    "dist_from_ma20": -5.488659,
-    "volume_ratio": 0.7588119,
+    "price": 321.55,
+    "change_24h": 1.499369,
+    "change_7d": -5.504294,
+    "rel_7d": -5.516,
+    "rsi": 35.00508,
+    "dist_from_ma20": -5.653599,
+    "volume_ratio": 0.7683188,
     "macd": {
-     "macd": -5.784316,
-     "signal": -2.468193,
-     "histogram": -3.316123,
+     "macd": -5.831383,
+     "signal": -2.477606,
+     "histogram": -3.353777,
      "crossover": null
     },
     "bollinger": {
-     "upper": 363.0817,
-     "lower": 318.6143,
-     "middle": 340.848,
-     "percent_b": 0.07928693
+     "upper": 363.1527,
+     "lower": 318.4843,
+     "middle": 340.8185,
+     "percent_b": 0.06863248
     },
-    "score": 36.0,
+    "score": 36.3,
     "signals": [
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-5.5%"
+      "value": "-5.7%"
      },
      {
       "kind": "bull",
       "label": "BB inferiore",
-      "value": "%B 0.08"
+      "value": "%B 0.07"
      }
     ],
     "flags": [],
@@ -1720,13 +1756,13 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 359.4,
-     "dist_top20": 10.36727,
-     "ext": -5.488659,
+     "dist_top20": 10.53144,
+     "ext": -5.653599,
      "vr": 1.009782,
-     "rsi_d": 35.62423,
+     "rsi_d": 35.00508,
      "adx": 20.19742,
-     "bbw_pct": 0.6416667,
-     "accum": 0.926124,
+     "bbw_pct": 0.6583333,
+     "accum": 0.9290228,
      "above_ma50": false
     },
     "signal": null
@@ -1847,31 +1883,31 @@
     "type": "commodity",
     "symbol": "GC=F",
     "name": "Oro",
-    "price": 4071.4,
-    "change_24h": 0.8171553,
-    "change_7d": -1.718732,
-    "rel_7d": -1.718732,
-    "rsi": 38.85111,
-    "dist_from_ma20": -1.736519,
+    "price": 4070.1,
+    "change_24h": 0.7849692,
+    "change_7d": -1.750109,
+    "rel_7d": -1.750109,
+    "rsi": 38.69857,
+    "dist_from_ma20": -1.766349,
     "volume_ratio": null,
     "macd": {
-     "macd": -65.17606,
-     "signal": -60.33591,
-     "histogram": -4.840149,
+     "macd": -65.27975,
+     "signal": -60.35665,
+     "histogram": -4.9231,
      "crossover": null
     },
     "bollinger": {
-     "upper": 4254.571,
-     "lower": 4032.129,
-     "middle": 4143.35,
-     "percent_b": 0.1765432
+     "upper": 4254.675,
+     "lower": 4031.895,
+     "middle": 4143.285,
+     "percent_b": 0.1714926
     },
     "score": 25.0,
     "signals": [
      {
       "kind": "bull",
       "label": "BB inferiore",
-      "value": "%B 0.18"
+      "value": "%B 0.17"
      }
     ],
     "flags": [],
@@ -1883,10 +1919,10 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 4259.0,
-     "dist_top20": 4.404792,
-     "ext": -1.736519,
+     "dist_top20": 4.435311,
+     "ext": -1.766349,
      "vr": null,
-     "rsi_d": 38.85111,
+     "rsi_d": 38.69857,
      "adx": 26.70167,
      "bbw_pct": 0.1416667,
      "accum": null,
@@ -1900,41 +1936,41 @@
     "type": "commodity",
     "symbol": "ZW=F",
     "name": "Grano",
-    "price": 612.0,
-    "change_24h": -0.6493506,
-    "change_7d": -4.858142,
-    "rel_7d": -4.858142,
-    "rsi": 24.02391,
-    "dist_from_ma20": -7.472503,
+    "price": 611.0,
+    "change_24h": -0.8116883,
+    "change_7d": -5.013603,
+    "rel_7d": -5.013603,
+    "rsi": 23.80129,
+    "dist_from_ma20": -7.616708,
     "volume_ratio": null,
     "macd": {
-     "macd": -21.23406,
-     "signal": -15.65242,
-     "histogram": -5.581648,
+     "macd": -21.31384,
+     "signal": -15.66837,
+     "histogram": -5.645465,
      "crossover": null
     },
     "bollinger": {
-     "upper": 714.6155,
-     "lower": 608.2345,
-     "middle": 661.425,
-     "percent_b": 0.03539621
+     "upper": 714.7528,
+     "lower": 607.9972,
+     "middle": 661.375,
+     "percent_b": 0.02812763
     },
-    "score": 84.9,
+    "score": 85.9,
     "signals": [
      {
       "kind": "bull",
       "label": "RSI ipervenduto",
-      "value": "24.0"
+      "value": "23.8"
      },
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-7.5%"
+      "value": "-7.6%"
      },
      {
       "kind": "bull",
       "label": "Sotto BB inf",
-      "value": "%B 0.04"
+      "value": "%B 0.03"
      }
     ],
     "flags": [],
@@ -1946,12 +1982,12 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 706.5,
-     "dist_top20": 13.3758,
-     "ext": -7.472503,
+     "dist_top20": 13.51734,
+     "ext": -7.616708,
      "vr": null,
-     "rsi_d": 24.02391,
-     "adx": 28.21862,
-     "bbw_pct": 0.6916667,
+     "rsi_d": 23.80129,
+     "adx": 28.22731,
+     "bbw_pct": 0.7,
      "accum": null,
      "above_ma50": false
     },
@@ -1961,31 +1997,31 @@
     "type": "stock",
     "symbol": "META",
     "name": "Meta Platforms",
-    "price": 623.2,
-    "change_24h": -1.167214,
-    "change_7d": -10.23406,
-    "rel_7d": -10.29388,
-    "rsi": 32.42732,
-    "dist_from_ma20": -11.92969,
-    "volume_ratio": 1.128411,
+    "price": 622.2,
+    "change_24h": -1.325803,
+    "change_7d": -10.3781,
+    "rel_7d": -10.38981,
+    "rsi": 32.26542,
+    "dist_from_ma20": -12.0648,
+    "volume_ratio": 1.159741,
     "macd": {
-     "macd": -11.59826,
-     "signal": 4.471503,
-     "histogram": -16.06976,
+     "macd": -11.67803,
+     "signal": 4.455549,
+     "histogram": -16.13358,
      "crossover": null
     },
     "bollinger": {
-     "upper": 786.0196,
-     "lower": 629.2134,
-     "middle": 707.6165,
-     "percent_b": -0.03834924
+     "upper": 786.1858,
+     "lower": 628.9472,
+     "middle": 707.5665,
+     "percent_b": -0.04291021
     },
-    "score": 73.9,
+    "score": 74.1,
     "signals": [
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-11.9%"
+      "value": "-12.1%"
      },
      {
       "kind": "bull",
@@ -2002,13 +2038,13 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 771.27,
-     "dist_top20": 19.19821,
-     "ext": -11.92969,
-     "vr": 1.602805,
-     "rsi_d": 32.42732,
+     "dist_top20": 19.32786,
+     "ext": -12.0648,
+     "vr": 1.640063,
+     "rsi_d": 32.26542,
      "adx": 27.43122,
      "bbw_pct": 0.6916667,
-     "accum": 1.220252,
+     "accum": 1.231225,
      "above_ma50": false
     },
     "signal": null
@@ -2017,26 +2053,26 @@
     "type": "stock",
     "symbol": "NFLX",
     "name": "Netflix",
-    "price": 62.585,
-    "change_24h": -2.057907,
-    "change_7d": -8.887761,
-    "rel_7d": -8.947578,
-    "rsi": 31.22919,
-    "dist_from_ma20": -8.634705,
-    "volume_ratio": 0.9449991,
+    "price": 62.605,
+    "change_24h": -2.026607,
+    "change_7d": -8.858644,
+    "rel_7d": -8.87035,
+    "rsi": 31.26093,
+    "dist_from_ma20": -8.606841,
+    "volume_ratio": 0.9626175,
     "macd": {
-     "macd": -2.258458,
-     "signal": -1.750172,
-     "histogram": -0.5082862,
+     "macd": -2.256863,
+     "signal": -1.749853,
+     "histogram": -0.5070098,
      "crossover": null
     },
     "bollinger": {
-     "upper": 73.62805,
-     "lower": 63.37145,
-     "middle": 68.49975,
-     "percent_b": -0.07667708
+     "upper": 73.62445,
+     "lower": 63.37705,
+     "middle": 68.50075,
+     "percent_b": -0.07534156
     },
-    "score": 67.3,
+    "score": 67.2,
     "signals": [
      {
       "kind": "bull",
@@ -2058,13 +2094,13 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 73.07,
-     "dist_top20": 14.34926,
-     "ext": -8.634705,
+     "dist_top20": 14.32188,
+     "ext": -8.606841,
      "vr": 1.281211,
-     "rsi_d": 31.22919,
+     "rsi_d": 31.26093,
      "adx": 26.98135,
      "bbw_pct": 0.525,
-     "accum": 1.585206,
+     "accum": 1.592174,
      "above_ma50": false
     },
     "signal": null
@@ -2073,26 +2109,26 @@
     "type": "commodity",
     "symbol": "PL=F",
     "name": "Platino",
-    "price": 1535.8,
-    "change_24h": -0.05856071,
-    "change_7d": -6.729013,
-    "rel_7d": -6.729013,
-    "rsi": 30.81301,
-    "dist_from_ma20": -6.084508,
+    "price": 1534.7,
+    "change_24h": -0.130149,
+    "change_7d": -6.795823,
+    "rel_7d": -6.795823,
+    "rsi": 30.70866,
+    "dist_from_ma20": -6.148623,
     "volume_ratio": null,
     "macd": {
-     "macd": -49.47378,
-     "signal": -41.09796,
-     "histogram": -8.375826,
+     "macd": -49.56154,
+     "signal": -41.11551,
+     "histogram": -8.446031,
      "crossover": null
     },
     "bollinger": {
-     "upper": 1742.572,
-     "lower": 1528.028,
-     "middle": 1635.3,
-     "percent_b": 0.03622414
+     "upper": 1742.722,
+     "lower": 1527.768,
+     "middle": 1635.245,
+     "percent_b": 0.03224659
     },
-    "score": 62.2,
+    "score": 62.3,
     "signals": [
      {
       "kind": "bull",
@@ -2102,7 +2138,7 @@
      {
       "kind": "bull",
       "label": "Sotto BB inf",
-      "value": "%B 0.04"
+      "value": "%B 0.03"
      }
     ],
     "flags": [],
@@ -2114,10 +2150,10 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 1744.5,
-     "dist_top20": 11.96331,
-     "ext": -6.084508,
+     "dist_top20": 12.02637,
+     "ext": -6.148623,
      "vr": null,
-     "rsi_d": 30.81301,
+     "rsi_d": 30.70866,
      "adx": 18.20088,
      "bbw_pct": 0.475,
      "accum": null,
@@ -2129,36 +2165,36 @@
     "type": "commodity",
     "symbol": "ZC=F",
     "name": "Mais",
-    "price": 449.25,
-    "change_24h": -1.263736,
-    "change_7d": -2.75974,
-    "rel_7d": -2.75974,
-    "rsi": 23.63091,
-    "dist_from_ma20": -6.403813,
+    "price": 450.0,
+    "change_24h": -1.098901,
+    "change_7d": -2.597403,
+    "rel_7d": -2.597403,
+    "rsi": 23.89973,
+    "dist_from_ma20": -6.254883,
     "volume_ratio": null,
     "macd": {
-     "macd": -13.98027,
-     "signal": -10.53453,
-     "histogram": -3.445736,
+     "macd": -13.92044,
+     "signal": -10.52257,
+     "histogram": -3.397872,
      "crossover": null
     },
     "bollinger": {
-     "upper": 516.2392,
-     "lower": 443.7358,
-     "middle": 479.9875,
-     "percent_b": 0.07605455
+     "upper": 516.1508,
+     "lower": 443.8992,
+     "middle": 480.025,
+     "percent_b": 0.08443812
     },
-    "score": 59.0,
+    "score": 57.8,
     "signals": [
      {
       "kind": "bull",
       "label": "RSI ipervenduto",
-      "value": "23.6"
+      "value": "23.9"
      },
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-6.4%"
+      "value": "-6.3%"
      },
      {
       "kind": "bull",
@@ -2175,11 +2211,11 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 526.5,
-     "dist_top20": 14.67236,
-     "ext": -6.403813,
+     "dist_top20": 14.52991,
+     "ext": -6.254883,
      "vr": null,
-     "rsi_d": 23.63091,
-     "adx": 37.75199,
+     "rsi_d": 23.89973,
+     "adx": 37.78913,
      "bbw_pct": 0.725,
      "accum": null,
      "above_ma50": false
@@ -2190,36 +2226,36 @@
     "type": "commodity",
     "symbol": "SI=F",
     "name": "Argento",
-    "price": 54.38,
-    "change_24h": 0.5026971,
-    "change_7d": -5.763699,
-    "rel_7d": -5.763699,
-    "rsi": 32.948,
-    "dist_from_ma20": -6.259075,
+    "price": 54.31,
+    "change_24h": 0.3733268,
+    "change_7d": -5.885003,
+    "rel_7d": -5.885003,
+    "rsi": 32.6062,
+    "dist_from_ma20": -6.374092,
     "volume_ratio": null,
     "macd": {
-     "macd": -2.254237,
-     "signal": -1.95812,
-     "histogram": -0.2961162,
+     "macd": -2.259821,
+     "signal": -1.959237,
+     "histogram": -0.3005834,
      "crossover": null
     },
     "bollinger": {
-     "upper": 62.8845,
-     "lower": 53.1374,
-     "middle": 58.01095,
-     "percent_b": 0.1274839
+     "upper": 62.89151,
+     "lower": 53.12339,
+     "middle": 58.00745,
+     "percent_b": 0.1214781
     },
-    "score": 37.5,
+    "score": 37.7,
     "signals": [
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-6.3%"
+      "value": "-6.4%"
      },
      {
       "kind": "bull",
       "label": "BB inferiore",
-      "value": "%B 0.13"
+      "value": "%B 0.12"
      }
     ],
     "flags": [],
@@ -2231,10 +2267,10 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 61.615,
-     "dist_top20": 11.74227,
-     "ext": -6.259075,
+     "dist_top20": 11.85588,
+     "ext": -6.374092,
      "vr": null,
-     "rsi_d": 32.948,
+     "rsi_d": 32.6062,
      "adx": 35.28138,
      "bbw_pct": 0.4583333,
      "accum": null,
@@ -2246,36 +2282,36 @@
     "type": "stock",
     "symbol": "GOOGL",
     "name": "Alphabet",
-    "price": 322.14,
-    "change_24h": 1.685615,
-    "change_7d": -5.330899,
-    "rel_7d": -5.390716,
-    "rsi": 35.62423,
-    "dist_from_ma20": -5.488659,
-    "volume_ratio": 0.7588119,
+    "price": 321.55,
+    "change_24h": 1.499369,
+    "change_7d": -5.504294,
+    "rel_7d": -5.516,
+    "rsi": 35.00508,
+    "dist_from_ma20": -5.653599,
+    "volume_ratio": 0.7683188,
     "macd": {
-     "macd": -5.784316,
-     "signal": -2.468193,
-     "histogram": -3.316123,
+     "macd": -5.831383,
+     "signal": -2.477606,
+     "histogram": -3.353777,
      "crossover": null
     },
     "bollinger": {
-     "upper": 363.0817,
-     "lower": 318.6143,
-     "middle": 340.848,
-     "percent_b": 0.07928693
+     "upper": 363.1527,
+     "lower": 318.4843,
+     "middle": 340.8185,
+     "percent_b": 0.06863248
     },
-    "score": 36.0,
+    "score": 36.3,
     "signals": [
      {
       "kind": "bull",
       "label": "Sotto MA20",
-      "value": "-5.5%"
+      "value": "-5.7%"
      },
      {
       "kind": "bull",
       "label": "BB inferiore",
-      "value": "%B 0.08"
+      "value": "%B 0.07"
      }
     ],
     "flags": [],
@@ -2287,13 +2323,13 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 359.4,
-     "dist_top20": 10.36727,
-     "ext": -5.488659,
+     "dist_top20": 10.53144,
+     "ext": -5.653599,
      "vr": 1.009782,
-     "rsi_d": 35.62423,
+     "rsi_d": 35.00508,
      "adx": 20.19742,
-     "bbw_pct": 0.6416667,
-     "accum": 0.926124,
+     "bbw_pct": 0.6583333,
+     "accum": 0.9290228,
      "above_ma50": false
     },
     "signal": null
@@ -2414,31 +2450,31 @@
     "type": "commodity",
     "symbol": "GC=F",
     "name": "Oro",
-    "price": 4071.4,
-    "change_24h": 0.8171553,
-    "change_7d": -1.718732,
-    "rel_7d": -1.718732,
-    "rsi": 38.85111,
-    "dist_from_ma20": -1.736519,
+    "price": 4070.1,
+    "change_24h": 0.7849692,
+    "change_7d": -1.750109,
+    "rel_7d": -1.750109,
+    "rsi": 38.69857,
+    "dist_from_ma20": -1.766349,
     "volume_ratio": null,
     "macd": {
-     "macd": -65.17606,
-     "signal": -60.33591,
-     "histogram": -4.840149,
+     "macd": -65.27975,
+     "signal": -60.35665,
+     "histogram": -4.9231,
      "crossover": null
     },
     "bollinger": {
-     "upper": 4254.571,
-     "lower": 4032.129,
-     "middle": 4143.35,
-     "percent_b": 0.1765432
+     "upper": 4254.675,
+     "lower": 4031.895,
+     "middle": 4143.285,
+     "percent_b": 0.1714926
     },
     "score": 25.0,
     "signals": [
      {
       "kind": "bull",
       "label": "BB inferiore",
-      "value": "%B 0.18"
+      "value": "%B 0.17"
      }
     ],
     "flags": [],
@@ -2450,10 +2486,10 @@
      "breakout20": false,
      "breakout55": false,
      "hi20": 4259.0,
-     "dist_top20": 4.404792,
-     "ext": -1.736519,
+     "dist_top20": 4.435311,
+     "ext": -1.766349,
      "vr": null,
-     "rsi_d": 38.85111,
+     "rsi_d": 38.69857,
      "adx": 26.70167,
      "bbw_pct": 0.1416667,
      "accum": null,
@@ -2470,65 +2506,137 @@
      "type": "crypto",
      "symbol": "AKEUSDT",
      "name": "Akedo",
-     "price": 0.02316226,
-     "change_24h": -24.34065,
-     "change_7d": -24.523,
-     "rel_7d": -22.0685,
-     "rsi": 31.34211,
-     "dist_from_ma20": -21.63157,
-     "volume_ratio": 2.882695,
+     "price": 0.0225615,
+     "change_24h": -25.89709,
+     "change_7d": -26.1782,
+     "rel_7d": -23.4534,
+     "rsi": 32.72127,
+     "dist_from_ma20": -23.71822,
+     "volume_ratio": 3.019579,
      "macd": {
-      "macd": -0.001476095,
-      "signal": -0.000537225,
-      "histogram": -0.0009388699,
+      "macd": -0.001442711,
+      "signal": -0.0005305482,
+      "histogram": -0.0009121628,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.03492394,
-      "lower": 0.02418726,
-      "middle": 0.0295556,
-      "percent_b": -0.157149
+      "upper": 0.03483687,
+      "lower": 0.02431617,
+      "middle": 0.02957652,
+      "percent_b": -0.1328509
      },
-     "score": 175.1,
+     "score": 177.7,
      "signals": [
       {
        "kind": "bull",
        "label": "Crollo 24h",
-       "value": "-24.34%"
+       "value": "-25.90%"
       },
       {
        "kind": "bull",
        "label": "Sotto MA20",
-       "value": "-21.6%"
+       "value": "-23.7%"
       },
       {
        "kind": "bull",
-       "label": "Volume 2.9x",
+       "label": "Volume 3.0x",
        "value": ""
       },
       {
        "kind": "bull",
        "label": "Sotto BB inf",
-       "value": "%B -0.16"
+       "value": "%B -0.13"
       }
      ],
      "flags": [],
      "trending": false,
-     "mcap_rank": 106,
-     "volume_24h": 32104730.0,
+     "mcap_rank": 107,
+     "volume_24h": 32111860.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.04025714,
-      "dist_top20": 44.10929,
-      "ext": -22.54035,
-      "vr": 1.527145,
-      "rsi_d": 42.12431,
+      "dist_top20": 43.06975,
+      "ext": -21.15643,
+      "vr": 1.59341,
+      "rsi_d": 42.48656,
       "adx": 44.89919,
       "bbw_pct": 0.1916667,
-      "accum": 0.4358659,
+      "accum": 0.4383198,
       "above_ma50": false
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "QUSDT",
+     "name": "Quack AI",
+     "price": 0.054823,
+     "change_24h": -27.34338,
+     "change_7d": -54.9394,
+     "rel_7d": -52.2146,
+     "rsi": 41.76951,
+     "dist_from_ma20": -36.07165,
+     "volume_ratio": 2.578597,
+     "macd": {
+      "macd": -0.0006926616,
+      "signal": 0.000206164,
+      "histogram": -0.0008988256,
+      "crossover": "bear"
+     },
+     "bollinger": {
+      "upper": 0.1719197,
+      "lower": -0.0004058482,
+      "middle": 0.08575695,
+      "percent_b": 0.3197485
+     },
+     "score": 100.8,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Crollo 24h",
+       "value": "-27.34%"
+      },
+      {
+       "kind": "bull",
+       "label": "Sotto MA20",
+       "value": "-36.1%"
+      },
+      {
+       "kind": "bull",
+       "label": "Volume 2.6x",
+       "value": ""
+      },
+      {
+       "kind": "bear",
+       "label": "MACD cross DOWN",
+       "value": "-0.0009"
+      }
+     ],
+     "flags": [
+      {
+       "code": "volume_anomalo",
+       "label": "Volume anomalo",
+       "value": "50% della cap"
+      }
+     ],
+     "trending": false,
+     "mcap_rank": 149,
+     "volume_24h": 129343200.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 0.21498,
+      "dist_top20": 74.5581,
+      "ext": -30.59574,
+      "vr": 3.437932,
+      "rsi_d": 47.35081,
+      "adx": 71.42853,
+      "bbw_pct": 0.925,
+      "accum": 2.442261,
+      "above_ma50": true
      },
      "signal": null
     },
@@ -2536,41 +2644,41 @@
      "type": "commodity",
      "symbol": "ZW=F",
      "name": "Grano",
-     "price": 612.0,
-     "change_24h": -0.6493506,
-     "change_7d": -4.858142,
-     "rel_7d": -4.858142,
-     "rsi": 24.02391,
-     "dist_from_ma20": -7.472503,
+     "price": 611.0,
+     "change_24h": -0.8116883,
+     "change_7d": -5.013603,
+     "rel_7d": -5.013603,
+     "rsi": 23.80129,
+     "dist_from_ma20": -7.616708,
      "volume_ratio": null,
      "macd": {
-      "macd": -21.23406,
-      "signal": -15.65242,
-      "histogram": -5.581648,
+      "macd": -21.31384,
+      "signal": -15.66837,
+      "histogram": -5.645465,
       "crossover": null
      },
      "bollinger": {
-      "upper": 714.6155,
-      "lower": 608.2345,
-      "middle": 661.425,
-      "percent_b": 0.03539621
+      "upper": 714.7528,
+      "lower": 607.9972,
+      "middle": 661.375,
+      "percent_b": 0.02812763
      },
-     "score": 84.9,
+     "score": 85.9,
      "signals": [
       {
        "kind": "bull",
        "label": "RSI ipervenduto",
-       "value": "24.0"
+       "value": "23.8"
       },
       {
        "kind": "bull",
        "label": "Sotto MA20",
-       "value": "-7.5%"
+       "value": "-7.6%"
       },
       {
        "kind": "bull",
        "label": "Sotto BB inf",
-       "value": "%B 0.04"
+       "value": "%B 0.03"
       }
      ],
      "flags": [],
@@ -2582,12 +2690,12 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 706.5,
-      "dist_top20": 13.3758,
-      "ext": -7.472503,
+      "dist_top20": 13.51734,
+      "ext": -7.616708,
       "vr": null,
-      "rsi_d": 24.02391,
-      "adx": 28.21862,
-      "bbw_pct": 0.6916667,
+      "rsi_d": 23.80129,
+      "adx": 28.22731,
+      "bbw_pct": 0.7,
       "accum": null,
       "above_ma50": false
      },
@@ -2597,31 +2705,31 @@
      "type": "stock",
      "symbol": "META",
      "name": "Meta Platforms",
-     "price": 623.2,
-     "change_24h": -1.167214,
-     "change_7d": -10.23406,
-     "rel_7d": -10.29388,
-     "rsi": 32.42732,
-     "dist_from_ma20": -11.92969,
-     "volume_ratio": 1.128411,
+     "price": 622.2,
+     "change_24h": -1.325803,
+     "change_7d": -10.3781,
+     "rel_7d": -10.38981,
+     "rsi": 32.26542,
+     "dist_from_ma20": -12.0648,
+     "volume_ratio": 1.159741,
      "macd": {
-      "macd": -11.59826,
-      "signal": 4.471503,
-      "histogram": -16.06976,
+      "macd": -11.67803,
+      "signal": 4.455549,
+      "histogram": -16.13358,
       "crossover": null
      },
      "bollinger": {
-      "upper": 786.0196,
-      "lower": 629.2134,
-      "middle": 707.6165,
-      "percent_b": -0.03834924
+      "upper": 786.1858,
+      "lower": 628.9472,
+      "middle": 707.5665,
+      "percent_b": -0.04291021
      },
-     "score": 73.9,
+     "score": 74.1,
      "signals": [
       {
        "kind": "bull",
        "label": "Sotto MA20",
-       "value": "-11.9%"
+       "value": "-12.1%"
       },
       {
        "kind": "bull",
@@ -2638,13 +2746,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 771.27,
-      "dist_top20": 19.19821,
-      "ext": -11.92969,
-      "vr": 1.602805,
-      "rsi_d": 32.42732,
+      "dist_top20": 19.32786,
+      "ext": -12.0648,
+      "vr": 1.640063,
+      "rsi_d": 32.26542,
       "adx": 27.43122,
       "bbw_pct": 0.6916667,
-      "accum": 1.220252,
+      "accum": 1.231225,
       "above_ma50": false
      },
      "signal": null
@@ -2653,26 +2761,26 @@
      "type": "stock",
      "symbol": "NFLX",
      "name": "Netflix",
-     "price": 62.585,
-     "change_24h": -2.057907,
-     "change_7d": -8.887761,
-     "rel_7d": -8.947578,
-     "rsi": 31.22919,
-     "dist_from_ma20": -8.634705,
-     "volume_ratio": 0.9449991,
+     "price": 62.605,
+     "change_24h": -2.026607,
+     "change_7d": -8.858644,
+     "rel_7d": -8.87035,
+     "rsi": 31.26093,
+     "dist_from_ma20": -8.606841,
+     "volume_ratio": 0.9626175,
      "macd": {
-      "macd": -2.258458,
-      "signal": -1.750172,
-      "histogram": -0.5082862,
+      "macd": -2.256863,
+      "signal": -1.749853,
+      "histogram": -0.5070098,
       "crossover": null
      },
      "bollinger": {
-      "upper": 73.62805,
-      "lower": 63.37145,
-      "middle": 68.49975,
-      "percent_b": -0.07667708
+      "upper": 73.62445,
+      "lower": 63.37705,
+      "middle": 68.50075,
+      "percent_b": -0.07534156
      },
-     "score": 67.3,
+     "score": 67.2,
      "signals": [
       {
        "kind": "bull",
@@ -2694,13 +2802,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 73.07,
-      "dist_top20": 14.34926,
-      "ext": -8.634705,
+      "dist_top20": 14.32188,
+      "ext": -8.606841,
       "vr": 1.281211,
-      "rsi_d": 31.22919,
+      "rsi_d": 31.26093,
       "adx": 26.98135,
       "bbw_pct": 0.525,
-      "accum": 1.585206,
+      "accum": 1.592174,
       "above_ma50": false
      },
      "signal": null
@@ -2709,26 +2817,26 @@
      "type": "commodity",
      "symbol": "PL=F",
      "name": "Platino",
-     "price": 1535.8,
-     "change_24h": -0.05856071,
-     "change_7d": -6.729013,
-     "rel_7d": -6.729013,
-     "rsi": 30.81301,
-     "dist_from_ma20": -6.084508,
+     "price": 1534.7,
+     "change_24h": -0.130149,
+     "change_7d": -6.795823,
+     "rel_7d": -6.795823,
+     "rsi": 30.70866,
+     "dist_from_ma20": -6.148623,
      "volume_ratio": null,
      "macd": {
-      "macd": -49.47378,
-      "signal": -41.09796,
-      "histogram": -8.375826,
+      "macd": -49.56154,
+      "signal": -41.11551,
+      "histogram": -8.446031,
       "crossover": null
      },
      "bollinger": {
-      "upper": 1742.572,
-      "lower": 1528.028,
-      "middle": 1635.3,
-      "percent_b": 0.03622414
+      "upper": 1742.722,
+      "lower": 1527.768,
+      "middle": 1635.245,
+      "percent_b": 0.03224659
      },
-     "score": 62.2,
+     "score": 62.3,
      "signals": [
       {
        "kind": "bull",
@@ -2738,7 +2846,7 @@
       {
        "kind": "bull",
        "label": "Sotto BB inf",
-       "value": "%B 0.04"
+       "value": "%B 0.03"
       }
      ],
      "flags": [],
@@ -2750,10 +2858,10 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 1744.5,
-      "dist_top20": 11.96331,
-      "ext": -6.084508,
+      "dist_top20": 12.02637,
+      "ext": -6.148623,
       "vr": null,
-      "rsi_d": 30.81301,
+      "rsi_d": 30.70866,
       "adx": 18.20088,
       "bbw_pct": 0.475,
       "accum": null,
@@ -2762,217 +2870,39 @@
      "signal": null
     },
     {
-     "type": "crypto",
-     "symbol": "QUSDT",
-     "name": "Quack AI",
-     "price": 0.055673,
-     "change_24h": -12.15226,
-     "change_7d": -54.3122,
-     "rel_7d": -51.8577,
-     "rsi": 41.7969,
-     "dist_from_ma20": -35.08699,
-     "volume_ratio": 2.541562,
-     "macd": {
-      "macd": -0.0006789408,
-      "signal": 0.0002089082,
-      "histogram": -0.000887849,
-      "crossover": "bear"
-     },
-     "bollinger": {
-      "upper": 0.171916,
-      "lower": -0.0003848786,
-      "middle": 0.08576555,
-      "percent_b": 0.3206709
-     },
-     "score": 62.1,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Crollo 24h",
-       "value": "-12.15%"
-      },
-      {
-       "kind": "bull",
-       "label": "Sotto MA20",
-       "value": "-35.1%"
-      },
-      {
-       "kind": "bull",
-       "label": "Volume 2.5x",
-       "value": ""
-      },
-      {
-       "kind": "bear",
-       "label": "MACD cross DOWN",
-       "value": "-0.0009"
-      }
-     ],
-     "flags": [],
-     "trending": true,
-     "mcap_rank": 148,
-     "volume_24h": 91692820.0,
-     "venue": "Binance o altri exchange",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 0.21498,
-      "dist_top20": 74.47809,
-      "ext": -30.38508,
-      "vr": 3.413219,
-      "rsi_d": 47.37044,
-      "adx": 71.42853,
-      "bbw_pct": 0.925,
-      "accum": 2.437592,
-      "above_ma50": true
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "ATOMUSDT",
-     "name": "Cosmos Hub",
-     "price": 1.61,
-     "change_24h": -2.45673,
-     "change_7d": -7.99,
-     "rel_7d": -5.5355,
-     "rsi": 38.33887,
-     "dist_from_ma20": -1.275448,
-     "volume_ratio": 1.091792,
-     "macd": {
-      "macd": -0.02168372,
-      "signal": -0.02216952,
-      "histogram": 0.0004858044,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 1.656213,
-      "lower": 1.605387,
-      "middle": 1.6308,
-      "percent_b": 0.0120681
-     },
-     "score": 62.0,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "MACD ripresa",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "Sotto BB inf",
-       "value": "%B 0.01"
-      }
-     ],
-     "flags": [],
-     "trending": false,
-     "mcap_rank": 80,
-     "volume_24h": 41165810.0,
-     "venue": "Trade Republic o Binance",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 2.087,
-      "dist_top20": 23.04744,
-      "ext": -8.840641,
-      "vr": 0.364319,
-      "rsi_d": 39.20585,
-      "adx": 12.89743,
-      "bbw_pct": 0.675,
-      "accum": 0.5597142,
-      "above_ma50": false
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "DOTUSDT",
-     "name": "Polkadot",
-     "price": 0.992673,
-     "change_24h": -2.20281,
-     "change_7d": -14.5328,
-     "rel_7d": -12.0783,
-     "rsi": 33.50249,
-     "dist_from_ma20": -2.621836,
-     "volume_ratio": 0.6002195,
-     "macd": {
-      "macd": -0.02807006,
-      "signal": -0.02817752,
-      "histogram": 0.0001074643,
-      "crossover": "bull"
-     },
-     "bollinger": {
-      "upper": 1.058018,
-      "lower": 0.9807819,
-      "middle": 1.0194,
-      "percent_b": 0.1452443
-     },
-     "score": 60.0,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "MACD cross UP",
-       "value": "0.0001"
-      },
-      {
-       "kind": "bull",
-       "label": "BB inferiore",
-       "value": "%B 0.15"
-      }
-     ],
-     "flags": [],
-     "trending": false,
-     "mcap_rank": 58,
-     "volume_24h": 116508200.0,
-     "venue": "Trade Republic o Binance",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 1.296,
-      "dist_top20": 23.45679,
-      "ext": -12.26674,
-      "vr": 0.458075,
-      "rsi_d": 34.55445,
-      "adx": 16.99674,
-      "bbw_pct": 0.6083333,
-      "accum": 0.6250841,
-      "above_ma50": false
-     },
-     "signal": null
-    },
-    {
      "type": "commodity",
      "symbol": "ZC=F",
      "name": "Mais",
-     "price": 449.25,
-     "change_24h": -1.263736,
-     "change_7d": -2.75974,
-     "rel_7d": -2.75974,
-     "rsi": 23.63091,
-     "dist_from_ma20": -6.403813,
+     "price": 450.0,
+     "change_24h": -1.098901,
+     "change_7d": -2.597403,
+     "rel_7d": -2.597403,
+     "rsi": 23.89973,
+     "dist_from_ma20": -6.254883,
      "volume_ratio": null,
      "macd": {
-      "macd": -13.98027,
-      "signal": -10.53453,
-      "histogram": -3.445736,
+      "macd": -13.92044,
+      "signal": -10.52257,
+      "histogram": -3.397872,
       "crossover": null
      },
      "bollinger": {
-      "upper": 516.2392,
-      "lower": 443.7358,
-      "middle": 479.9875,
-      "percent_b": 0.07605455
+      "upper": 516.1508,
+      "lower": 443.8992,
+      "middle": 480.025,
+      "percent_b": 0.08443812
      },
-     "score": 59.0,
+     "score": 57.8,
      "signals": [
       {
        "kind": "bull",
        "label": "RSI ipervenduto",
-       "value": "23.6"
+       "value": "23.9"
       },
       {
        "kind": "bull",
        "label": "Sotto MA20",
-       "value": "-6.4%"
+       "value": "-6.3%"
       },
       {
        "kind": "bull",
@@ -2989,11 +2919,11 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 526.5,
-      "dist_top20": 14.67236,
-      "ext": -6.403813,
+      "dist_top20": 14.52991,
+      "ext": -6.254883,
       "vr": null,
-      "rsi_d": 23.63091,
-      "adx": 37.75199,
+      "rsi_d": 23.89973,
+      "adx": 37.78913,
       "bbw_pct": 0.725,
       "accum": null,
       "above_ma50": false
@@ -3002,483 +2932,43 @@
     },
     {
      "type": "crypto",
-     "symbol": "AAVEUSDT",
-     "name": "Aave",
-     "price": 131.94,
-     "change_24h": -3.06545,
-     "change_7d": -12.9891,
-     "rel_7d": -10.5346,
-     "rsi": 33.0006,
-     "dist_from_ma20": -2.435417,
-     "volume_ratio": 1.519205,
-     "macd": {
-      "macd": -3.348447,
-      "signal": -3.427357,
-      "histogram": 0.07890989,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 139.3563,
-      "lower": 131.1107,
-      "middle": 135.2335,
-      "percent_b": 0.09329598
-     },
-     "score": 52.6,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Crollo 24h",
-       "value": "-3.07%"
-      },
-      {
-       "kind": "bull",
-       "label": "Volume 1.5x",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "MACD ripresa",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "BB inferiore",
-       "value": "%B 0.09"
-      }
-     ],
-     "flags": [],
-     "trending": true,
-     "mcap_rank": 48,
-     "volume_24h": 240409000.0,
-     "venue": "Trade Republic o Binance",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 179.73,
-      "dist_top20": 26.62327,
-      "ext": -13.6408,
-      "vr": 1.177958,
-      "rsi_d": 32.65389,
-      "adx": 22.61706,
-      "bbw_pct": 0.5916667,
-      "accum": 0.7298615,
-      "above_ma50": false
-     },
-     "signal": null
-    }
-   ],
-   "crypto": [
-    {
-     "type": "crypto",
-     "symbol": "AKEUSDT",
-     "name": "Akedo",
-     "price": 0.02316226,
-     "change_24h": -24.34065,
-     "change_7d": -24.523,
-     "rel_7d": -22.0685,
-     "rsi": 31.34211,
-     "dist_from_ma20": -21.63157,
-     "volume_ratio": 2.882695,
-     "macd": {
-      "macd": -0.001476095,
-      "signal": -0.000537225,
-      "histogram": -0.0009388699,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 0.03492394,
-      "lower": 0.02418726,
-      "middle": 0.0295556,
-      "percent_b": -0.157149
-     },
-     "score": 175.1,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Crollo 24h",
-       "value": "-24.34%"
-      },
-      {
-       "kind": "bull",
-       "label": "Sotto MA20",
-       "value": "-21.6%"
-      },
-      {
-       "kind": "bull",
-       "label": "Volume 2.9x",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "Sotto BB inf",
-       "value": "%B -0.16"
-      }
-     ],
-     "flags": [],
-     "trending": false,
-     "mcap_rank": 106,
-     "volume_24h": 32104730.0,
-     "venue": "Binance o altri exchange",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 0.04025714,
-      "dist_top20": 44.10929,
-      "ext": -22.54035,
-      "vr": 1.527145,
-      "rsi_d": 42.12431,
-      "adx": 44.89919,
-      "bbw_pct": 0.1916667,
-      "accum": 0.4358659,
-      "above_ma50": false
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "QUSDT",
-     "name": "Quack AI",
-     "price": 0.055673,
-     "change_24h": -12.15226,
-     "change_7d": -54.3122,
-     "rel_7d": -51.8577,
-     "rsi": 41.7969,
-     "dist_from_ma20": -35.08699,
-     "volume_ratio": 2.541562,
-     "macd": {
-      "macd": -0.0006789408,
-      "signal": 0.0002089082,
-      "histogram": -0.000887849,
-      "crossover": "bear"
-     },
-     "bollinger": {
-      "upper": 0.171916,
-      "lower": -0.0003848786,
-      "middle": 0.08576555,
-      "percent_b": 0.3206709
-     },
-     "score": 62.1,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Crollo 24h",
-       "value": "-12.15%"
-      },
-      {
-       "kind": "bull",
-       "label": "Sotto MA20",
-       "value": "-35.1%"
-      },
-      {
-       "kind": "bull",
-       "label": "Volume 2.5x",
-       "value": ""
-      },
-      {
-       "kind": "bear",
-       "label": "MACD cross DOWN",
-       "value": "-0.0009"
-      }
-     ],
-     "flags": [],
-     "trending": true,
-     "mcap_rank": 148,
-     "volume_24h": 91692820.0,
-     "venue": "Binance o altri exchange",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 0.21498,
-      "dist_top20": 74.47809,
-      "ext": -30.38508,
-      "vr": 3.413219,
-      "rsi_d": 47.37044,
-      "adx": 71.42853,
-      "bbw_pct": 0.925,
-      "accum": 2.437592,
-      "above_ma50": true
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "ATOMUSDT",
-     "name": "Cosmos Hub",
-     "price": 1.61,
-     "change_24h": -2.45673,
-     "change_7d": -7.99,
-     "rel_7d": -5.5355,
-     "rsi": 38.33887,
-     "dist_from_ma20": -1.275448,
-     "volume_ratio": 1.091792,
-     "macd": {
-      "macd": -0.02168372,
-      "signal": -0.02216952,
-      "histogram": 0.0004858044,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 1.656213,
-      "lower": 1.605387,
-      "middle": 1.6308,
-      "percent_b": 0.0120681
-     },
-     "score": 62.0,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "MACD ripresa",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "Sotto BB inf",
-       "value": "%B 0.01"
-      }
-     ],
-     "flags": [],
-     "trending": false,
-     "mcap_rank": 80,
-     "volume_24h": 41165810.0,
-     "venue": "Trade Republic o Binance",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 2.087,
-      "dist_top20": 23.04744,
-      "ext": -8.840641,
-      "vr": 0.364319,
-      "rsi_d": 39.20585,
-      "adx": 12.89743,
-      "bbw_pct": 0.675,
-      "accum": 0.5597142,
-      "above_ma50": false
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "DOTUSDT",
-     "name": "Polkadot",
-     "price": 0.992673,
-     "change_24h": -2.20281,
-     "change_7d": -14.5328,
-     "rel_7d": -12.0783,
-     "rsi": 33.50249,
-     "dist_from_ma20": -2.621836,
-     "volume_ratio": 0.6002195,
-     "macd": {
-      "macd": -0.02807006,
-      "signal": -0.02817752,
-      "histogram": 0.0001074643,
-      "crossover": "bull"
-     },
-     "bollinger": {
-      "upper": 1.058018,
-      "lower": 0.9807819,
-      "middle": 1.0194,
-      "percent_b": 0.1452443
-     },
-     "score": 60.0,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "MACD cross UP",
-       "value": "0.0001"
-      },
-      {
-       "kind": "bull",
-       "label": "BB inferiore",
-       "value": "%B 0.15"
-      }
-     ],
-     "flags": [],
-     "trending": false,
-     "mcap_rank": 58,
-     "volume_24h": 116508200.0,
-     "venue": "Trade Republic o Binance",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 1.296,
-      "dist_top20": 23.45679,
-      "ext": -12.26674,
-      "vr": 0.458075,
-      "rsi_d": 34.55445,
-      "adx": 16.99674,
-      "bbw_pct": 0.6083333,
-      "accum": 0.6250841,
-      "above_ma50": false
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "AAVEUSDT",
-     "name": "Aave",
-     "price": 131.94,
-     "change_24h": -3.06545,
-     "change_7d": -12.9891,
-     "rel_7d": -10.5346,
-     "rsi": 33.0006,
-     "dist_from_ma20": -2.435417,
-     "volume_ratio": 1.519205,
-     "macd": {
-      "macd": -3.348447,
-      "signal": -3.427357,
-      "histogram": 0.07890989,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 139.3563,
-      "lower": 131.1107,
-      "middle": 135.2335,
-      "percent_b": 0.09329598
-     },
-     "score": 52.6,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Crollo 24h",
-       "value": "-3.07%"
-      },
-      {
-       "kind": "bull",
-       "label": "Volume 1.5x",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "MACD ripresa",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "BB inferiore",
-       "value": "%B 0.09"
-      }
-     ],
-     "flags": [],
-     "trending": true,
-     "mcap_rank": 48,
-     "volume_24h": 240409000.0,
-     "venue": "Trade Republic o Binance",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 179.73,
-      "dist_top20": 26.62327,
-      "ext": -13.6408,
-      "vr": 1.177958,
-      "rsi_d": 32.65389,
-      "adx": 22.61706,
-      "bbw_pct": 0.5916667,
-      "accum": 0.7298615,
-      "above_ma50": false
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "CVXUSDT",
-     "name": "Convex Finance",
-     "price": 2.31,
-     "change_24h": -5.96888,
-     "change_7d": 5.3931,
-     "rel_7d": 7.8476,
-     "rsi": 42.44546,
-     "dist_from_ma20": -4.133466,
-     "volume_ratio": 0.8166618,
-     "macd": {
-      "macd": -0.02625459,
-      "signal": -0.005213758,
-      "histogram": -0.02104083,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 2.561035,
-      "lower": 2.258165,
-      "middle": 2.4096,
-      "percent_b": 0.1909565
-     },
-     "score": 51.2,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Crollo 24h",
-       "value": "-5.97%"
-      },
-      {
-       "kind": "bull",
-       "label": "Sotto MA20",
-       "value": "-4.1%"
-      },
-      {
-       "kind": "bull",
-       "label": "BB inferiore",
-       "value": "%B 0.19"
-      }
-     ],
-     "flags": [
-      {
-       "code": "liquidita",
-       "label": "Liquidità bassa",
-       "value": "9.5M$/24h"
-      }
-     ],
-     "trending": false,
-     "mcap_rank": 170,
-     "volume_24h": 9524034.0,
-     "venue": "Binance o altri exchange",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 2.715,
-      "dist_top20": 14.69613,
-      "ext": 5.719633,
-      "vr": 0.8858312,
-      "rsi_d": 53.43808,
-      "adx": 26.78121,
-      "bbw_pct": 0.8333333,
-      "accum": 1.603016,
-      "above_ma50": true
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
      "symbol": "KMNOUSDT",
      "name": "Kamino",
-     "price": 0.03991655,
-     "change_24h": -7.75325,
-     "change_7d": 0.3406,
-     "rel_7d": 2.7951,
-     "rsi": 43.20304,
-     "dist_from_ma20": -3.990211,
-     "volume_ratio": 0.7515539,
+     "price": 0.0398175,
+     "change_24h": -7.95062,
+     "change_7d": -1.0914,
+     "rel_7d": 1.6334,
+     "rsi": 42.77914,
+     "dist_from_ma20": -4.215781,
+     "volume_ratio": 0.7745371,
      "macd": {
-      "macd": 0.0001035862,
-      "signal": 0.0004042901,
-      "histogram": -0.0003007039,
+      "macd": 9.481129e-05,
+      "signal": 0.0004025351,
+      "histogram": -0.0003077239,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.04397913,
-      "lower": 0.03917187,
-      "middle": 0.0415755,
-      "percent_b": 0.1639464
+      "upper": 0.04398885,
+      "lower": 0.03915115,
+      "middle": 0.04157,
+      "percent_b": 0.1444593
      },
-     "score": 48.3,
+     "score": 57.3,
      "signals": [
       {
        "kind": "bull",
        "label": "Crollo 24h",
-       "value": "-7.75%"
+       "value": "-7.95%"
+      },
+      {
+       "kind": "bull",
+       "label": "Sotto MA20",
+       "value": "-4.2%"
       },
       {
        "kind": "bull",
        "label": "BB inferiore",
-       "value": "%B 0.16"
+       "value": "%B 0.14"
       }
      ],
      "flags": [
@@ -3490,19 +2980,19 @@
      ],
      "trending": false,
      "mcap_rank": 159,
-     "volume_24h": 9245528.0,
+     "volume_24h": 9159918.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.04458,
-      "dist_top20": 10.36339,
-      "ext": 1.940076,
-      "vr": 0.8552461,
-      "rsi_d": 51.66715,
-      "adx": 33.60827,
+      "dist_top20": 10.61014,
+      "ext": 1.673726,
+      "vr": 0.8680597,
+      "rsi_d": 51.43422,
+      "adx": 33.58058,
       "bbw_pct": 0.5833333,
-      "accum": 0.8020482,
+      "accum": 0.8032561,
       "above_ma50": true
      },
      "signal": null
@@ -3511,31 +3001,31 @@
      "type": "crypto",
      "symbol": "SKYUSDT",
      "name": "Sky",
-     "price": 0.065467,
-     "change_24h": -4.19299,
-     "change_7d": -11.5414,
-     "rel_7d": -9.0869,
-     "rsi": 32.63026,
-     "dist_from_ma20": -3.677547,
-     "volume_ratio": 2.187507,
+     "price": 0.06541,
+     "change_24h": -4.35114,
+     "change_7d": -12.9125,
+     "rel_7d": -10.1877,
+     "rsi": 32.5634,
+     "dist_from_ma20": -3.759996,
+     "volume_ratio": 2.237029,
      "macd": {
-      "macd": -0.001613382,
-      "signal": -0.001384058,
-      "histogram": -0.0002293234,
+      "macd": -0.001614977,
+      "signal": -0.001384378,
+      "histogram": -0.0002305998,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.07138969,
-      "lower": 0.06454331,
-      "middle": 0.0679665,
-      "percent_b": 0.1222095
+      "upper": 0.07139173,
+      "lower": 0.06453927,
+      "middle": 0.0679655,
+      "percent_b": 0.1197711
      },
-     "score": 46.8,
+     "score": 47.4,
      "signals": [
       {
        "kind": "bull",
        "label": "Crollo 24h",
-       "value": "-4.19%"
+       "value": "-4.35%"
       },
       {
        "kind": "bull",
@@ -3552,24 +3042,550 @@
       {
        "code": "liquidita",
        "label": "Liquidità bassa",
-       "value": "14.5M$/24h"
+       "value": "14.7M$/24h"
       }
      ],
      "trending": false,
      "mcap_rank": 62,
-     "volume_24h": 14483980.0,
+     "volume_24h": 14696370.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.08993,
-      "dist_top20": 27.29901,
-      "ext": -10.23115,
-      "vr": 1.828247,
-      "rsi_d": 37.45358,
+      "dist_top20": 27.33237,
+      "ext": -10.27049,
+      "vr": 1.846132,
+      "rsi_d": 37.41945,
       "adx": 17.86084,
       "bbw_pct": 0.35,
-      "accum": 0.4970204,
+      "accum": 0.4981535,
+      "above_ma50": false
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "ENSUSDT",
+     "name": "Ethereum Name Service",
+     "price": 5.16,
+     "change_24h": -1.13102,
+     "change_7d": -7.9784,
+     "rel_7d": -5.2536,
+     "rsi": 38.84928,
+     "dist_from_ma20": -1.45149,
+     "volume_ratio": 2.189184,
+     "macd": {
+      "macd": -0.08558819,
+      "signal": -0.08606737,
+      "histogram": 0.0004791781,
+      "crossover": "bull"
+     },
+     "bollinger": {
+      "upper": 5.386519,
+      "lower": 5.085481,
+      "middle": 5.236,
+      "percent_b": 0.2475403
+     },
+     "score": 44.2,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Volume 2.2x",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "MACD cross UP",
+       "value": "0.0005"
+      }
+     ],
+     "flags": [
+      {
+       "code": "liquidita",
+       "label": "Liquidità bassa",
+       "value": "9.7M$/24h"
+      }
+     ],
+     "trending": false,
+     "mcap_rank": 168,
+     "volume_24h": 9657811.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 6.77,
+      "dist_top20": 23.78139,
+      "ext": -9.62431,
+      "vr": 1.004639,
+      "rsi_d": 30.54571,
+      "adx": 31.28588,
+      "bbw_pct": 0.55,
+      "accum": 0.4942132,
+      "above_ma50": false
+     },
+     "signal": null
+    }
+   ],
+   "crypto": [
+    {
+     "type": "crypto",
+     "symbol": "AKEUSDT",
+     "name": "Akedo",
+     "price": 0.0225615,
+     "change_24h": -25.89709,
+     "change_7d": -26.1782,
+     "rel_7d": -23.4534,
+     "rsi": 32.72127,
+     "dist_from_ma20": -23.71822,
+     "volume_ratio": 3.019579,
+     "macd": {
+      "macd": -0.001442711,
+      "signal": -0.0005305482,
+      "histogram": -0.0009121628,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 0.03483687,
+      "lower": 0.02431617,
+      "middle": 0.02957652,
+      "percent_b": -0.1328509
+     },
+     "score": 177.7,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Crollo 24h",
+       "value": "-25.90%"
+      },
+      {
+       "kind": "bull",
+       "label": "Sotto MA20",
+       "value": "-23.7%"
+      },
+      {
+       "kind": "bull",
+       "label": "Volume 3.0x",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "Sotto BB inf",
+       "value": "%B -0.13"
+      }
+     ],
+     "flags": [],
+     "trending": false,
+     "mcap_rank": 107,
+     "volume_24h": 32111860.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 0.04025714,
+      "dist_top20": 43.06975,
+      "ext": -21.15643,
+      "vr": 1.59341,
+      "rsi_d": 42.48656,
+      "adx": 44.89919,
+      "bbw_pct": 0.1916667,
+      "accum": 0.4383198,
+      "above_ma50": false
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "QUSDT",
+     "name": "Quack AI",
+     "price": 0.054823,
+     "change_24h": -27.34338,
+     "change_7d": -54.9394,
+     "rel_7d": -52.2146,
+     "rsi": 41.76951,
+     "dist_from_ma20": -36.07165,
+     "volume_ratio": 2.578597,
+     "macd": {
+      "macd": -0.0006926616,
+      "signal": 0.000206164,
+      "histogram": -0.0008988256,
+      "crossover": "bear"
+     },
+     "bollinger": {
+      "upper": 0.1719197,
+      "lower": -0.0004058482,
+      "middle": 0.08575695,
+      "percent_b": 0.3197485
+     },
+     "score": 100.8,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Crollo 24h",
+       "value": "-27.34%"
+      },
+      {
+       "kind": "bull",
+       "label": "Sotto MA20",
+       "value": "-36.1%"
+      },
+      {
+       "kind": "bull",
+       "label": "Volume 2.6x",
+       "value": ""
+      },
+      {
+       "kind": "bear",
+       "label": "MACD cross DOWN",
+       "value": "-0.0009"
+      }
+     ],
+     "flags": [
+      {
+       "code": "volume_anomalo",
+       "label": "Volume anomalo",
+       "value": "50% della cap"
+      }
+     ],
+     "trending": false,
+     "mcap_rank": 149,
+     "volume_24h": 129343200.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 0.21498,
+      "dist_top20": 74.5581,
+      "ext": -30.59574,
+      "vr": 3.437932,
+      "rsi_d": 47.35081,
+      "adx": 71.42853,
+      "bbw_pct": 0.925,
+      "accum": 2.442261,
+      "above_ma50": true
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "KMNOUSDT",
+     "name": "Kamino",
+     "price": 0.0398175,
+     "change_24h": -7.95062,
+     "change_7d": -1.0914,
+     "rel_7d": 1.6334,
+     "rsi": 42.77914,
+     "dist_from_ma20": -4.215781,
+     "volume_ratio": 0.7745371,
+     "macd": {
+      "macd": 9.481129e-05,
+      "signal": 0.0004025351,
+      "histogram": -0.0003077239,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 0.04398885,
+      "lower": 0.03915115,
+      "middle": 0.04157,
+      "percent_b": 0.1444593
+     },
+     "score": 57.3,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Crollo 24h",
+       "value": "-7.95%"
+      },
+      {
+       "kind": "bull",
+       "label": "Sotto MA20",
+       "value": "-4.2%"
+      },
+      {
+       "kind": "bull",
+       "label": "BB inferiore",
+       "value": "%B 0.14"
+      }
+     ],
+     "flags": [
+      {
+       "code": "liquidita",
+       "label": "Liquidità bassa",
+       "value": "9.2M$/24h"
+      }
+     ],
+     "trending": false,
+     "mcap_rank": 159,
+     "volume_24h": 9159918.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 0.04458,
+      "dist_top20": 10.61014,
+      "ext": 1.673726,
+      "vr": 0.8680597,
+      "rsi_d": 51.43422,
+      "adx": 33.58058,
+      "bbw_pct": 0.5833333,
+      "accum": 0.8032561,
+      "above_ma50": true
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "SKYUSDT",
+     "name": "Sky",
+     "price": 0.06541,
+     "change_24h": -4.35114,
+     "change_7d": -12.9125,
+     "rel_7d": -10.1877,
+     "rsi": 32.5634,
+     "dist_from_ma20": -3.759996,
+     "volume_ratio": 2.237029,
+     "macd": {
+      "macd": -0.001614977,
+      "signal": -0.001384378,
+      "histogram": -0.0002305998,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 0.07139173,
+      "lower": 0.06453927,
+      "middle": 0.0679655,
+      "percent_b": 0.1197711
+     },
+     "score": 47.4,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Crollo 24h",
+       "value": "-4.35%"
+      },
+      {
+       "kind": "bull",
+       "label": "Volume 2.2x",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "BB inferiore",
+       "value": "%B 0.12"
+      }
+     ],
+     "flags": [
+      {
+       "code": "liquidita",
+       "label": "Liquidità bassa",
+       "value": "14.7M$/24h"
+      }
+     ],
+     "trending": false,
+     "mcap_rank": 62,
+     "volume_24h": 14696370.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 0.08993,
+      "dist_top20": 27.33237,
+      "ext": -10.27049,
+      "vr": 1.846132,
+      "rsi_d": 37.41945,
+      "adx": 17.86084,
+      "bbw_pct": 0.35,
+      "accum": 0.4981535,
+      "above_ma50": false
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "ENSUSDT",
+     "name": "Ethereum Name Service",
+     "price": 5.16,
+     "change_24h": -1.13102,
+     "change_7d": -7.9784,
+     "rel_7d": -5.2536,
+     "rsi": 38.84928,
+     "dist_from_ma20": -1.45149,
+     "volume_ratio": 2.189184,
+     "macd": {
+      "macd": -0.08558819,
+      "signal": -0.08606737,
+      "histogram": 0.0004791781,
+      "crossover": "bull"
+     },
+     "bollinger": {
+      "upper": 5.386519,
+      "lower": 5.085481,
+      "middle": 5.236,
+      "percent_b": 0.2475403
+     },
+     "score": 44.2,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Volume 2.2x",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "MACD cross UP",
+       "value": "0.0005"
+      }
+     ],
+     "flags": [
+      {
+       "code": "liquidita",
+       "label": "Liquidità bassa",
+       "value": "9.7M$/24h"
+      }
+     ],
+     "trending": false,
+     "mcap_rank": 168,
+     "volume_24h": 9657811.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 6.77,
+      "dist_top20": 23.78139,
+      "ext": -9.62431,
+      "vr": 1.004639,
+      "rsi_d": 30.54571,
+      "adx": 31.28588,
+      "bbw_pct": 0.55,
+      "accum": 0.4942132,
+      "above_ma50": false
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "AAVEUSDT",
+     "name": "Aave",
+     "price": 131.99,
+     "change_24h": -2.69672,
+     "change_7d": -13.7248,
+     "rel_7d": -11.0,
+     "rsi": 33.4011,
+     "dist_from_ma20": -2.406383,
+     "volume_ratio": 1.559702,
+     "macd": {
+      "macd": -3.330897,
+      "signal": -3.423847,
+      "histogram": 0.09294978,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 139.3325,
+      "lower": 131.1565,
+      "middle": 135.2445,
+      "percent_b": 0.1153945
+     },
+     "score": 43.6,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Volume 1.6x",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "MACD ripresa",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "BB inferiore",
+       "value": "%B 0.12"
+      }
+     ],
+     "flags": [],
+     "trending": false,
+     "mcap_rank": 48,
+     "volume_24h": 242372100.0,
+     "venue": "Trade Republic o Binance",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 179.73,
+      "dist_top20": 26.50086,
+      "ext": -13.50297,
+      "vr": 1.196428,
+      "rsi_d": 32.78228,
+      "adx": 22.61706,
+      "bbw_pct": 0.5916667,
+      "accum": 0.7312937,
+      "above_ma50": false
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "FFUSDT",
+     "name": "Falcon Finance",
+     "price": 0.097462,
+     "change_24h": -2.25835,
+     "change_7d": -9.4422,
+     "rel_7d": -6.7174,
+     "rsi": 40.71267,
+     "dist_from_ma20": -1.55453,
+     "volume_ratio": 1.539554,
+     "macd": {
+      "macd": -0.001162161,
+      "signal": -0.001171904,
+      "histogram": 9.742909e-06,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 0.1010243,
+      "lower": 0.09697766,
+      "middle": 0.099001,
+      "percent_b": 0.1241368
+     },
+     "score": 43.5,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Volume 1.5x",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "MACD ripresa",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "BB inferiore",
+       "value": "%B 0.12"
+      }
+     ],
+     "flags": [
+      {
+       "code": "liquidita",
+       "label": "Liquidità bassa",
+       "value": "5.6M$/24h"
+      }
+     ],
+     "trending": false,
+     "mcap_rank": 133,
+     "volume_24h": 5614347.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 0.11785,
+      "dist_top20": 17.28468,
+      "ext": -7.671033,
+      "vr": 0.784047,
+      "rsi_d": 38.05336,
+      "adx": 13.11196,
+      "bbw_pct": 0.375,
+      "accum": 0.4587316,
       "above_ma50": false
      },
      "signal": null
@@ -3578,24 +3594,24 @@
      "type": "crypto",
      "symbol": "HBARUSDT",
      "name": "Hedera",
-     "price": 0.075875,
-     "change_24h": -1.48654,
-     "change_7d": -8.7427,
-     "rel_7d": -6.2882,
-     "rsi": 38.26723,
-     "dist_from_ma20": -1.483429,
-     "volume_ratio": 1.068049,
+     "price": 0.075828,
+     "change_24h": -1.32256,
+     "change_7d": -9.3099,
+     "rel_7d": -6.5851,
+     "rsi": 38.66757,
+     "dist_from_ma20": -1.550206,
+     "volume_ratio": 1.119127,
      "macd": {
-      "macd": -0.0009737756,
-      "signal": -0.001024218,
-      "histogram": 5.044285e-05,
+      "macd": -0.0009665961,
+      "signal": -0.001022783,
+      "histogram": 5.618644e-05,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.07851116,
-      "lower": 0.07552384,
-      "middle": 0.0770175,
-      "percent_b": 0.08909794
+      "upper": 0.07850132,
+      "lower": 0.07554268,
+      "middle": 0.077022,
+      "percent_b": 0.1140115
      },
      "score": 37.0,
      "signals": [
@@ -3607,25 +3623,25 @@
       {
        "kind": "bull",
        "label": "BB inferiore",
-       "value": "%B 0.09"
+       "value": "%B 0.11"
       }
      ],
      "flags": [],
      "trending": false,
      "mcap_rank": 32,
-     "volume_24h": 63306330.0,
+     "volume_24h": 64196240.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.09991,
-      "dist_top20": 24.14173,
-      "ext": -10.0095,
-      "vr": 0.5845803,
-      "rsi_d": 33.65756,
+      "dist_top20": 24.05165,
+      "ext": -9.90745,
+      "vr": 0.6002746,
+      "rsi_d": 33.76024,
       "adx": 21.05216,
       "bbw_pct": 0.6166667,
-      "accum": 0.7414291,
+      "accum": 0.7426894,
       "above_ma50": false
      },
      "signal": null
@@ -3634,13 +3650,13 @@
      "type": "crypto",
      "symbol": "WLFIUSDT",
      "name": "World Liberty Financial",
-     "price": 0.052373,
-     "change_24h": -1.5618,
-     "change_7d": -3.0474,
-     "rel_7d": -0.5929,
+     "price": 0.052374,
+     "change_24h": -1.19336,
+     "change_7d": -2.9648,
+     "rel_7d": -0.24,
      "rsi": 39.36885,
-     "dist_from_ma20": -1.052333,
-     "volume_ratio": 0.3809683,
+     "dist_from_ma20": -1.050444,
+     "volume_ratio": 0.3841453,
      "macd": {
       "macd": -0.0004499783,
       "signal": -0.0004557828,
@@ -3670,12 +3686,12 @@
       {
        "code": "liquidita",
        "label": "Liquidità bassa",
-       "value": "14.8M$/24h"
+       "value": "14.4M$/24h"
       }
      ],
      "trending": false,
      "mcap_rank": 59,
-     "volume_24h": 14778680.0,
+     "volume_24h": 14356530.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
@@ -3683,11 +3699,67 @@
       "hi20": 0.0585,
       "dist_top20": 10.42735,
       "ext": -5.636593,
-      "vr": 0.3793242,
+      "vr": 0.3806568,
       "rsi_d": 36.31874,
       "adx": 18.34765,
       "bbw_pct": 0.8583333,
-      "accum": 0.7832074,
+      "accum": 0.7833117,
+      "above_ma50": false
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "ATOMUSDT",
+     "name": "Cosmos Hub",
+     "price": 1.61,
+     "change_24h": -1.95299,
+     "change_7d": -8.2157,
+     "rel_7d": -5.4909,
+     "rsi": 39.0883,
+     "dist_from_ma20": -1.287554,
+     "volume_ratio": 1.143016,
+     "macd": {
+      "macd": -0.02136463,
+      "signal": -0.02210571,
+      "histogram": 0.000741075,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 1.655682,
+      "lower": 1.606318,
+      "middle": 1.631,
+      "percent_b": 0.07458838
+     },
+     "score": 37.0,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "MACD ripresa",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "BB inferiore",
+       "value": "%B 0.07"
+      }
+     ],
+     "flags": [],
+     "trending": false,
+     "mcap_rank": 80,
+     "volume_24h": 41691420.0,
+     "venue": "Trade Republic o Binance",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 2.087,
+      "dist_top20": 22.85577,
+      "ext": -8.623968,
+      "vr": 0.3752327,
+      "rsi_d": 39.47647,
+      "adx": 12.90903,
+      "bbw_pct": 0.6666667,
+      "accum": 0.5610821,
       "above_ma50": false
      },
      "signal": null
@@ -3698,41 +3770,41 @@
      "type": "commodity",
      "symbol": "ZW=F",
      "name": "Grano",
-     "price": 612.0,
-     "change_24h": -0.6493506,
-     "change_7d": -4.858142,
-     "rel_7d": -4.858142,
-     "rsi": 24.02391,
-     "dist_from_ma20": -7.472503,
+     "price": 611.0,
+     "change_24h": -0.8116883,
+     "change_7d": -5.013603,
+     "rel_7d": -5.013603,
+     "rsi": 23.80129,
+     "dist_from_ma20": -7.616708,
      "volume_ratio": null,
      "macd": {
-      "macd": -21.23406,
-      "signal": -15.65242,
-      "histogram": -5.581648,
+      "macd": -21.31384,
+      "signal": -15.66837,
+      "histogram": -5.645465,
       "crossover": null
      },
      "bollinger": {
-      "upper": 714.6155,
-      "lower": 608.2345,
-      "middle": 661.425,
-      "percent_b": 0.03539621
+      "upper": 714.7528,
+      "lower": 607.9972,
+      "middle": 661.375,
+      "percent_b": 0.02812763
      },
-     "score": 84.9,
+     "score": 85.9,
      "signals": [
       {
        "kind": "bull",
        "label": "RSI ipervenduto",
-       "value": "24.0"
+       "value": "23.8"
       },
       {
        "kind": "bull",
        "label": "Sotto MA20",
-       "value": "-7.5%"
+       "value": "-7.6%"
       },
       {
        "kind": "bull",
        "label": "Sotto BB inf",
-       "value": "%B 0.04"
+       "value": "%B 0.03"
       }
      ],
      "flags": [],
@@ -3744,12 +3816,12 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 706.5,
-      "dist_top20": 13.3758,
-      "ext": -7.472503,
+      "dist_top20": 13.51734,
+      "ext": -7.616708,
       "vr": null,
-      "rsi_d": 24.02391,
-      "adx": 28.21862,
-      "bbw_pct": 0.6916667,
+      "rsi_d": 23.80129,
+      "adx": 28.22731,
+      "bbw_pct": 0.7,
       "accum": null,
       "above_ma50": false
      },
@@ -3759,31 +3831,31 @@
      "type": "stock",
      "symbol": "META",
      "name": "Meta Platforms",
-     "price": 623.2,
-     "change_24h": -1.167214,
-     "change_7d": -10.23406,
-     "rel_7d": -10.29388,
-     "rsi": 32.42732,
-     "dist_from_ma20": -11.92969,
-     "volume_ratio": 1.128411,
+     "price": 622.2,
+     "change_24h": -1.325803,
+     "change_7d": -10.3781,
+     "rel_7d": -10.38981,
+     "rsi": 32.26542,
+     "dist_from_ma20": -12.0648,
+     "volume_ratio": 1.159741,
      "macd": {
-      "macd": -11.59826,
-      "signal": 4.471503,
-      "histogram": -16.06976,
+      "macd": -11.67803,
+      "signal": 4.455549,
+      "histogram": -16.13358,
       "crossover": null
      },
      "bollinger": {
-      "upper": 786.0196,
-      "lower": 629.2134,
-      "middle": 707.6165,
-      "percent_b": -0.03834924
+      "upper": 786.1858,
+      "lower": 628.9472,
+      "middle": 707.5665,
+      "percent_b": -0.04291021
      },
-     "score": 73.9,
+     "score": 74.1,
      "signals": [
       {
        "kind": "bull",
        "label": "Sotto MA20",
-       "value": "-11.9%"
+       "value": "-12.1%"
       },
       {
        "kind": "bull",
@@ -3800,13 +3872,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 771.27,
-      "dist_top20": 19.19821,
-      "ext": -11.92969,
-      "vr": 1.602805,
-      "rsi_d": 32.42732,
+      "dist_top20": 19.32786,
+      "ext": -12.0648,
+      "vr": 1.640063,
+      "rsi_d": 32.26542,
       "adx": 27.43122,
       "bbw_pct": 0.6916667,
-      "accum": 1.220252,
+      "accum": 1.231225,
       "above_ma50": false
      },
      "signal": null
@@ -3815,26 +3887,26 @@
      "type": "stock",
      "symbol": "NFLX",
      "name": "Netflix",
-     "price": 62.585,
-     "change_24h": -2.057907,
-     "change_7d": -8.887761,
-     "rel_7d": -8.947578,
-     "rsi": 31.22919,
-     "dist_from_ma20": -8.634705,
-     "volume_ratio": 0.9449991,
+     "price": 62.605,
+     "change_24h": -2.026607,
+     "change_7d": -8.858644,
+     "rel_7d": -8.87035,
+     "rsi": 31.26093,
+     "dist_from_ma20": -8.606841,
+     "volume_ratio": 0.9626175,
      "macd": {
-      "macd": -2.258458,
-      "signal": -1.750172,
-      "histogram": -0.5082862,
+      "macd": -2.256863,
+      "signal": -1.749853,
+      "histogram": -0.5070098,
       "crossover": null
      },
      "bollinger": {
-      "upper": 73.62805,
-      "lower": 63.37145,
-      "middle": 68.49975,
-      "percent_b": -0.07667708
+      "upper": 73.62445,
+      "lower": 63.37705,
+      "middle": 68.50075,
+      "percent_b": -0.07534156
      },
-     "score": 67.3,
+     "score": 67.2,
      "signals": [
       {
        "kind": "bull",
@@ -3856,13 +3928,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 73.07,
-      "dist_top20": 14.34926,
-      "ext": -8.634705,
+      "dist_top20": 14.32188,
+      "ext": -8.606841,
       "vr": 1.281211,
-      "rsi_d": 31.22919,
+      "rsi_d": 31.26093,
       "adx": 26.98135,
       "bbw_pct": 0.525,
-      "accum": 1.585206,
+      "accum": 1.592174,
       "above_ma50": false
      },
      "signal": null
@@ -3871,26 +3943,26 @@
      "type": "commodity",
      "symbol": "PL=F",
      "name": "Platino",
-     "price": 1535.8,
-     "change_24h": -0.05856071,
-     "change_7d": -6.729013,
-     "rel_7d": -6.729013,
-     "rsi": 30.81301,
-     "dist_from_ma20": -6.084508,
+     "price": 1534.7,
+     "change_24h": -0.130149,
+     "change_7d": -6.795823,
+     "rel_7d": -6.795823,
+     "rsi": 30.70866,
+     "dist_from_ma20": -6.148623,
      "volume_ratio": null,
      "macd": {
-      "macd": -49.47378,
-      "signal": -41.09796,
-      "histogram": -8.375826,
+      "macd": -49.56154,
+      "signal": -41.11551,
+      "histogram": -8.446031,
       "crossover": null
      },
      "bollinger": {
-      "upper": 1742.572,
-      "lower": 1528.028,
-      "middle": 1635.3,
-      "percent_b": 0.03622414
+      "upper": 1742.722,
+      "lower": 1527.768,
+      "middle": 1635.245,
+      "percent_b": 0.03224659
      },
-     "score": 62.2,
+     "score": 62.3,
      "signals": [
       {
        "kind": "bull",
@@ -3900,7 +3972,7 @@
       {
        "kind": "bull",
        "label": "Sotto BB inf",
-       "value": "%B 0.04"
+       "value": "%B 0.03"
       }
      ],
      "flags": [],
@@ -3912,10 +3984,10 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 1744.5,
-      "dist_top20": 11.96331,
-      "ext": -6.084508,
+      "dist_top20": 12.02637,
+      "ext": -6.148623,
       "vr": null,
-      "rsi_d": 30.81301,
+      "rsi_d": 30.70866,
       "adx": 18.20088,
       "bbw_pct": 0.475,
       "accum": null,
@@ -3927,36 +3999,36 @@
      "type": "commodity",
      "symbol": "ZC=F",
      "name": "Mais",
-     "price": 449.25,
-     "change_24h": -1.263736,
-     "change_7d": -2.75974,
-     "rel_7d": -2.75974,
-     "rsi": 23.63091,
-     "dist_from_ma20": -6.403813,
+     "price": 450.0,
+     "change_24h": -1.098901,
+     "change_7d": -2.597403,
+     "rel_7d": -2.597403,
+     "rsi": 23.89973,
+     "dist_from_ma20": -6.254883,
      "volume_ratio": null,
      "macd": {
-      "macd": -13.98027,
-      "signal": -10.53453,
-      "histogram": -3.445736,
+      "macd": -13.92044,
+      "signal": -10.52257,
+      "histogram": -3.397872,
       "crossover": null
      },
      "bollinger": {
-      "upper": 516.2392,
-      "lower": 443.7358,
-      "middle": 479.9875,
-      "percent_b": 0.07605455
+      "upper": 516.1508,
+      "lower": 443.8992,
+      "middle": 480.025,
+      "percent_b": 0.08443812
      },
-     "score": 59.0,
+     "score": 57.8,
      "signals": [
       {
        "kind": "bull",
        "label": "RSI ipervenduto",
-       "value": "23.6"
+       "value": "23.9"
       },
       {
        "kind": "bull",
        "label": "Sotto MA20",
-       "value": "-6.4%"
+       "value": "-6.3%"
       },
       {
        "kind": "bull",
@@ -3973,11 +4045,11 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 526.5,
-      "dist_top20": 14.67236,
-      "ext": -6.403813,
+      "dist_top20": 14.52991,
+      "ext": -6.254883,
       "vr": null,
-      "rsi_d": 23.63091,
-      "adx": 37.75199,
+      "rsi_d": 23.89973,
+      "adx": 37.78913,
       "bbw_pct": 0.725,
       "accum": null,
       "above_ma50": false
@@ -3988,36 +4060,36 @@
      "type": "commodity",
      "symbol": "SI=F",
      "name": "Argento",
-     "price": 54.38,
-     "change_24h": 0.5026971,
-     "change_7d": -5.763699,
-     "rel_7d": -5.763699,
-     "rsi": 32.948,
-     "dist_from_ma20": -6.259075,
+     "price": 54.31,
+     "change_24h": 0.3733268,
+     "change_7d": -5.885003,
+     "rel_7d": -5.885003,
+     "rsi": 32.6062,
+     "dist_from_ma20": -6.374092,
      "volume_ratio": null,
      "macd": {
-      "macd": -2.254237,
-      "signal": -1.95812,
-      "histogram": -0.2961162,
+      "macd": -2.259821,
+      "signal": -1.959237,
+      "histogram": -0.3005834,
       "crossover": null
      },
      "bollinger": {
-      "upper": 62.8845,
-      "lower": 53.1374,
-      "middle": 58.01095,
-      "percent_b": 0.1274839
+      "upper": 62.89151,
+      "lower": 53.12339,
+      "middle": 58.00745,
+      "percent_b": 0.1214781
      },
-     "score": 37.5,
+     "score": 37.7,
      "signals": [
       {
        "kind": "bull",
        "label": "Sotto MA20",
-       "value": "-6.3%"
+       "value": "-6.4%"
       },
       {
        "kind": "bull",
        "label": "BB inferiore",
-       "value": "%B 0.13"
+       "value": "%B 0.12"
       }
      ],
      "flags": [],
@@ -4029,10 +4101,10 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 61.615,
-      "dist_top20": 11.74227,
-      "ext": -6.259075,
+      "dist_top20": 11.85588,
+      "ext": -6.374092,
       "vr": null,
-      "rsi_d": 32.948,
+      "rsi_d": 32.6062,
       "adx": 35.28138,
       "bbw_pct": 0.4583333,
       "accum": null,
@@ -4044,36 +4116,36 @@
      "type": "stock",
      "symbol": "GOOGL",
      "name": "Alphabet",
-     "price": 322.14,
-     "change_24h": 1.685615,
-     "change_7d": -5.330899,
-     "rel_7d": -5.390716,
-     "rsi": 35.62423,
-     "dist_from_ma20": -5.488659,
-     "volume_ratio": 0.7588119,
+     "price": 321.55,
+     "change_24h": 1.499369,
+     "change_7d": -5.504294,
+     "rel_7d": -5.516,
+     "rsi": 35.00508,
+     "dist_from_ma20": -5.653599,
+     "volume_ratio": 0.7683188,
      "macd": {
-      "macd": -5.784316,
-      "signal": -2.468193,
-      "histogram": -3.316123,
+      "macd": -5.831383,
+      "signal": -2.477606,
+      "histogram": -3.353777,
       "crossover": null
      },
      "bollinger": {
-      "upper": 363.0817,
-      "lower": 318.6143,
-      "middle": 340.848,
-      "percent_b": 0.07928693
+      "upper": 363.1527,
+      "lower": 318.4843,
+      "middle": 340.8185,
+      "percent_b": 0.06863248
      },
-     "score": 36.0,
+     "score": 36.3,
      "signals": [
       {
        "kind": "bull",
        "label": "Sotto MA20",
-       "value": "-5.5%"
+       "value": "-5.7%"
       },
       {
        "kind": "bull",
        "label": "BB inferiore",
-       "value": "%B 0.08"
+       "value": "%B 0.07"
       }
      ],
      "flags": [],
@@ -4085,13 +4157,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 359.4,
-      "dist_top20": 10.36727,
-      "ext": -5.488659,
+      "dist_top20": 10.53144,
+      "ext": -5.653599,
       "vr": 1.009782,
-      "rsi_d": 35.62423,
+      "rsi_d": 35.00508,
       "adx": 20.19742,
-      "bbw_pct": 0.6416667,
-      "accum": 0.926124,
+      "bbw_pct": 0.6583333,
+      "accum": 0.9290228,
       "above_ma50": false
      },
      "signal": null
@@ -4212,31 +4284,31 @@
      "type": "commodity",
      "symbol": "GC=F",
      "name": "Oro",
-     "price": 4071.4,
-     "change_24h": 0.8171553,
-     "change_7d": -1.718732,
-     "rel_7d": -1.718732,
-     "rsi": 38.85111,
-     "dist_from_ma20": -1.736519,
+     "price": 4070.1,
+     "change_24h": 0.7849692,
+     "change_7d": -1.750109,
+     "rel_7d": -1.750109,
+     "rsi": 38.69857,
+     "dist_from_ma20": -1.766349,
      "volume_ratio": null,
      "macd": {
-      "macd": -65.17606,
-      "signal": -60.33591,
-      "histogram": -4.840149,
+      "macd": -65.27975,
+      "signal": -60.35665,
+      "histogram": -4.9231,
       "crossover": null
      },
      "bollinger": {
-      "upper": 4254.571,
-      "lower": 4032.129,
-      "middle": 4143.35,
-      "percent_b": 0.1765432
+      "upper": 4254.675,
+      "lower": 4031.895,
+      "middle": 4143.285,
+      "percent_b": 0.1714926
      },
      "score": 25.0,
      "signals": [
       {
        "kind": "bull",
        "label": "BB inferiore",
-       "value": "%B 0.18"
+       "value": "%B 0.17"
       }
      ],
      "flags": [],
@@ -4248,10 +4320,10 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 4259.0,
-      "dist_top20": 4.404792,
-      "ext": -1.736519,
+      "dist_top20": 4.435311,
+      "ext": -1.766349,
       "vr": null,
-      "rsi_d": 38.85111,
+      "rsi_d": 38.69857,
       "adx": 26.70167,
       "bbw_pct": 0.1416667,
       "accum": null,
@@ -4267,26 +4339,26 @@
      "type": "stock",
      "symbol": "TSLA",
      "name": "Tesla",
-     "price": 405.73,
-     "change_24h": 3.602987,
-     "change_7d": 8.568146,
-     "rel_7d": 8.50833,
-     "rsi": 64.96137,
-     "dist_from_ma20": 8.420184,
-     "volume_ratio": 1.091484,
+     "price": 405.915,
+     "change_24h": 3.650226,
+     "change_7d": 8.617649,
+     "rel_7d": 8.605943,
+     "rsi": 65.01722,
+     "dist_from_ma20": 8.466938,
+     "volume_ratio": 1.102792,
      "macd": {
-      "macd": 6.116213,
-      "signal": 3.630491,
-      "histogram": 2.485721,
+      "macd": 6.13097,
+      "signal": 3.633443,
+      "histogram": 2.497527,
       "crossover": null
      },
      "bollinger": {
-      "upper": 398.773,
-      "lower": 349.667,
-      "middle": 374.22,
-      "percent_b": 1.141673
+      "upper": 398.8298,
+      "lower": 349.6287,
+      "middle": 374.2292,
+      "percent_b": 1.144004
      },
-     "score": 69.7,
+     "score": 69.8,
      "signals": [
       {
        "kind": "bull",
@@ -4306,7 +4378,7 @@
       {
        "kind": "bull",
        "label": "Rialzo 24h",
-       "value": "+3.6%"
+       "value": "+3.7%"
       },
       {
        "kind": "bull",
@@ -4323,13 +4395,13 @@
       "breakout20": true,
       "breakout55": true,
       "hi20": 397.27,
-      "dist_top20": -2.12954,
-      "ext": 8.420184,
+      "dist_top20": -2.176107,
+      "ext": 8.466938,
       "vr": 1.460646,
-      "rsi_d": 64.96137,
+      "rsi_d": 65.01722,
       "adx": 13.45984,
       "bbw_pct": 0.3,
-      "accum": 1.150165,
+      "accum": 1.153628,
       "above_ma50": true
      },
      "signal": {
@@ -4338,6 +4410,78 @@
       "alert": false,
       "portfolio": "brokerage_breakout",
       "regime": true
+     }
+    },
+    {
+     "type": "crypto",
+     "symbol": "DASHUSDT",
+     "name": "Dash",
+     "price": 54.88,
+     "change_24h": 3.64577,
+     "change_7d": 9.3248,
+     "rel_7d": 12.0496,
+     "rsi": 60.76354,
+     "dist_from_ma20": 4.310804,
+     "volume_ratio": 1.445368,
+     "macd": {
+      "macd": 0.8371847,
+      "signal": 0.5617786,
+      "histogram": 0.2754061,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 55.6132,
+      "lower": 49.6108,
+      "middle": 52.612,
+      "percent_b": 0.8878452
+     },
+     "score": 32.3,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Volume 1.6x",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "Forza vs BTC",
+       "value": "+12%"
+      },
+      {
+       "kind": "bull",
+       "label": "Rialzo 24h",
+       "value": "+3.6%"
+      },
+      {
+       "kind": "bull",
+       "label": "MACD in accelerazione",
+       "value": ""
+      }
+     ],
+     "flags": [],
+     "trending": false,
+     "mcap_rank": 88,
+     "volume_24h": 84009350.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 55.98,
+      "dist_top20": 1.857806,
+      "ext": 7.70226,
+      "vr": 1.615941,
+      "rsi_d": 55.23822,
+      "adx": 17.88476,
+      "bbw_pct": 0.2666667,
+      "accum": 0.4473928,
+      "above_ma50": false
+     },
+     "signal": {
+      "kind": "momentum",
+      "status": "sotto_soglia",
+      "alert": true,
+      "portfolio": "crypto_breakout",
+      "regime": false
      }
     },
     {
@@ -4401,73 +4545,6 @@
       "portfolio": "brokerage_breakout",
       "regime": false
      }
-    },
-    {
-     "type": "crypto",
-     "symbol": "DASHUSDT",
-     "name": "Dash",
-     "price": 54.64,
-     "change_24h": 2.96865,
-     "change_7d": 10.3236,
-     "rel_7d": 12.7781,
-     "rsi": 60.03506,
-     "dist_from_ma20": 3.874377,
-     "volume_ratio": 1.401935,
-     "macd": {
-      "macd": 0.8212303,
-      "signal": 0.5585877,
-      "histogram": 0.2626425,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 55.57329,
-      "lower": 49.63071,
-      "middle": 52.602,
-      "percent_b": 0.8597768
-     },
-     "score": 29.7,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Volume 1.6x",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "Forza vs BTC",
-       "value": "+13%"
-      },
-      {
-       "kind": "bull",
-       "label": "MACD in accelerazione",
-       "value": ""
-      }
-     ],
-     "flags": [],
-     "trending": false,
-     "mcap_rank": 88,
-     "volume_24h": 86266710.0,
-     "venue": "Binance o altri exchange",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 55.98,
-      "dist_top20": 2.215077,
-      "ext": 7.331229,
-      "vr": 1.587908,
-      "rsi_d": 54.79336,
-      "adx": 17.88476,
-      "bbw_pct": 0.2666667,
-      "accum": 0.4463097,
-      "above_ma50": false
-     },
-     "signal": {
-      "kind": "momentum",
-      "status": "sotto_soglia",
-      "alert": true,
-      "portfolio": "crypto_breakout",
-      "regime": false
-     }
     }
    ],
    "crypto": [
@@ -4475,26 +4552,26 @@
      "type": "crypto",
      "symbol": "DASHUSDT",
      "name": "Dash",
-     "price": 54.64,
-     "change_24h": 2.96865,
-     "change_7d": 10.3236,
-     "rel_7d": 12.7781,
-     "rsi": 60.03506,
-     "dist_from_ma20": 3.874377,
-     "volume_ratio": 1.401935,
+     "price": 54.88,
+     "change_24h": 3.64577,
+     "change_7d": 9.3248,
+     "rel_7d": 12.0496,
+     "rsi": 60.76354,
+     "dist_from_ma20": 4.310804,
+     "volume_ratio": 1.445368,
      "macd": {
-      "macd": 0.8212303,
-      "signal": 0.5585877,
-      "histogram": 0.2626425,
+      "macd": 0.8371847,
+      "signal": 0.5617786,
+      "histogram": 0.2754061,
       "crossover": null
      },
      "bollinger": {
-      "upper": 55.57329,
-      "lower": 49.63071,
-      "middle": 52.602,
-      "percent_b": 0.8597768
+      "upper": 55.6132,
+      "lower": 49.6108,
+      "middle": 52.612,
+      "percent_b": 0.8878452
      },
-     "score": 29.7,
+     "score": 32.3,
      "signals": [
       {
        "kind": "bull",
@@ -4504,7 +4581,12 @@
       {
        "kind": "bull",
        "label": "Forza vs BTC",
-       "value": "+13%"
+       "value": "+12%"
+      },
+      {
+       "kind": "bull",
+       "label": "Rialzo 24h",
+       "value": "+3.6%"
       },
       {
        "kind": "bull",
@@ -4515,19 +4597,19 @@
      "flags": [],
      "trending": false,
      "mcap_rank": 88,
-     "volume_24h": 86266710.0,
+     "volume_24h": 84009350.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 55.98,
-      "dist_top20": 2.215077,
-      "ext": 7.331229,
-      "vr": 1.587908,
-      "rsi_d": 54.79336,
+      "dist_top20": 1.857806,
+      "ext": 7.70226,
+      "vr": 1.615941,
+      "rsi_d": 55.23822,
       "adx": 17.88476,
       "bbw_pct": 0.2666667,
-      "accum": 0.4463097,
+      "accum": 0.4473928,
       "above_ma50": false
      },
      "signal": {
@@ -4544,26 +4626,26 @@
      "type": "stock",
      "symbol": "TSLA",
      "name": "Tesla",
-     "price": 405.73,
-     "change_24h": 3.602987,
-     "change_7d": 8.568146,
-     "rel_7d": 8.50833,
-     "rsi": 64.96137,
-     "dist_from_ma20": 8.420184,
-     "volume_ratio": 1.091484,
+     "price": 405.915,
+     "change_24h": 3.650226,
+     "change_7d": 8.617649,
+     "rel_7d": 8.605943,
+     "rsi": 65.01722,
+     "dist_from_ma20": 8.466938,
+     "volume_ratio": 1.102792,
      "macd": {
-      "macd": 6.116213,
-      "signal": 3.630491,
-      "histogram": 2.485721,
+      "macd": 6.13097,
+      "signal": 3.633443,
+      "histogram": 2.497527,
       "crossover": null
      },
      "bollinger": {
-      "upper": 398.773,
-      "lower": 349.667,
-      "middle": 374.22,
-      "percent_b": 1.141673
+      "upper": 398.8298,
+      "lower": 349.6287,
+      "middle": 374.2292,
+      "percent_b": 1.144004
      },
-     "score": 69.7,
+     "score": 69.8,
      "signals": [
       {
        "kind": "bull",
@@ -4583,7 +4665,7 @@
       {
        "kind": "bull",
        "label": "Rialzo 24h",
-       "value": "+3.6%"
+       "value": "+3.7%"
       },
       {
        "kind": "bull",
@@ -4600,13 +4682,13 @@
       "breakout20": true,
       "breakout55": true,
       "hi20": 397.27,
-      "dist_top20": -2.12954,
-      "ext": 8.420184,
+      "dist_top20": -2.176107,
+      "ext": 8.466938,
       "vr": 1.460646,
-      "rsi_d": 64.96137,
+      "rsi_d": 65.01722,
       "adx": 13.45984,
       "bbw_pct": 0.3,
-      "accum": 1.150165,
+      "accum": 1.153628,
       "above_ma50": true
      },
      "signal": {
@@ -4685,26 +4767,92 @@
    "combined": [
     {
      "type": "crypto",
-     "symbol": "STABLEUSDT",
-     "name": "​​Stable",
-     "price": 0.02714031,
-     "change_24h": 1.7945,
-     "change_7d": 5.698,
-     "rel_7d": 8.1525,
-     "rsi": 56.31539,
-     "dist_from_ma20": 1.883777,
-     "volume_ratio": 1.705161,
+     "symbol": "JSTUSDT",
+     "name": "JUST",
+     "price": 0.139229,
+     "change_24h": -0.14149,
+     "change_7d": 0.1355,
+     "rel_7d": 2.8603,
+     "rsi": 48.73165,
+     "dist_from_ma20": -0.744263,
+     "volume_ratio": 1.663423,
      "macd": {
-      "macd": 0.0001915362,
-      "signal": 0.0001283726,
-      "histogram": 6.316362e-05,
+      "macd": -0.0005330336,
+      "signal": -0.0001599238,
+      "histogram": -0.0003731099,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.02742063,
-      "lower": 0.02585637,
-      "middle": 0.0266385,
-      "percent_b": 0.8205979
+      "upper": 0.1434095,
+      "lower": 0.1371365,
+      "middle": 0.140273,
+      "percent_b": 0.3959025
+     },
+     "score": 108.8,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Volatilità ai minimi",
+       "value": "1° pct"
+      },
+      {
+       "kind": "bull",
+       "label": "Vicino al tetto",
+       "value": "-2.6%"
+      },
+      {
+       "kind": "bull",
+       "label": "OBV in salita",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "Sopra MA50",
+       "value": ""
+      }
+     ],
+     "flags": [],
+     "trending": false,
+     "mcap_rank": 72,
+     "volume_24h": 32084880.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 0.1433,
+      "dist_top20": 2.568039,
+      "ext": 0.5400734,
+      "vr": 0.8076266,
+      "rsi_d": 57.18245,
+      "adx": 15.72666,
+      "bbw_pct": 0.008333333,
+      "accum": 0.5240764,
+      "above_ma50": true
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "STABLEUSDT",
+     "name": "​​Stable",
+     "price": 0.02721966,
+     "change_24h": 3.70081,
+     "change_7d": 4.2724,
+     "rel_7d": 6.9972,
+     "rsi": 56.63479,
+     "dist_from_ma20": 2.175901,
+     "volume_ratio": 1.757532,
+     "macd": {
+      "macd": 0.0001939294,
+      "signal": 0.0001288512,
+      "histogram": 6.507815e-05,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 0.02742608,
+      "lower": 0.02585392,
+      "middle": 0.02664,
+      "percent_b": 0.8371163
      },
      "score": 102.5,
      "signals": [
@@ -4733,24 +4881,24 @@
       {
        "code": "liquidita",
        "label": "Liquidità bassa",
-       "value": "10.8M$/24h"
+       "value": "10.9M$/24h"
       }
      ],
      "trending": false,
      "mcap_rank": 113,
-     "volume_24h": 10837260.0,
+     "volume_24h": 10853850.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.02861,
-      "dist_top20": 5.138064,
-      "ext": 2.896573,
-      "vr": 1.241236,
-      "rsi_d": 53.2718,
+      "dist_top20": 5.033205,
+      "ext": 3.004455,
+      "vr": 1.275345,
+      "rsi_d": 53.43049,
       "adx": 11.94514,
       "bbw_pct": 0.01666667,
-      "accum": 1.414331,
+      "accum": 1.417933,
       "above_ma50": true
      },
      "signal": null
@@ -4759,24 +4907,24 @@
      "type": "stock",
      "symbol": "AAPL",
      "name": "Apple",
-     "price": 345.875,
-     "change_24h": 0.5713693,
-     "change_7d": 1.877761,
-     "rel_7d": 1.817944,
-     "rsi": 59.86486,
-     "dist_from_ma20": 1.72637,
-     "volume_ratio": 0.8464821,
+     "price": 345.515,
+     "change_24h": 0.4666951,
+     "change_7d": 1.771727,
+     "rel_7d": 1.760021,
+     "rsi": 59.4847,
+     "dist_from_ma20": 1.625873,
+     "volume_ratio": 0.8529153,
      "macd": {
-      "macd": 4.100538,
-      "signal": 4.084259,
-      "histogram": 0.01627906,
-      "crossover": null
+      "macd": 4.071821,
+      "signal": 4.078516,
+      "histogram": -0.006694369,
+      "crossover": "bear"
      },
      "bollinger": {
-      "upper": 350.2536,
-      "lower": 329.7569,
-      "middle": 340.0053,
-      "percent_b": 0.7863741
+      "upper": 350.1955,
+      "lower": 329.779,
+      "middle": 339.9873,
+      "percent_b": 0.770749
      },
      "score": 90.0,
      "signals": [
@@ -4788,7 +4936,7 @@
       {
        "kind": "bull",
        "label": "Vicino al tetto",
-       "value": "-1.7%"
+       "value": "-1.8%"
       },
       {
        "kind": "bull",
@@ -4810,74 +4958,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 351.73,
-      "dist_top20": 1.664632,
-      "ext": 1.72637,
+      "dist_top20": 1.766979,
+      "ext": 1.625873,
       "vr": 1.107925,
-      "rsi_d": 59.86486,
+      "rsi_d": 59.4847,
       "adx": 19.95932,
       "bbw_pct": 0.1333333,
-      "accum": 0.9876902,
-      "above_ma50": true
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "JSTUSDT",
-     "name": "JUST",
-     "price": 0.138526,
-     "change_24h": -0.90882,
-     "change_7d": -0.9548,
-     "rel_7d": 1.4997,
-     "rsi": 44.09451,
-     "dist_from_ma20": -1.213738,
-     "volume_ratio": 1.527857,
-     "macd": {
-      "macd": -0.0006048285,
-      "signal": -0.0001742827,
-      "histogram": -0.0004305458,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 0.1434259,
-      "lower": 0.1370301,
-      "middle": 0.140228,
-      "percent_b": 0.2642196
-     },
-     "score": 88.8,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Volatilità ai minimi",
-       "value": "1° pct"
-      },
-      {
-       "kind": "bull",
-       "label": "OBV in salita",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "Sopra MA50",
-       "value": ""
-      }
-     ],
-     "flags": [],
-     "trending": false,
-     "mcap_rank": 72,
-     "volume_24h": 26761170.0,
-     "venue": "Binance o altri exchange",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 0.1433,
-      "dist_top20": 3.196092,
-      "ext": -0.07563479,
-      "vr": 0.7682481,
-      "rsi_d": 55.60903,
-      "adx": 15.72666,
-      "bbw_pct": 0.008333333,
-      "accum": 0.5210028,
+      "accum": 0.9895394,
       "above_ma50": true
      },
      "signal": null
@@ -4952,24 +5039,24 @@
      "type": "stock",
      "symbol": "JPM",
      "name": "JPMorgan",
-     "price": 336.34,
-     "change_24h": 0.6885366,
-     "change_7d": 0.322134,
-     "rel_7d": 0.2623171,
-     "rsi": 49.36162,
-     "dist_from_ma20": 0.909309,
-     "volume_ratio": 0.5329285,
+     "price": 336.326,
+     "change_24h": 0.6843432,
+     "change_7d": 0.3179559,
+     "rel_7d": 0.3062497,
+     "rsi": 49.34191,
+     "dist_from_ma20": 0.9053185,
+     "volume_ratio": 0.5386157,
      "macd": {
-      "macd": -1.813078,
-      "signal": -2.615705,
-      "histogram": 0.8026272,
+      "macd": -1.814195,
+      "signal": -2.615929,
+      "histogram": 0.8017333,
       "crossover": null
      },
      "bollinger": {
-      "upper": 338.6032,
-      "lower": 328.0152,
-      "middle": 333.3092,
-      "percent_b": 0.7862477
+      "upper": 338.6009,
+      "lower": 328.0161,
+      "middle": 333.3085,
+      "percent_b": 0.7850771
      },
      "score": 86.2,
      "signals": [
@@ -5003,13 +5090,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 344.4,
-      "dist_top20": 2.340301,
-      "ext": 0.909309,
+      "dist_top20": 2.344369,
+      "ext": 0.9053185,
       "vr": 0.8300091,
-      "rsi_d": 49.36162,
+      "rsi_d": 49.34191,
       "adx": 14.05015,
       "bbw_pct": 0.025,
-      "accum": 0.9423387,
+      "accum": 0.9443535,
       "above_ma50": false
      },
      "signal": null
@@ -5084,24 +5171,24 @@
      "type": "commodity",
      "symbol": "HG=F",
      "name": "Rame",
-     "price": 6.6625,
-     "change_24h": 2.374001,
-     "change_7d": 1.461962,
-     "rel_7d": 1.461962,
-     "rsi": 55.80489,
-     "dist_from_ma20": 1.595021,
+     "price": 6.6555,
+     "change_24h": 2.266442,
+     "change_7d": 1.35536,
+     "rel_7d": 1.35536,
+     "rsi": 55.48276,
+     "dist_from_ma20": 1.493697,
      "volume_ratio": null,
      "macd": {
-      "macd": -0.01094963,
-      "signal": -0.009067512,
-      "histogram": -0.001882113,
+      "macd": -0.01150803,
+      "signal": -0.009179192,
+      "histogram": -0.002328835,
       "crossover": null
      },
      "bollinger": {
-      "upper": 6.713669,
-      "lower": 6.402131,
-      "middle": 6.5579,
-      "percent_b": 0.8357528
+      "upper": 6.712406,
+      "lower": 6.402694,
+      "middle": 6.55755,
+      "percent_b": 0.8162607
      },
      "score": 81.2,
      "signals": [
@@ -5113,7 +5200,7 @@
       {
        "kind": "bull",
        "label": "Vicino al tetto",
-       "value": "-0.9%"
+       "value": "-1.0%"
       },
       {
        "kind": "bull",
@@ -5130,10 +5217,10 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 6.7255,
-      "dist_top20": 0.9367363,
-      "ext": 1.595021,
+      "dist_top20": 1.040817,
+      "ext": 1.493697,
       "vr": null,
-      "rsi_d": 55.80489,
+      "rsi_d": 55.48276,
       "adx": 11.20964,
       "bbw_pct": 0.125,
       "accum": null,
@@ -5145,24 +5232,24 @@
      "type": "crypto",
      "symbol": "TRXUSDT",
      "name": "TRON",
-     "price": 0.328246,
-     "change_24h": -0.68171,
-     "change_7d": -1.0292,
-     "rel_7d": 1.4253,
-     "rsi": 41.62958,
-     "dist_from_ma20": -0.3987134,
-     "volume_ratio": 1.345964,
+     "price": 0.328709,
+     "change_24h": -0.47408,
+     "change_7d": -0.9017,
+     "rel_7d": 1.8231,
+     "rsi": 45.04703,
+     "dist_from_ma20": -0.2642757,
+     "volume_ratio": 1.405549,
      "macd": {
-      "macd": -0.0004623525,
-      "signal": -0.0003131783,
-      "histogram": -0.0001491742,
+      "macd": -0.0004304437,
+      "signal": -0.0003067966,
+      "histogram": -0.0001236471,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.3313211,
-      "lower": 0.3277989,
-      "middle": 0.32956,
-      "percent_b": 0.2558394
+      "upper": 0.3313104,
+      "lower": 0.3278496,
+      "middle": 0.32958,
+      "percent_b": 0.3613064
      },
      "score": 78.8,
      "signals": [
@@ -5174,7 +5261,7 @@
       {
        "kind": "bull",
        "label": "Vicino al tetto",
-       "value": "-2.5%"
+       "value": "-2.4%"
       },
       {
        "kind": "bear",
@@ -5185,19 +5272,19 @@
      "flags": [],
      "trending": false,
      "mcap_rank": 8,
-     "volume_24h": 317088000.0,
+     "volume_24h": 321052600.0,
      "venue": "Trade Republic o Binance",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.3372,
-      "dist_top20": 2.520759,
-      "ext": -0.6993641,
-      "vr": 0.8483886,
-      "rsi_d": 40.55227,
+      "dist_top20": 2.402135,
+      "ext": -0.5845303,
+      "vr": 0.8698559,
+      "rsi_d": 41.43254,
       "adx": 9.576567,
       "bbw_pct": 0.008333333,
-      "accum": 0.7777913,
+      "accum": 0.7797924,
       "above_ma50": false
      },
      "signal": null
@@ -5206,24 +5293,24 @@
      "type": "crypto",
      "symbol": "AKTUSDT",
      "name": "Akash Network",
-     "price": 0.678375,
-     "change_24h": -1.54273,
-     "change_7d": -5.5682,
-     "rel_7d": -3.1137,
-     "rsi": 51.28664,
-     "dist_from_ma20": 2.521574,
-     "volume_ratio": 1.117732,
+     "price": 0.679138,
+     "change_24h": -1.15025,
+     "change_7d": -7.5397,
+     "rel_7d": -4.8149,
+     "rsi": 52.12068,
+     "dist_from_ma20": 2.619049,
+     "volume_ratio": 1.126368,
      "macd": {
-      "macd": -0.0008091429,
-      "signal": -0.004250085,
-      "histogram": 0.003440943,
+      "macd": -0.0006256671,
+      "signal": -0.00421339,
+      "histogram": 0.003587723,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.6921069,
-      "lower": 0.6312731,
-      "middle": 0.66169,
-      "percent_b": 0.7385187
+      "upper": 0.6924569,
+      "lower": 0.6311531,
+      "middle": 0.661805,
+      "percent_b": 0.7723318
      },
      "score": 77.5,
      "signals": [
@@ -5247,52 +5334,57 @@
      ],
      "trending": false,
      "mcap_rank": 176,
-     "volume_24h": 4592110.0,
+     "volume_24h": 4604730.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.791,
-      "dist_top20": 14.51327,
-      "ext": -3.632658,
-      "vr": 0.5775357,
-      "rsi_d": 48.58734,
+      "dist_top20": 14.29836,
+      "ext": -3.402088,
+      "vr": 0.5802515,
+      "rsi_d": 48.83303,
       "adx": 17.50671,
       "bbw_pct": 0.01666667,
-      "accum": 0.544535,
+      "accum": 0.5447862,
       "above_ma50": true
      },
      "signal": null
     },
     {
      "type": "crypto",
-     "symbol": "ZBCNUSDT",
-     "name": "Zebec Network",
-     "price": 0.00218851,
-     "change_24h": 3.55502,
-     "change_7d": 0.983,
-     "rel_7d": 3.4375,
-     "rsi": 51.93471,
-     "dist_from_ma20": 1.287083,
-     "volume_ratio": 0.5531133,
+     "symbol": "BCHUSDT",
+     "name": "Bitcoin Cash",
+     "price": 289.84,
+     "change_24h": 3.52129,
+     "change_7d": 4.3223,
+     "rel_7d": 7.0471,
+     "rsi": 64.89314,
+     "dist_from_ma20": 3.950507,
+     "volume_ratio": 1.478847,
      "macd": {
-      "macd": -6.358274e-06,
-      "signal": -1.043425e-05,
-      "histogram": 4.075979e-06,
+      "macd": 1.757412,
+      "signal": 0.5076015,
+      "histogram": 1.249811,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.002248423,
-      "lower": 0.002072977,
-      "middle": 0.0021607,
-      "percent_b": 0.6670039
+      "upper": 287.5352,
+      "lower": 270.1148,
+      "middle": 278.825,
+      "percent_b": 1.124268
      },
      "score": 70.0,
      "signals": [
       {
        "kind": "bull",
        "label": "Volatilità ai minimi",
-       "value": "7° pct"
+       "value": "13° pct"
+      },
+      {
+       "kind": "bull",
+       "label": "OBV in salita",
+       "value": ""
       },
       {
        "kind": "bull",
@@ -5300,28 +5392,22 @@
        "value": ""
       }
      ],
-     "flags": [
-      {
-       "code": "liquidita",
-       "label": "Liquidità bassa",
-       "value": "8.2M$/24h"
-      }
-     ],
+     "flags": [],
      "trending": false,
-     "mcap_rank": 167,
-     "volume_24h": 8159294.0,
-     "venue": "Binance o altri exchange",
+     "mcap_rank": 21,
+     "volume_24h": 189374300.0,
+     "venue": "Trade Republic o Binance",
      "daily": {
       "breakout20": false,
       "breakout55": false,
-      "hi20": 0.002647,
-      "dist_top20": 17.26483,
-      "ext": -0.7297947,
-      "vr": 1.088649,
-      "rsi_d": 49.57098,
-      "adx": 37.08205,
-      "bbw_pct": 0.06666667,
-      "accum": 0.9568639,
+      "hi20": 312.1,
+      "dist_top20": 7.177187,
+      "ext": 4.109392,
+      "vr": 0.8832347,
+      "rsi_d": 54.08288,
+      "adx": 19.47415,
+      "bbw_pct": 0.1333333,
+      "accum": 0.4479165,
       "above_ma50": true
      },
      "signal": null
@@ -5330,26 +5416,92 @@
    "crypto": [
     {
      "type": "crypto",
-     "symbol": "STABLEUSDT",
-     "name": "​​Stable",
-     "price": 0.02714031,
-     "change_24h": 1.7945,
-     "change_7d": 5.698,
-     "rel_7d": 8.1525,
-     "rsi": 56.31539,
-     "dist_from_ma20": 1.883777,
-     "volume_ratio": 1.705161,
+     "symbol": "JSTUSDT",
+     "name": "JUST",
+     "price": 0.139229,
+     "change_24h": -0.14149,
+     "change_7d": 0.1355,
+     "rel_7d": 2.8603,
+     "rsi": 48.73165,
+     "dist_from_ma20": -0.744263,
+     "volume_ratio": 1.663423,
      "macd": {
-      "macd": 0.0001915362,
-      "signal": 0.0001283726,
-      "histogram": 6.316362e-05,
+      "macd": -0.0005330336,
+      "signal": -0.0001599238,
+      "histogram": -0.0003731099,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.02742063,
-      "lower": 0.02585637,
-      "middle": 0.0266385,
-      "percent_b": 0.8205979
+      "upper": 0.1434095,
+      "lower": 0.1371365,
+      "middle": 0.140273,
+      "percent_b": 0.3959025
+     },
+     "score": 108.8,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Volatilità ai minimi",
+       "value": "1° pct"
+      },
+      {
+       "kind": "bull",
+       "label": "Vicino al tetto",
+       "value": "-2.6%"
+      },
+      {
+       "kind": "bull",
+       "label": "OBV in salita",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "Sopra MA50",
+       "value": ""
+      }
+     ],
+     "flags": [],
+     "trending": false,
+     "mcap_rank": 72,
+     "volume_24h": 32084880.0,
+     "venue": "Binance o altri exchange",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 0.1433,
+      "dist_top20": 2.568039,
+      "ext": 0.5400734,
+      "vr": 0.8076266,
+      "rsi_d": 57.18245,
+      "adx": 15.72666,
+      "bbw_pct": 0.008333333,
+      "accum": 0.5240764,
+      "above_ma50": true
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "STABLEUSDT",
+     "name": "​​Stable",
+     "price": 0.02721966,
+     "change_24h": 3.70081,
+     "change_7d": 4.2724,
+     "rel_7d": 6.9972,
+     "rsi": 56.63479,
+     "dist_from_ma20": 2.175901,
+     "volume_ratio": 1.757532,
+     "macd": {
+      "macd": 0.0001939294,
+      "signal": 0.0001288512,
+      "histogram": 6.507815e-05,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 0.02742608,
+      "lower": 0.02585392,
+      "middle": 0.02664,
+      "percent_b": 0.8371163
      },
      "score": 102.5,
      "signals": [
@@ -5378,85 +5530,24 @@
       {
        "code": "liquidita",
        "label": "Liquidità bassa",
-       "value": "10.8M$/24h"
+       "value": "10.9M$/24h"
       }
      ],
      "trending": false,
      "mcap_rank": 113,
-     "volume_24h": 10837260.0,
+     "volume_24h": 10853850.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.02861,
-      "dist_top20": 5.138064,
-      "ext": 2.896573,
-      "vr": 1.241236,
-      "rsi_d": 53.2718,
+      "dist_top20": 5.033205,
+      "ext": 3.004455,
+      "vr": 1.275345,
+      "rsi_d": 53.43049,
       "adx": 11.94514,
       "bbw_pct": 0.01666667,
-      "accum": 1.414331,
-      "above_ma50": true
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "JSTUSDT",
-     "name": "JUST",
-     "price": 0.138526,
-     "change_24h": -0.90882,
-     "change_7d": -0.9548,
-     "rel_7d": 1.4997,
-     "rsi": 44.09451,
-     "dist_from_ma20": -1.213738,
-     "volume_ratio": 1.527857,
-     "macd": {
-      "macd": -0.0006048285,
-      "signal": -0.0001742827,
-      "histogram": -0.0004305458,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 0.1434259,
-      "lower": 0.1370301,
-      "middle": 0.140228,
-      "percent_b": 0.2642196
-     },
-     "score": 88.8,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Volatilità ai minimi",
-       "value": "1° pct"
-      },
-      {
-       "kind": "bull",
-       "label": "OBV in salita",
-       "value": ""
-      },
-      {
-       "kind": "bull",
-       "label": "Sopra MA50",
-       "value": ""
-      }
-     ],
-     "flags": [],
-     "trending": false,
-     "mcap_rank": 72,
-     "volume_24h": 26761170.0,
-     "venue": "Binance o altri exchange",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 0.1433,
-      "dist_top20": 3.196092,
-      "ext": -0.07563479,
-      "vr": 0.7682481,
-      "rsi_d": 55.60903,
-      "adx": 15.72666,
-      "bbw_pct": 0.008333333,
-      "accum": 0.5210028,
+      "accum": 1.417933,
       "above_ma50": true
      },
      "signal": null
@@ -5465,24 +5556,24 @@
      "type": "crypto",
      "symbol": "TRXUSDT",
      "name": "TRON",
-     "price": 0.328246,
-     "change_24h": -0.68171,
-     "change_7d": -1.0292,
-     "rel_7d": 1.4253,
-     "rsi": 41.62958,
-     "dist_from_ma20": -0.3987134,
-     "volume_ratio": 1.345964,
+     "price": 0.328709,
+     "change_24h": -0.47408,
+     "change_7d": -0.9017,
+     "rel_7d": 1.8231,
+     "rsi": 45.04703,
+     "dist_from_ma20": -0.2642757,
+     "volume_ratio": 1.405549,
      "macd": {
-      "macd": -0.0004623525,
-      "signal": -0.0003131783,
-      "histogram": -0.0001491742,
+      "macd": -0.0004304437,
+      "signal": -0.0003067966,
+      "histogram": -0.0001236471,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.3313211,
-      "lower": 0.3277989,
-      "middle": 0.32956,
-      "percent_b": 0.2558394
+      "upper": 0.3313104,
+      "lower": 0.3278496,
+      "middle": 0.32958,
+      "percent_b": 0.3613064
      },
      "score": 78.8,
      "signals": [
@@ -5494,7 +5585,7 @@
       {
        "kind": "bull",
        "label": "Vicino al tetto",
-       "value": "-2.5%"
+       "value": "-2.4%"
       },
       {
        "kind": "bear",
@@ -5505,19 +5596,19 @@
      "flags": [],
      "trending": false,
      "mcap_rank": 8,
-     "volume_24h": 317088000.0,
+     "volume_24h": 321052600.0,
      "venue": "Trade Republic o Binance",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.3372,
-      "dist_top20": 2.520759,
-      "ext": -0.6993641,
-      "vr": 0.8483886,
-      "rsi_d": 40.55227,
+      "dist_top20": 2.402135,
+      "ext": -0.5845303,
+      "vr": 0.8698559,
+      "rsi_d": 41.43254,
       "adx": 9.576567,
       "bbw_pct": 0.008333333,
-      "accum": 0.7777913,
+      "accum": 0.7797924,
       "above_ma50": false
      },
      "signal": null
@@ -5526,24 +5617,24 @@
      "type": "crypto",
      "symbol": "AKTUSDT",
      "name": "Akash Network",
-     "price": 0.678375,
-     "change_24h": -1.54273,
-     "change_7d": -5.5682,
-     "rel_7d": -3.1137,
-     "rsi": 51.28664,
-     "dist_from_ma20": 2.521574,
-     "volume_ratio": 1.117732,
+     "price": 0.679138,
+     "change_24h": -1.15025,
+     "change_7d": -7.5397,
+     "rel_7d": -4.8149,
+     "rsi": 52.12068,
+     "dist_from_ma20": 2.619049,
+     "volume_ratio": 1.126368,
      "macd": {
-      "macd": -0.0008091429,
-      "signal": -0.004250085,
-      "histogram": 0.003440943,
+      "macd": -0.0006256671,
+      "signal": -0.00421339,
+      "histogram": 0.003587723,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.6921069,
-      "lower": 0.6312731,
-      "middle": 0.66169,
-      "percent_b": 0.7385187
+      "upper": 0.6924569,
+      "lower": 0.6311531,
+      "middle": 0.661805,
+      "percent_b": 0.7723318
      },
      "score": 77.5,
      "signals": [
@@ -5567,19 +5658,80 @@
      ],
      "trending": false,
      "mcap_rank": 176,
-     "volume_24h": 4592110.0,
+     "volume_24h": 4604730.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.791,
-      "dist_top20": 14.51327,
-      "ext": -3.632658,
-      "vr": 0.5775357,
-      "rsi_d": 48.58734,
+      "dist_top20": 14.29836,
+      "ext": -3.402088,
+      "vr": 0.5802515,
+      "rsi_d": 48.83303,
       "adx": 17.50671,
       "bbw_pct": 0.01666667,
-      "accum": 0.544535,
+      "accum": 0.5447862,
+      "above_ma50": true
+     },
+     "signal": null
+    },
+    {
+     "type": "crypto",
+     "symbol": "BCHUSDT",
+     "name": "Bitcoin Cash",
+     "price": 289.84,
+     "change_24h": 3.52129,
+     "change_7d": 4.3223,
+     "rel_7d": 7.0471,
+     "rsi": 64.89314,
+     "dist_from_ma20": 3.950507,
+     "volume_ratio": 1.478847,
+     "macd": {
+      "macd": 1.757412,
+      "signal": 0.5076015,
+      "histogram": 1.249811,
+      "crossover": null
+     },
+     "bollinger": {
+      "upper": 287.5352,
+      "lower": 270.1148,
+      "middle": 278.825,
+      "percent_b": 1.124268
+     },
+     "score": 70.0,
+     "signals": [
+      {
+       "kind": "bull",
+       "label": "Volatilità ai minimi",
+       "value": "13° pct"
+      },
+      {
+       "kind": "bull",
+       "label": "OBV in salita",
+       "value": ""
+      },
+      {
+       "kind": "bull",
+       "label": "Sopra MA50",
+       "value": ""
+      }
+     ],
+     "flags": [],
+     "trending": false,
+     "mcap_rank": 21,
+     "volume_24h": 189374300.0,
+     "venue": "Trade Republic o Binance",
+     "daily": {
+      "breakout20": false,
+      "breakout55": false,
+      "hi20": 312.1,
+      "dist_top20": 7.177187,
+      "ext": 4.109392,
+      "vr": 0.8832347,
+      "rsi_d": 54.08288,
+      "adx": 19.47415,
+      "bbw_pct": 0.1333333,
+      "accum": 0.4479165,
       "above_ma50": true
      },
      "signal": null
@@ -5588,24 +5740,24 @@
      "type": "crypto",
      "symbol": "ZBCNUSDT",
      "name": "Zebec Network",
-     "price": 0.00218851,
-     "change_24h": 3.55502,
-     "change_7d": 0.983,
-     "rel_7d": 3.4375,
-     "rsi": 51.93471,
-     "dist_from_ma20": 1.287083,
-     "volume_ratio": 0.5531133,
+     "price": 0.00219401,
+     "change_24h": 3.6635,
+     "change_7d": 2.0158,
+     "rel_7d": 4.7406,
+     "rsi": 51.53662,
+     "dist_from_ma20": 1.55103,
+     "volume_ratio": 0.5953935,
      "macd": {
-      "macd": -6.358274e-06,
-      "signal": -1.043425e-05,
-      "histogram": 4.075979e-06,
+      "macd": -6.677363e-06,
+      "signal": -1.049807e-05,
+      "histogram": 3.820708e-06,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.002248423,
-      "lower": 0.002072977,
-      "middle": 0.0021607,
-      "percent_b": 0.6670039
+      "upper": 0.002247972,
+      "lower": 0.002073028,
+      "middle": 0.0021605,
+      "percent_b": 0.6457605
      },
      "score": 70.0,
      "signals": [
@@ -5629,52 +5781,52 @@
      ],
      "trending": false,
      "mcap_rank": 167,
-     "volume_24h": 8159294.0,
+     "volume_24h": 8213972.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.002647,
-      "dist_top20": 17.26483,
-      "ext": -0.7297947,
-      "vr": 1.088649,
-      "rsi_d": 49.57098,
+      "dist_top20": 17.41594,
+      "ext": -0.9021261,
+      "vr": 1.10558,
+      "rsi_d": 49.37759,
       "adx": 37.08205,
       "bbw_pct": 0.06666667,
-      "accum": 0.9568639,
+      "accum": 0.9585816,
       "above_ma50": true
      },
      "signal": null
     },
     {
      "type": "crypto",
-     "symbol": "BCHUSDT",
-     "name": "Bitcoin Cash",
-     "price": 291.31,
-     "change_24h": 3.68876,
-     "change_7d": 4.8076,
-     "rel_7d": 7.2621,
-     "rsi": 65.8007,
-     "dist_from_ma20": 4.46086,
-     "volume_ratio": 1.455399,
+     "symbol": "VVVUSDT",
+     "name": "Venice Token",
+     "price": 25.91,
+     "change_24h": 2.53348,
+     "change_7d": 1.5072,
+     "rel_7d": 4.232,
+     "rsi": 59.02528,
+     "dist_from_ma20": 4.316618,
+     "volume_ratio": 0.8606477,
      "macd": {
-      "macd": 1.829207,
-      "signal": 0.5219605,
-      "histogram": 1.307247,
+      "macd": 0.1019381,
+      "signal": -0.02715324,
+      "histogram": 0.1290914,
       "crossover": null
      },
      "bollinger": {
-      "upper": 287.8107,
-      "lower": 269.9293,
-      "middle": 278.87,
-      "percent_b": 1.155988
+      "upper": 25.8909,
+      "lower": 23.78479,
+      "middle": 24.83784,
+      "percent_b": 0.985328
      },
-     "score": 68.8,
+     "score": 67.5,
      "signals": [
       {
        "kind": "bull",
        "label": "Volatilità ai minimi",
-       "value": "14° pct"
+       "value": "15° pct"
       },
       {
        "kind": "bull",
@@ -5688,21 +5840,21 @@
       }
      ],
      "flags": [],
-     "trending": false,
-     "mcap_rank": 21,
-     "volume_24h": 188342500.0,
-     "venue": "Trade Republic o Binance",
+     "trending": true,
+     "mcap_rank": 69,
+     "volume_24h": 21289760.0,
+     "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
-      "hi20": 312.1,
-      "dist_top20": 6.920859,
-      "ext": 4.381883,
-      "vr": 0.8746587,
-      "rsi_d": 54.49434,
-      "adx": 19.47415,
-      "bbw_pct": 0.1416667,
-      "accum": 0.4474267,
+      "hi20": 28.4013,
+      "dist_top20": 8.93938,
+      "ext": 7.471372,
+      "vr": 0.2952816,
+      "rsi_d": 53.35355,
+      "adx": 23.37843,
+      "bbw_pct": 0.15,
+      "accum": 0.491154,
       "above_ma50": true
      },
      "signal": null
@@ -5711,24 +5863,24 @@
      "type": "crypto",
      "symbol": "ZAMAUSDT",
      "name": "Zama",
-     "price": 0.076705,
-     "change_24h": 6.97351,
-     "change_7d": 2.6654,
-     "rel_7d": 5.1199,
-     "rsi": 64.22878,
-     "dist_from_ma20": 8.716604,
-     "volume_ratio": 1.388753,
+     "price": 0.076647,
+     "change_24h": 7.19468,
+     "change_7d": 3.1897,
+     "rel_7d": 5.9145,
+     "rsi": 64.46991,
+     "dist_from_ma20": 8.625161,
+     "volume_ratio": 1.439709,
      "macd": {
-      "macd": 0.0004706387,
-      "signal": -0.0003845594,
-      "histogram": 0.0008551981,
+      "macd": 0.0004802113,
+      "signal": -0.0003826449,
+      "histogram": 0.0008628562,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.07528641,
-      "lower": 0.06582359,
-      "middle": 0.070555,
-      "percent_b": 1.146213
+      "upper": 0.07532362,
+      "lower": 0.06579838,
+      "middle": 0.070561,
+      "percent_b": 1.153947
      },
      "score": 63.8,
      "signals": [
@@ -5751,19 +5903,19 @@
      "flags": [],
      "trending": false,
      "mcap_rank": 180,
-     "volume_24h": 48071250.0,
+     "volume_24h": 51951920.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.0855,
-      "dist_top20": 10.32749,
-      "ext": 3.561925,
-      "vr": 1.015922,
-      "rsi_d": 52.84249,
+      "dist_top20": 10.18713,
+      "ext": 3.715609,
+      "vr": 1.040366,
+      "rsi_d": 52.95955,
       "adx": 16.56389,
       "bbw_pct": 0.175,
-      "accum": 0.5356007,
+      "accum": 0.5369625,
       "above_ma50": true
      },
      "signal": null
@@ -5773,23 +5925,23 @@
      "symbol": "UNIUSDT",
      "name": "Uniswap",
      "price": 7.1,
-     "change_24h": -0.06052,
-     "change_7d": -1.9591,
-     "rel_7d": 0.4954,
-     "rsi": 52.812,
-     "dist_from_ma20": 2.229613,
-     "volume_ratio": 0.6981451,
+     "change_24h": 0.08047,
+     "change_7d": -3.6926,
+     "rel_7d": -0.9678,
+     "rsi": 53.26601,
+     "dist_from_ma20": 2.222254,
+     "volume_ratio": 0.7131414,
      "macd": {
-      "macd": 0.01380599,
-      "signal": -0.01701385,
-      "histogram": 0.03081985,
+      "macd": 0.01460371,
+      "signal": -0.01685431,
+      "histogram": 0.03145802,
       "crossover": null
      },
      "bollinger": {
-      "upper": 7.242687,
-      "lower": 6.647613,
-      "middle": 6.94515,
-      "percent_b": 0.7450952
+      "upper": 7.244198,
+      "lower": 6.647102,
+      "middle": 6.94565,
+      "percent_b": 0.7601759
      },
      "score": 58.8,
      "signals": [
@@ -5807,19 +5959,19 @@
      "flags": [],
      "trending": false,
      "mcap_rank": 25,
-     "volume_24h": 246119600.0,
+     "volume_24h": 246461600.0,
      "venue": "Trade Republic o Binance",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 8.59,
-      "dist_top20": 17.45052,
-      "ext": -2.095199,
-      "vr": 0.4912243,
-      "rsi_d": 44.05281,
+      "dist_top20": 17.33411,
+      "ext": -1.963897,
+      "vr": 0.4958305,
+      "rsi_d": 44.19511,
       "adx": 29.31168,
       "bbw_pct": 0.008333333,
-      "accum": 0.4541229,
+      "accum": 0.4544069,
       "above_ma50": false
      },
      "signal": null
@@ -5828,24 +5980,24 @@
      "type": "crypto",
      "symbol": "ETHFIUSDT",
      "name": "Ether.fi",
-     "price": 0.661298,
-     "change_24h": 1.56724,
-     "change_7d": -5.1371,
-     "rel_7d": -2.6826,
-     "rsi": 58.91495,
-     "dist_from_ma20": 4.707,
-     "volume_ratio": 1.074508,
+     "price": 0.663178,
+     "change_24h": 2.99247,
+     "change_7d": -6.5551,
+     "rel_7d": -3.8303,
+     "rsi": 60.20209,
+     "dist_from_ma20": 4.978076,
+     "volume_ratio": 1.091525,
      "macd": {
-      "macd": 0.001852318,
-      "signal": -0.004028983,
-      "histogram": 0.005881301,
+      "macd": 0.002107589,
+      "signal": -0.003977929,
+      "histogram": 0.006085518,
       "crossover": null
      },
      "bollinger": {
-      "upper": 0.6677604,
-      "lower": 0.5953796,
-      "middle": 0.63157,
-      "percent_b": 0.9052174
+      "upper": 0.668462,
+      "lower": 0.594998,
+      "middle": 0.63173,
+      "percent_b": 0.9406245
      },
      "score": 58.8,
      "signals": [
@@ -5863,86 +6015,19 @@
      "flags": [],
      "trending": false,
      "mcap_rank": 94,
-     "volume_24h": 42778030.0,
+     "volume_24h": 42501430.0,
      "venue": "Binance o altri exchange",
      "daily": {
       "breakout20": false,
       "breakout55": false,
       "hi20": 0.7888,
-      "dist_top20": 16.2145,
-      "ext": -1.671539,
-      "vr": 0.8480294,
-      "rsi_d": 47.85993,
+      "dist_top20": 15.80882,
+      "ext": -1.218959,
+      "vr": 0.8537827,
+      "rsi_d": 48.38438,
       "adx": 12.92228,
       "bbw_pct": 0.008333333,
-      "accum": 0.5438161,
-      "above_ma50": false
-     },
-     "signal": null
-    },
-    {
-     "type": "crypto",
-     "symbol": "SPXUSDT",
-     "name": "SPX6900",
-     "price": 0.377424,
-     "change_24h": -0.67874,
-     "change_7d": 1.6615,
-     "rel_7d": 4.116,
-     "rsi": 57.70663,
-     "dist_from_ma20": 3.419419,
-     "volume_ratio": 1.098959,
-     "macd": {
-      "macd": 0.004348572,
-      "signal": 0.002616966,
-      "histogram": 0.001731606,
-      "crossover": null
-     },
-     "bollinger": {
-      "upper": 0.3877198,
-      "lower": 0.3421702,
-      "middle": 0.364945,
-      "percent_b": 0.7668524
-     },
-     "score": 58.8,
-     "signals": [
-      {
-       "kind": "bull",
-       "label": "Volatilità ai minimi",
-       "value": "8° pct"
-      },
-      {
-       "kind": "bull",
-       "label": "OBV in salita",
-       "value": ""
-      },
-      {
-       "kind": "bear",
-       "label": "Sotto MA50",
-       "value": ""
-      }
-     ],
-     "flags": [
-      {
-       "code": "liquidita",
-       "label": "Liquidità bassa",
-       "value": "8.1M$/24h"
-      }
-     ],
-     "trending": false,
-     "mcap_rank": 127,
-     "volume_24h": 8088426.0,
-     "venue": "Binance o altri exchange",
-     "daily": {
-      "breakout20": false,
-      "breakout55": false,
-      "hi20": 0.4204,
-      "dist_top20": 10.3235,
-      "ext": 3.195785,
-      "vr": 0.8298866,
-      "rsi_d": 47.45893,
-      "adx": 16.31611,
-      "bbw_pct": 0.075,
-      "accum": 0.5639089,
+      "accum": 0.5442627,
       "above_ma50": false
      },
      "signal": null
@@ -5953,24 +6038,24 @@
      "type": "stock",
      "symbol": "AAPL",
      "name": "Apple",
-     "price": 345.875,
-     "change_24h": 0.5713693,
-     "change_7d": 1.877761,
-     "rel_7d": 1.817944,
-     "rsi": 59.86486,
-     "dist_from_ma20": 1.72637,
-     "volume_ratio": 0.8464821,
+     "price": 345.515,
+     "change_24h": 0.4666951,
+     "change_7d": 1.771727,
+     "rel_7d": 1.760021,
+     "rsi": 59.4847,
+     "dist_from_ma20": 1.625873,
+     "volume_ratio": 0.8529153,
      "macd": {
-      "macd": 4.100538,
-      "signal": 4.084259,
-      "histogram": 0.01627906,
-      "crossover": null
+      "macd": 4.071821,
+      "signal": 4.078516,
+      "histogram": -0.006694369,
+      "crossover": "bear"
      },
      "bollinger": {
-      "upper": 350.2536,
-      "lower": 329.7569,
-      "middle": 340.0053,
-      "percent_b": 0.7863741
+      "upper": 350.1955,
+      "lower": 329.779,
+      "middle": 339.9873,
+      "percent_b": 0.770749
      },
      "score": 90.0,
      "signals": [
@@ -5982,7 +6067,7 @@
       {
        "kind": "bull",
        "label": "Vicino al tetto",
-       "value": "-1.7%"
+       "value": "-1.8%"
       },
       {
        "kind": "bull",
@@ -6004,13 +6089,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 351.73,
-      "dist_top20": 1.664632,
-      "ext": 1.72637,
+      "dist_top20": 1.766979,
+      "ext": 1.625873,
       "vr": 1.107925,
-      "rsi_d": 59.86486,
+      "rsi_d": 59.4847,
       "adx": 19.95932,
       "bbw_pct": 0.1333333,
-      "accum": 0.9876902,
+      "accum": 0.9895394,
       "above_ma50": true
      },
      "signal": null
@@ -6085,24 +6170,24 @@
      "type": "stock",
      "symbol": "JPM",
      "name": "JPMorgan",
-     "price": 336.34,
-     "change_24h": 0.6885366,
-     "change_7d": 0.322134,
-     "rel_7d": 0.2623171,
-     "rsi": 49.36162,
-     "dist_from_ma20": 0.909309,
-     "volume_ratio": 0.5329285,
+     "price": 336.326,
+     "change_24h": 0.6843432,
+     "change_7d": 0.3179559,
+     "rel_7d": 0.3062497,
+     "rsi": 49.34191,
+     "dist_from_ma20": 0.9053185,
+     "volume_ratio": 0.5386157,
      "macd": {
-      "macd": -1.813078,
-      "signal": -2.615705,
-      "histogram": 0.8026272,
+      "macd": -1.814195,
+      "signal": -2.615929,
+      "histogram": 0.8017333,
       "crossover": null
      },
      "bollinger": {
-      "upper": 338.6032,
-      "lower": 328.0152,
-      "middle": 333.3092,
-      "percent_b": 0.7862477
+      "upper": 338.6009,
+      "lower": 328.0161,
+      "middle": 333.3085,
+      "percent_b": 0.7850771
      },
      "score": 86.2,
      "signals": [
@@ -6136,13 +6221,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 344.4,
-      "dist_top20": 2.340301,
-      "ext": 0.909309,
+      "dist_top20": 2.344369,
+      "ext": 0.9053185,
       "vr": 0.8300091,
-      "rsi_d": 49.36162,
+      "rsi_d": 49.34191,
       "adx": 14.05015,
       "bbw_pct": 0.025,
-      "accum": 0.9423387,
+      "accum": 0.9443535,
       "above_ma50": false
      },
      "signal": null
@@ -6217,24 +6302,24 @@
      "type": "commodity",
      "symbol": "HG=F",
      "name": "Rame",
-     "price": 6.6625,
-     "change_24h": 2.374001,
-     "change_7d": 1.461962,
-     "rel_7d": 1.461962,
-     "rsi": 55.80489,
-     "dist_from_ma20": 1.595021,
+     "price": 6.6555,
+     "change_24h": 2.266442,
+     "change_7d": 1.35536,
+     "rel_7d": 1.35536,
+     "rsi": 55.48276,
+     "dist_from_ma20": 1.493697,
      "volume_ratio": null,
      "macd": {
-      "macd": -0.01094963,
-      "signal": -0.009067512,
-      "histogram": -0.001882113,
+      "macd": -0.01150803,
+      "signal": -0.009179192,
+      "histogram": -0.002328835,
       "crossover": null
      },
      "bollinger": {
-      "upper": 6.713669,
-      "lower": 6.402131,
-      "middle": 6.5579,
-      "percent_b": 0.8357528
+      "upper": 6.712406,
+      "lower": 6.402694,
+      "middle": 6.55755,
+      "percent_b": 0.8162607
      },
      "score": 81.2,
      "signals": [
@@ -6246,7 +6331,7 @@
       {
        "kind": "bull",
        "label": "Vicino al tetto",
-       "value": "-0.9%"
+       "value": "-1.0%"
       },
       {
        "kind": "bull",
@@ -6263,10 +6348,10 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 6.7255,
-      "dist_top20": 0.9367363,
-      "ext": 1.595021,
+      "dist_top20": 1.040817,
+      "ext": 1.493697,
       "vr": null,
-      "rsi_d": 55.80489,
+      "rsi_d": 55.48276,
       "adx": 11.20964,
       "bbw_pct": 0.125,
       "accum": null,
@@ -6278,24 +6363,24 @@
      "type": "stock",
      "symbol": "MSFT",
      "name": "Microsoft",
-     "price": 531.42,
-     "change_24h": -0.2215533,
-     "change_7d": -0.08460944,
-     "rel_7d": -0.1444264,
-     "rsi": 56.39397,
-     "dist_from_ma20": 0.4586025,
-     "volume_ratio": 0.6354951,
+     "price": 530.63,
+     "change_24h": -0.3698781,
+     "change_7d": -0.2331378,
+     "rel_7d": -0.2448441,
+     "rsi": 55.82899,
+     "dist_from_ma20": 0.316757,
+     "volume_ratio": 0.6444523,
      "macd": {
-      "macd": 6.653946,
-      "signal": 8.519826,
-      "histogram": -1.86588,
+      "macd": 6.590927,
+      "signal": 8.507222,
+      "histogram": -1.916295,
       "crossover": null
      },
      "bollinger": {
-      "upper": 545.6045,
-      "lower": 512.3835,
-      "middle": 528.994,
-      "percent_b": 0.5730257
+      "upper": 545.5454,
+      "lower": 512.3636,
+      "middle": 528.9545,
+      "percent_b": 0.5504944
      },
      "score": 70.0,
      "signals": [
@@ -6324,13 +6409,13 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 551.15,
-      "dist_top20": 3.579795,
-      "ext": 0.4586025,
+      "dist_top20": 3.723128,
+      "ext": 0.316757,
       "vr": 0.9315866,
-      "rsi_d": 56.39397,
+      "rsi_d": 55.82899,
       "adx": 26.19193,
       "bbw_pct": 0.1333333,
-      "accum": 0.7776181,
+      "accum": 0.7801385,
       "above_ma50": true
      },
      "signal": null
@@ -6461,24 +6546,24 @@
      "type": "commodity",
      "symbol": "GC=F",
      "name": "Oro",
-     "price": 4071.4,
-     "change_24h": 0.8171553,
-     "change_7d": -1.718732,
-     "rel_7d": -1.718732,
-     "rsi": 38.85111,
-     "dist_from_ma20": -1.736519,
+     "price": 4070.1,
+     "change_24h": 0.7849692,
+     "change_7d": -1.750109,
+     "rel_7d": -1.750109,
+     "rsi": 38.69857,
+     "dist_from_ma20": -1.766349,
      "volume_ratio": null,
      "macd": {
-      "macd": -65.17606,
-      "signal": -60.33591,
-      "histogram": -4.840149,
+      "macd": -65.27975,
+      "signal": -60.35665,
+      "histogram": -4.9231,
       "crossover": null
      },
      "bollinger": {
-      "upper": 4254.571,
-      "lower": 4032.129,
-      "middle": 4143.35,
-      "percent_b": 0.1765432
+      "upper": 4254.675,
+      "lower": 4031.895,
+      "middle": 4143.285,
+      "percent_b": 0.1714926
      },
      "score": 38.8,
      "signals": [
@@ -6502,10 +6587,10 @@
       "breakout20": false,
       "breakout55": false,
       "hi20": 4259.0,
-      "dist_top20": 4.404792,
-      "ext": -1.736519,
+      "dist_top20": 4.435311,
+      "ext": -1.766349,
       "vr": null,
-      "rsi_d": 38.85111,
+      "rsi_d": 38.69857,
       "adx": 26.70167,
       "bbw_pct": 0.1416667,
       "accum": null,
@@ -6579,10 +6664,10 @@
     "signals": 877,
     "horizons": {
      "1d": {
-      "n": 831,
-      "win": 46.20939,
-      "avg": -0.2369275,
-      "median": -0.3071128
+      "n": 832,
+      "win": 46.15385,
+      "avg": -0.2366428,
+      "median": -0.3011305
      },
      "3d": {
       "n": 767,
@@ -6683,9 +6768,9 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": -0.5575189,
+    "last_ret": -0.8042782,
     "max_up": 0.11258,
-    "max_down": -0.5575189,
+    "max_down": -0.8042782,
     "alerted": false,
     "kind": null,
     "status": null,
@@ -6704,7 +6789,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": -0.3775294,
+    "last_ret": -0.3397765,
     "max_up": 0.1736635,
     "max_down": -0.3775294,
     "alerted": false,
@@ -6725,7 +6810,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": -0.6988425,
+    "last_ret": -0.443054,
     "max_up": 0.0,
     "max_down": -0.6988425,
     "alerted": false,
@@ -6746,7 +6831,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": -0.5617978,
+    "last_ret": 0.0,
     "max_up": 0.0,
     "max_down": -1.123596,
     "alerted": false,
@@ -6788,7 +6873,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": -0.1771656,
+    "last_ret": -0.1931505,
     "max_up": 0.0,
     "max_down": -0.1998108,
     "alerted": false,
@@ -6809,7 +6894,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": 1.203927,
+    "last_ret": 1.648453,
     "max_up": 2.018892,
     "max_down": 0.0,
     "alerted": false,
@@ -6830,7 +6915,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": -2.650198,
+    "last_ret": -3.25879,
     "max_up": 0.0,
     "max_down": -3.54755,
     "alerted": false,
@@ -6872,8 +6957,8 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": 1.495461,
-    "max_up": 1.572829,
+    "last_ret": 1.771636,
+    "max_up": 1.771636,
     "max_down": 0.0,
     "alerted": false,
     "kind": null,
@@ -6893,7 +6978,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": -1.022345,
+    "last_ret": -0.9137821,
     "max_up": 0.0,
     "max_down": -1.049486,
     "alerted": false,
@@ -6935,8 +7020,8 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": 0.7827789,
-    "max_up": 0.7827789,
+    "last_ret": 0.9784736,
+    "max_up": 0.9784736,
     "max_down": -1.369863,
     "alerted": false,
     "kind": null,
@@ -6956,7 +7041,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": 0.1287842,
+    "last_ret": 0.07765382,
     "max_up": 0.1287842,
     "max_down": -0.1536383,
     "alerted": false,
@@ -6977,7 +7062,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": -0.2377179,
+    "last_ret": -0.1485737,
     "max_up": 0.0792393,
     "max_down": -1.000396,
     "alerted": false,
@@ -6998,8 +7083,8 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": 1.197605,
-    "max_up": 1.197605,
+    "last_ret": 1.796407,
+    "max_up": 1.796407,
     "max_down": -0.5988024,
     "alerted": false,
     "kind": null,
@@ -7019,7 +7104,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": 1.33393,
+    "last_ret": 1.391193,
     "max_up": 2.018148,
     "max_down": 0.0,
     "alerted": false,
@@ -7061,7 +7146,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": 3.184407,
+    "last_ret": 3.786764,
     "max_up": 4.761801,
     "max_down": -0.3119826,
     "alerted": false,
@@ -7082,7 +7167,7 @@
      "3d": null,
      "7d": null
     },
-    "last_ret": -0.07243514,
+    "last_ret": -0.1343343,
     "max_up": 0.7559594,
     "max_down": -0.4201238,
     "alerted": false,
@@ -7133,7 +7218,7 @@
     "rule": "crypto_breakout",
     "started": "2026-10-15T10:01:25+00:00",
     "bench": {
-     "BTC": -0.889294
+     "BTC": -0.7932207
     },
     "initial": 10000.0,
     "cash": 9549.614,
@@ -7150,7 +7235,7 @@
     "verdict": {
      "code": "raccolta",
      "label": "In raccolta · 3/20 operazioni",
-     "market": -0.889294
+     "market": -0.7932207
     },
     "history": [
      [
@@ -7686,7 +7771,7 @@
       9549.61
      ],
      [
-      "2026-10-27T18:01:31+00:00",
+      "2026-10-27T18:31:13+00:00",
       9549.61
      ]
     ],
@@ -7749,7 +7834,7 @@
     "rule": "crypto_breakout",
     "started": "2026-10-15T10:01:25+00:00",
     "bench": {
-     "BTC": -0.889294
+     "BTC": -0.7932207
     },
     "initial": 10000.0,
     "cash": 9900.601,
@@ -7766,7 +7851,7 @@
     "verdict": {
      "code": "raccolta",
      "label": "In raccolta · 1/20 operazioni",
-     "market": -0.889294
+     "market": -0.7932207
     },
     "history": [
      [
@@ -8302,7 +8387,7 @@
       9900.6
      ],
      [
-      "2026-10-27T18:01:31+00:00",
+      "2026-10-27T18:31:13+00:00",
       9900.6
      ]
     ],
@@ -8333,12 +8418,12 @@
     "rule": "brokerage_breakout",
     "started": "2026-10-15T10:01:25+00:00",
     "bench": {
-     "SPY": -0.01169312
+     "SPY": -0.05976941
     },
     "initial": 10000.0,
     "cash": 3986.5,
-    "equity": 9988.939,
-    "ret_pct": -0.1106089,
+    "equity": 9992.641,
+    "ret_pct": -0.07358529,
     "n_open": 6,
     "n_closed": 0,
     "win_rate": null,
@@ -8350,7 +8435,7 @@
     "verdict": {
      "code": "raccolta",
      "label": "In raccolta · 0/20 operazioni",
-     "market": -0.01169312
+     "market": -0.05976941
     },
     "history": [
      [
@@ -8886,8 +8971,8 @@
       9998.58
      ],
      [
-      "2026-10-27T18:01:31+00:00",
-      9988.94
+      "2026-10-27T18:31:13+00:00",
+      9992.64
      ]
     ],
     "open": [
@@ -8933,9 +9018,9 @@
       "type": "commodity",
       "entry_ts": "2026-10-16T16:50:55+00:00",
       "entry_price": 109.32,
-      "last_price": 109.4,
-      "value": 1000.732,
-      "ret_pct": 0.07318105,
+      "last_price": 109.52,
+      "value": 1001.829,
+      "ret_pct": 0.1829461,
       "suggested_by": [],
       "reason": "Squeeze (score 61)"
      },
@@ -8957,9 +9042,9 @@
       "type": "commodity",
       "entry_ts": "2026-10-20T04:01:17+00:00",
       "entry_price": 103.66,
-      "last_price": 99.77,
-      "value": 962.4734,
-      "ret_pct": -3.752656,
+      "last_price": 100.04,
+      "value": 965.0781,
+      "ret_pct": -3.492185,
       "suggested_by": [],
       "reason": "Squeeze (score 63)"
      }
@@ -8973,8 +9058,8 @@
     "rule": null,
     "started": "2026-10-03T14:01:36+00:00",
     "bench": {
-     "BTC": -5.174588,
-     "SPY": -0.01688975
+     "BTC": -5.082668,
+     "SPY": -0.06496354
     },
     "initial": 10000.0,
     "cash": 10000.0,
@@ -8991,7 +9076,7 @@
     "verdict": {
      "code": "raccolta",
      "label": "In raccolta · 0/20 operazioni",
-     "market": -2.595739
+     "market": -2.573816
     },
     "history": [
      [
@@ -9511,7 +9596,7 @@
       10000.0
      ],
      [
-      "2026-10-27T18:01:31+00:00",
+      "2026-10-27T18:31:13+00:00",
       10000.0
      ]
     ],
