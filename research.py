@@ -16,6 +16,11 @@ Domande, decise PRIMA di guardare i risultati (niente pesca a strascico):
       più alto tra 13 classi di attivo, solo se sopra la media a 200 giorni, altrimenti liquidità.
       Confronto con S&P 500 e 60/40.
 
+  E5  Definizione del regime: BTC > MA50 (attuale), BTC > MA200, BTC > MA50 con MA50 > MA200,
+      ampiezza (metà delle crypto liquide sopra la propria MA50), nessun filtro.
+  E6  Con stop 3× ATR: uscita a 3, 5, 7, 10 giorni; filtro di liquidità ≥ 20 M$/giorno.
+      Regola per adottare una modifica: deve migliorare ENTRAMBE le metà del periodo.
+
 Per E3 ed E4 i parametri di riferimento vengono dalla letteratura (non ottimizzati qui);
 la griglia di sensibilità serve solo a vedere se il risultato regge cambiandoli.
 
@@ -113,6 +118,9 @@ def crypto_panel(crypto_d: dict):
     btc = crypto_d["BTC"]["c"]
     btc_ret7 = (btc / btc.shift(7) - 1) * 100
     regime = btc > btc.rolling(50).mean()
+    ma50, ma200 = btc.rolling(50).mean(), btc.rolling(200).mean()
+    regimes = {"BTC > MA50 (attuale)": regime, "BTC > MA200": btc > ma200,
+               "BTC > MA50 e MA50 > MA200": (btc > ma50) & (ma50 > ma200)}
     P = {}
     for base, df in crypto_d.items():
         f = B.daily_features(df, 7, btc_ret7)
@@ -127,14 +135,21 @@ def crypto_panel(crypto_d: dict):
                    "atr_pct": atr / df["c"], "o": df["o"].to_numpy(), "h": df["h"].to_numpy(),
                    "l": df["l"].to_numpy(), "c": df["c"].to_numpy(), "idx": df.index,
                    "pos": {t: i for i, t in enumerate(df.index)}}
-    return P, regime
+    C = pd.DataFrame({b: p["df"]["c"] for b, p in P.items()}).sort_index()
+    above = C > C.rolling(50).mean()
+    liq_all = pd.DataFrame({b: p["qv20"] >= 1_500_000 for b, p in P.items()}).reindex(C.index).fillna(False)
+    share = (above & liq_all).sum(axis=1) / liq_all.sum(axis=1).replace(0, np.nan)
+    regimes["ampiezza: metà delle crypto sopra MA50"] = share >= 0.5
+    regimes["nessun filtro"] = pd.Series(True, index=C.index)
+    return P, regime, regimes
 
 
-def v3_events(P: dict, regime: pd.Series) -> tuple[list[dict], pd.Timestamp]:
+def v3_events(P: dict, regimes: dict) -> tuple[list[dict], pd.Timestamp]:
+    """Tutti i segnali v3 SENZA filtro di regime; ogni evento porta i flag dei vari regimi."""
     M = pd.DataFrame({b: p["ms"] for b, p in P.items()}).sort_index()
     Sq = pd.DataFrame({b: p["sq"] for b, p in P.items()}).reindex(M.index)
     VR = pd.DataFrame({b: p["f"]["vr"] for b, p in P.items()}).reindex(M.index)
-    reg = regime.reindex(M.index).ffill().fillna(False).astype(bool)
+    regs = {k: r.reindex(M.index).ffill().fillna(False).astype(bool) for k, r in regimes.items()}
     sc = M.where(M > 0)
     top = (sc.rank(axis=1, ascending=False, method="first") <= B.TOP_N).fillna(False)
     new = top & ~top.shift(1, fill_value=False)
@@ -151,7 +166,7 @@ def v3_events(P: dict, regime: pd.Series) -> tuple[list[dict], pd.Timestamp]:
             is_sq = bool(sq_prev.at[ts, b])
             vr = VR.at[ts, b]
             need_s, need_v = (thr_sq, 1.5) if is_sq else (thr_mom, 2.0)
-            if s < need_s or (pd.notna(vr) and vr < need_v) or not bool(reg.at[ts]):
+            if s < need_s or (pd.notna(vr) and vr < need_v):
                 continue
             i0 = p["pos"].get(ts)
             if i0 is None:
@@ -160,7 +175,8 @@ def v3_events(P: dict, regime: pd.Series) -> tuple[list[dict], pd.Timestamp]:
             evs.append({"ts": ts, "asset": b, "kind": "squeeze" if is_sq else "momentum", "score": s,
                         "i0": i0, "qv20": float(p["qv20"].iloc[i0]) if pd.notna(p["qv20"].iloc[i0]) else None,
                         "ext": float(f["ext"].iloc[i0]) if pd.notna(f["ext"].iloc[i0]) else None,
-                        "atr_pct": float(p["atr_pct"].iloc[i0]), "ch1": float(f["ch1"].iloc[i0])})
+                        "atr_pct": float(p["atr_pct"].iloc[i0]), "ch1": float(f["ch1"].iloc[i0]),
+                        "regimes": {k: bool(r.at[ts]) for k, r in regs.items()}})
     evs.sort(key=lambda e: e["ts"])
     return evs, start
 
@@ -422,9 +438,11 @@ def main() -> int:
     if "BTC" not in crypto_d:
         log("!! manca BTC")
         return 1
-    P, regime = crypto_panel(crypto_d)
-    evs, start = v3_events(P, regime)
-    log(f"Eventi v3: {len(evs)} dal {start.date()}")
+    P, regime, regimes = crypto_panel(crypto_d)
+    all_evs, start = v3_events(P, regimes)
+    CUR = "BTC > MA50 (attuale)"
+    evs = [e for e in all_evs if e["regimes"][CUR]]
+    log(f"Eventi v3: {len(evs)} (senza filtro di regime: {len(all_evs)}) dal {start.date()}")
     rep = {"generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
            "period_start": str(start.date()), "n_crypto": len(crypto_d), "n_events": len(evs)}
 
@@ -465,6 +483,57 @@ def main() -> int:
     # E4
     rep["E4_etf_rotation"] = etf_rotations(etf)
     log("E4 fatto")
+
+    # E5 · regime
+    closes_all = closes
+    mid = all_evs[len(all_evs) // 2]["ts"] if all_evs else start
+    ATR3 = dict(lag=0, stop=("atr", 3.0), max_days=5, slip=0.0)
+    REAL = dict(lag=1, stop=("atr", 3.0), max_days=5, slip=0.01)
+    e5 = {}
+    for rk in regimes:
+        sub = [e for e in all_evs if e["regimes"][rk]]
+        row = {"n": len(sub)}
+        for tag, v in (("atr3", ATR3), ("realistico", REAL)):
+            res = [simulate(P[e["asset"]], e["i0"], **v) for e in sub]
+            pairs = [(e, r) for e, r in zip(sub, res) if r]
+            row[tag] = trade_stats([r["ret"] for _, r in pairs])
+            row[tag + "_A"] = trade_stats([r["ret"] for e, r in pairs if e["ts"] < mid])
+            row[tag + "_B"] = trade_stats([r["ret"] for e, r in pairs if e["ts"] >= mid])
+            row[tag + "_years"] = {y: trade_stats([r["ret"] for e, r in pairs if e["ts"].year == int(y)])
+                                   for y in sorted({str(e["ts"].year) for e, _ in pairs})}
+            trades = [{"asset": e["asset"], "entry_ts": P[e["asset"]]["idx"][r["ie"]],
+                       "exit_ts": P[e["asset"]]["idx"][r["ix"]], "entry": r["entry"], "exit_px": r["exit_px"],
+                       "stop_pct": r["stop_pct"]} for e, r in pairs]
+            eq = portfolio_daily(trades, closes_all, "rischio 1% per operazione", start)
+            row[tag + "_portfolio"] = {"all": curve_stats(eq, 365), "halves": halves(eq, 365)}
+        e5[rk] = row
+    rep["E5_regime"] = e5
+    rep["E5_split"] = str(mid.date()) if hasattr(mid, "date") else str(mid)
+    log("E5 fatto")
+
+    # E6 · durata e liquidità (regime attuale, stop 3× ATR)
+    e6 = {}
+    for liq_name, liq_min in (("tutte", 0), ("liquidità ≥ 20 M$", 20e6)):
+        sub = [e for e in evs if (e["qv20"] or 0) >= liq_min]
+        for days in (3, 5, 7, 10):
+            for tag, lag, slip in (("chiusura", 0, 0.0), ("giorno dopo +1%", 1, 0.01)):
+                res = [simulate(P[e["asset"]], e["i0"], lag=lag, stop=("atr", 3.0), max_days=days, slip=slip) for e in sub]
+                pairs = [(e, r) for e, r in zip(sub, res) if r]
+                key = f"{liq_name} · {days} giorni · {tag}"
+                st = trade_stats([r["ret"] for _, r in pairs])
+                st["A"] = trade_stats([r["ret"] for e, r in pairs if e["ts"] < mid]).get("pf")
+                st["B"] = trade_stats([r["ret"] for e, r in pairs if e["ts"] >= mid]).get("pf")
+                st["y2026"] = trade_stats([r["ret"] for e, r in pairs if e["ts"].year == 2026]).get("pf")
+                if days == 5:
+                    trades = [{"asset": e["asset"], "entry_ts": P[e["asset"]]["idx"][r["ie"]],
+                               "exit_ts": P[e["asset"]]["idx"][r["ix"]], "entry": r["entry"],
+                               "exit_px": r["exit_px"], "stop_pct": r["stop_pct"]} for e, r in pairs]
+                    eq = portfolio_daily(trades, closes_all, "rischio 1% per operazione", start)
+                    st["portfolio"] = curve_stats(eq, 365)
+                    st["portfolio_halves"] = halves(eq, 365)
+                e6[key] = st
+    rep["E6_hold_liquidity"] = e6
+    log("E6 fatto")
 
     (OUT / "report.json").write_text(json.dumps(rep, indent=1, default=str))
     write_markdown(rep)
@@ -529,6 +598,31 @@ def write_markdown(rep: dict) -> None:
         for k, s in e4["grid"].items():
             L.append(f"| {k} | {f_(s.get('cagr'),1)} | {f_(s.get('sharpe'),2,False)} | {f_(s.get('max_dd'),1)} |")
         L += ["", f"Ultime scelte: {e4.get('reference_picks')}", ""]
+    if "E5_regime" in rep:
+        L += ["## E5 · Definizione del regime (stop 3× ATR)", "", f"Metà A/B divise al {rep['E5_split']}", "",
+              "| Regime | n | media | PF | PF metà A | PF metà B | realistico: media | PF | PF A | PF B | portafoglio CAGR | Sharpe | calo max |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+        for k, r in rep["E5_regime"].items():
+            a, ra, pt = r["atr3"], r["realistico"], r["realistico_portfolio"]["all"]
+            L.append(f"| {k} | {r['n']} | {f_(a.get('mean'),2)} | {f_(a.get('pf'),2,False)} | {f_(r['atr3_A'].get('pf'),2,False)} | "
+                     f"{f_(r['atr3_B'].get('pf'),2,False)} | {f_(ra.get('mean'),2)} | {f_(ra.get('pf'),2,False)} | "
+                     f"{f_(r['realistico_A'].get('pf'),2,False)} | {f_(r['realistico_B'].get('pf'),2,False)} | "
+                     f"{f_(pt.get('cagr'),1)} | {f_(pt.get('sharpe'),2,False)} | {f_(pt.get('max_dd'),1)} |")
+        years = sorted({y for r in rep["E5_regime"].values() for y in r["realistico_years"]})
+        L += ["", "PF per anno (realistico):", "", "| Regime | " + " | ".join(years) + " |", "|---" * (len(years) + 1) + "|"]
+        for k, r in rep["E5_regime"].items():
+            L.append(f"| {k} | " + " | ".join(f"{f_(r['realistico_years'].get(y, {}).get('pf'),2,False)} (n={r['realistico_years'].get(y, {}).get('n', 0)})" for y in years) + " |")
+        L += [""]
+    if "E6_hold_liquidity" in rep:
+        L += ["## E6 · Durata e liquidità (regime attuale, stop 3× ATR)", "",
+              "| Variante | n | media | positivi | PF | PF A | PF B | PF 2026 | portafoglio CAGR | Sharpe | calo max |",
+              "|---|---|---|---|---|---|---|---|---|---|---|"]
+        for k, st in rep["E6_hold_liquidity"].items():
+            pt = st.get("portfolio", {})
+            L.append(f"| {k} | {st.get('n')} | {f_(st.get('mean'),2)} | {f_(st.get('win'),0,False)}% | {f_(st.get('pf'),2,False)} | "
+                     f"{f_(st.get('A'),2,False)} | {f_(st.get('B'),2,False)} | {f_(st.get('y2026'),2,False)} | "
+                     f"{f_(pt.get('cagr'),1)} | {f_(pt.get('sharpe'),2,False)} | {f_(pt.get('max_dd'),1)} |")
+        L += [""]
     (OUT / "report.md").write_text("\n".join(L))
 
 
