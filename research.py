@@ -20,6 +20,9 @@ Domande, decise PRIMA di guardare i risultati (niente pesca a strascico):
       ampiezza (metà delle crypto liquide sopra la propria MA50), nessun filtro.
   E6  Con stop 3× ATR: uscita a 3, 5, 7, 10 giorni; filtro di liquidità ≥ 20 M$/giorno.
       Regola per adottare una modifica: deve migliorare ENTRAMBE le metà del periodo.
+  E7  Specifica candidata v4 (regime MA50 > MA200, liquidità ≥ 20 M$, stop 3× ATR, 5 giorni,
+      rischio 1% per operazione) contro la v3 (MA50, stop −8%, 1.000 a operazione),
+      con esecuzione alla chiusura e con esecuzione il giorno dopo + 1% di slittamento.
 
 Per E3 ed E4 i parametri di riferimento vengono dalla letteratura (non ottimizzati qui);
 la griglia di sensibilità serve solo a vedere se il risultato regge cambiandoli.
@@ -535,6 +538,34 @@ def main() -> int:
     rep["E6_hold_liquidity"] = e6
     log("E6 fatto")
 
+    # E7 · v3 contro v4 candidata
+    specs = {
+        "v3 (MA50, stop −8%, 1.000 fissi)": dict(reg="BTC > MA50 (attuale)", liq=0, stop=("fix", 0.08), sizing="fisso 1.000"),
+        "v4 (MA50>MA200, liquidità, 3× ATR, rischio 1%)": dict(reg="BTC > MA50 e MA50 > MA200", liq=20e6, stop=("atr", 3.0),
+                                                               sizing="rischio 1% per operazione"),
+        "v4 senza filtro di liquidità": dict(reg="BTC > MA50 e MA50 > MA200", liq=0, stop=("atr", 3.0),
+                                             sizing="rischio 1% per operazione"),
+        "v4 con regime attuale (MA50)": dict(reg="BTC > MA50 (attuale)", liq=20e6, stop=("atr", 3.0),
+                                             sizing="rischio 1% per operazione"),
+    }
+    e7 = {}
+    for name, sp in specs.items():
+        sub = [e for e in all_evs if e["regimes"][sp["reg"]] and (e["qv20"] or 0) >= sp["liq"]]
+        for tag, lag, slip in (("alla chiusura", 0, 0.0), ("giorno dopo +1%", 1, 0.01)):
+            res = [simulate(P[e["asset"]], e["i0"], lag=lag, stop=sp["stop"], max_days=5, slip=slip) for e in sub]
+            pairs = [(e, r) for e, r in zip(sub, res) if r]
+            trades = [{"asset": e["asset"], "entry_ts": P[e["asset"]]["idx"][r["ie"]],
+                       "exit_ts": P[e["asset"]]["idx"][r["ix"]], "entry": r["entry"], "exit_px": r["exit_px"],
+                       "stop_pct": r["stop_pct"]} for e, r in pairs]
+            eq = portfolio_daily(trades, closes_all, sp["sizing"], start)
+            stops = sorted(r["stop_pct"] for _, r in pairs)
+            e7[f"{name} · {tag}"] = {"all": curve_stats(eq, 365), "halves": halves(eq, 365),
+                                     "trades": trade_stats([r["ret"] for _, r in pairs]),
+                                     "stop_median": stops[len(stops) // 2] * 100 if stops else None,
+                                     "per_month": len(pairs) / max(1, (closes_all.index[-1] - start).days / 30.4)}
+    rep["E7_final"] = e7
+    log("E7 fatto")
+
     (OUT / "report.json").write_text(json.dumps(rep, indent=1, default=str))
     write_markdown(rep)
     log(f"Fatto in {time.monotonic() - t0:.0f}s")
@@ -622,6 +653,20 @@ def write_markdown(rep: dict) -> None:
             L.append(f"| {k} | {st.get('n')} | {f_(st.get('mean'),2)} | {f_(st.get('win'),0,False)}% | {f_(st.get('pf'),2,False)} | "
                      f"{f_(st.get('A'),2,False)} | {f_(st.get('B'),2,False)} | {f_(st.get('y2026'),2,False)} | "
                      f"{f_(pt.get('cagr'),1)} | {f_(pt.get('sharpe'),2,False)} | {f_(pt.get('max_dd'),1)} |")
+        L += [""]
+    if "E7_final" in rep:
+        L += ["## E7 · v3 contro v4 candidata (portafoglio da 10.000, valutato ogni giorno)", "",
+              "| Specifica | operazioni/mese | stop mediano | PF | totale | CAGR | Sharpe | calo max | CAGR metà A | CAGR metà B |",
+              "|---|---|---|---|---|---|---|---|---|---|"]
+        for k, r in rep["E7_final"].items():
+            a, h, t = r["all"], r["halves"], r["trades"]
+            L.append(f"| {k} | {r['per_month']:.1f} | {f_(r['stop_median'],0,False)}% | {f_(t.get('pf'),2,False)} | {f_(a.get('total'),0)} | "
+                     f"{f_(a.get('cagr'),1)} | {f_(a.get('sharpe'),2,False)} | {f_(a.get('max_dd'),1)} | "
+                     f"{f_(h['A'].get('cagr'),1)} | {f_(h['B'].get('cagr'),1)} |")
+        years = sorted({y for r in rep["E7_final"].values() for y in r["all"].get("years", {})})
+        L += ["", "| Specifica | " + " | ".join(years) + " |", "|---" * (len(years) + 1) + "|"]
+        for k, r in rep["E7_final"].items():
+            L.append(f"| {k} | " + " | ".join(f_(r["all"]["years"].get(y), 0) for y in years) + " |")
         L += [""]
     (OUT / "report.md").write_text("\n".join(L))
 
