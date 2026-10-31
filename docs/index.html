@@ -314,7 +314,7 @@
     <button class="lens" data-lens="momentum" role="tab">
       <div class="ln"><span class="lt"><span class="ico">↗</span>Accelerazioni</span><span class="lc" id="lc-momentum">—</span></div>
       <div class="ld">Rompono i massimi con volume. Movimenti presi all'innesco.</div>
-      <div class="tagline op">● alert · crypto con BTC in salita</div>
+      <div class="tagline op">● alert · crypto con BTC in tendenza</div>
     </button>
     <button class="lens" data-lens="setup" role="tab">
       <div class="ln"><span class="lt"><span class="ico">◎</span>In carica</span><span class="lc" id="lc-setup">—</span></div>
@@ -379,33 +379,40 @@
     <div id="pf-archive"></div>
 
     <details class="rules" id="why-v3">
-      <summary>Perché queste regole: il backtest 2021–2026</summary>
+      <summary>Perché queste regole: cosa dicono 5 anni di dati</summary>
       <div class="rules-body">
-        <p>A metà ottobre, dopo due settimane di simulazione in perdita, abbiamo rifatto i segnali dello scanner su
-        <strong>5 anni di dati</strong> (99 crypto liquide, 30 azioni, 10 commodity), con gli stessi punteggi del sito e i costi inclusi. Cosa è emerso:</p>
+        <p>Il modello è stato rivisto due volte, sempre con lo stesso metodo: ricostruire i segnali del sito su <strong>5 anni di dati</strong>
+        (circa 95 crypto liquide, 30 azioni, 10 commodity, 13 ETF), costi inclusi, e tenere solo le regole che reggono in
+        <strong>entrambe le metà</strong> del periodo, non solo in media. Cosa è emerso (dettagli in <code>research_results/report.md</code>):</p>
         <ul>
-          <li><strong>Rimbalzi</strong>: dopo i costi perdono (profit factor 0,75 sulle crypto, circa 0,9 sulle azioni). Comprare chi crolla, nelle crypto, spesso vuol dire prendere un coltello che cade. Restano visibili, ma senza alert.</li>
-          <li><strong>Accelerazioni crypto</strong>: funzionano, ma solo quando <strong>BTC è sopra la media a 50 giorni</strong>. Con BTC in discesa perdono (profit factor 0,55).</li>
-          <li><strong>Score</strong>: tra 80 e 100 i breakout crypto non rendono (profit factor 1,03); sopra 100 sì (1,29, oltre 130: 1,46). Da qui la soglia a 100.</li>
-          <li><strong>Uscita</strong>: vendere dopo 5 giorni (o allo stop −8%) ha reso più del trailing, che restituiva buona parte dei guadagni.</li>
-          <li><strong>Azioni</strong>: i breakout danno poco e solo con uscite larghe. Restano in un portafoglio sperimentale, senza alert.</li>
+          <li><strong>Rimbalzi</strong>: dopo i costi perdono (profit factor 0,75 sulle crypto). Restano visibili, senza alert.</li>
+          <li><strong>Breakout crypto</strong>: l'unico segnale con un vantaggio, ma <strong>solo quando BTC è in tendenza</strong>
+          (sopra la media a 50 giorni e media 50 sopra la 200). Con questa regola il modello è rimasto fuori da tutto il 2022.</li>
+          <li><strong>Stop</strong>: il −8% fisso veniva preso dal rumore normale delle crypto. Uno stop a 3× la volatilità del token
+          (tipicamente intorno a −21%) con una posizione più piccola, dimensionata perché lo stop costi l'1% del capitale, rende di più e perde meno.</li>
+          <li><strong>Velocità</strong>: entrare il giorno dopo il segnale, con l'1% di slittamento, toglie circa un terzo del guadagno medio.
+          Con lo stop a −8% il vantaggio spariva quasi del tutto.</li>
+          <li><strong>Scartate</strong>: rotazione settimanale sulle crypto più forti (−12% l'anno, calo massimo −71%) e rotazione mensile
+          tra ETF (+7% l'anno contro +20% dell'S&amp;P 500 tenuto). Strategie da manuale, ma non in questi anni.</li>
         </ul>
-        <p>Accelerazioni + Squeeze crypto, un portafoglio da 10.000 all'anno (1.000 a operazione, massimo 10 aperte, costi inclusi):</p>
+        <p>Breakout crypto, portafoglio da 10.000 valutato ogni giorno, <strong>esecuzione realistica</strong> (il giorno dopo il segnale, 1% di slittamento):</p>
         <div class="table-wrap" style="margin-top:0"><table class="bt" id="bt-table">
-          <thead><tr><th>Anno</th><th>Regole v2</th><th>Regole v3</th></tr></thead>
+          <thead id="bt-head"></thead>
           <tbody id="bt-body"></tbody>
         </table></div>
-        <p><strong>Limiti, da prendere sul serio.</strong> Il backtest usa le crypto liquide di oggi (quelle sparite nel frattempo non ci sono),
-        barre giornaliere (il sito controlla ogni 30 minuti) e regole di uscita scelte guardando questi stessi dati: nella realtà aspettati meno.
-        E aspettati <strong>poche operazioni vincenti, circa 1 su 3</strong>: si guadagna perché le vincenti sono molto più grandi delle perdenti, non perché si vince spesso.
-        È per questo che prima dei soldi veri servono almeno 20–50 operazioni simulate.</p>
+        <p>Il modello v4 non batte BTC negli anni di euforia (2023–2024): sta fuori dal mercato o investe solo una parte del capitale.
+        Vince sul rischio: <strong>calo massimo −14% contro −69%</strong>. Nel 2026, anno difficile per le crypto, sarebbe rimasto in pari (la v3: −24%).</p>
+        <p><strong>Limiti, da prendere sul serio.</strong> Il backtest usa le crypto liquide di oggi (quelle sparite non ci sono),
+        barre giornaliere (il sito controlla ogni 30 minuti) e regole scelte guardando questi stessi dati: nella realtà aspettati meno.
+        Si vince poco meno di una volta su due: si guadagna perché le vincenti sono più grandi delle perdenti.
+        Prima dei soldi veri servono almeno 20–50 operazioni simulate, e poi importi piccoli.</p>
       </div>
     </details>
 
     <details class="rules">
       <summary>Come funziona e quando passare ai soldi veri</summary>
       <div class="rules-body" id="pf-rules">
-        <p><strong>I portafogli automatici</strong> comprano <span id="pf-size">1.000</span> a ogni segnale del modello e vendono da soli:</p>
+        <p><strong>I portafogli automatici</strong> comprano a ogni segnale del modello (base <span id="pf-size">1.000</span>) e vendono da soli:</p>
         <ul id="pf-rules-list"></ul>
         <p><strong>Costi inclusi</strong> a ogni acquisto e vendita: crypto 0,25%, azioni 1 € + 0,10%, commodity (ETF) 1 € + 0,15%.
         Le operazioni avvengono al prezzo dell'aggiornamento dello scanner: niente senno di poi. I rendimenti sono nella valuta dell'asset (senza cambio euro/dollaro).</p>
@@ -414,6 +421,7 @@
           <li><code>/compra QNT 500</code> compra 500 di Quant (senza importo: 1.000)</li>
           <li><code>/vendi QNT</code> vende tutto · <code>/vendi QNT 50%</code> vende metà</li>
           <li><code>/portafoglio</code> ti risponde con la situazione · <code>/riepilogo</code> tutti i portafogli</li>
+          <li><code>/capitale 5000</code> il capitale che useresti davvero: gli alert ti dicono quanto comprare</li>
         </ul>
         <p>Vale il ticker o il nome: QNT, Quant, NVDA, ENI.MI, Oro. L'ordine viene eseguito al prossimo aggiornamento (ogni 30 minuti) e il bot ti conferma prezzo e costi.
         Ogni acquisto viene segnato come <em>suggerito</em> se in quel momento l'asset era in una delle liste: così vediamo se scegli meglio dentro o fuori dai suggerimenti.</p>
@@ -459,7 +467,7 @@
             l'indice per le azioni). È il tipo di movimento di QNT a fine settembre:
             non si può prevedere la notizia, ma si può vedere l'innesco nelle prime ore.
             I breakout falliscono spesso: <em>serve sempre uno stop</em>. È l'unica modalità con alert:
-            solo crypto con score ≥ 100 e solo quando BTC è in salita (vedi <strong>Regime di mercato</strong>).
+            solo crypto con score ≥ 100 e solo quando BTC è in tendenza (vedi <strong>Regime di mercato</strong>).
           </div>
         </div>
         <div class="term">
@@ -488,7 +496,8 @@
         <div class="term">
           <div class="t">Regime di mercato <span class="sub">il semaforo in alto</span></div>
           <div class="d">
-            Si compra un breakout solo se il mercato di riferimento è in salita: per le crypto <strong>BTC sopra la sua media a 50 giorni</strong>,
+            Si compra un breakout solo se il mercato di riferimento è in salita: per le crypto <strong>BTC sopra la sua media a 50 giorni
+            e la media a 50 sopra quella a 200</strong> (tendenza di fondo rialzista),
             per le azioni l'<strong>indice sopra la media a 200 giorni</strong> (S&amp;P 500, Euro Stoxx 50, FTSE MIB).
             Conta l'ultima chiusura giornaliera, quindi il semaforo cambia al massimo una volta al giorno; quando cambia ti arriva un messaggio.
             Con il semaforo rosso gli alert crypto vanno in pausa: <em>nel backtest i breakout in quella fase perdevano</em>.
@@ -500,7 +509,17 @@
             <strong>Operativo</strong>: soddisfa tutte le regole del modello; quando entra in top 10 ti arriva l'alert e il portafoglio simulato compra.
             <strong>Sperimentale</strong>: azioni e commodity, seguite solo dal portafoglio «Breakout azioni», senza alert, finché i numeri non dicono che funziona.
             <strong>In pausa</strong>: sarebbe un segnale, ma il regime è negativo. Senza badge: score o volume sotto soglia.
-            Aprendo la riga vedi il piano: <em>prezzo di stop e giorni massimi</em>.
+            Aprendo la riga vedi il piano: <em>quanto comprare, prezzo di stop e giorni massimi</em>.
+          </div>
+        </div>
+        <div class="term">
+          <div class="t">Stop e dimensione <span class="sub">perché la posizione è piccola</span></div>
+          <div class="d">
+            Lo stop è a <strong>3 volte la volatilità media giornaliera</strong> del token (ATR a 14 giorni), tra −4% e −35%:
+            abbastanza lontano da non scattare per il rumore normale. Per compensare, la posizione è piccola: l'importo è scelto
+            perché, se scatta lo stop, perdi circa <strong>l'1% del capitale</strong>. Esempio su 10.000: stop a −20% → compri 500.
+            Il capitale di riferimento lo imposti su Telegram con <code>/capitale 5000</code>.
+            Trade Republic non accetta ordini stop sulle crypto: lì lo stop lo devi controllare tu; Kraken e Binance lo eseguono da soli.
           </div>
         </div>
       </div>
@@ -592,15 +611,19 @@
 <script>
 const TR_CRYPTO = new Set(["BTC","ETH","SOL","XRP","ADA","DOGE","LINK","DOT","AVAX","MATIC","POL","LTC","BCH","UNI","AAVE","ATOM","TRX","XLM","ETC","FIL","ALGO","EOS","SHIB","ARB","OP","INJ"]);
 const LENS_INFO = {
-  momentum: { title: "Accelerazioni", lead: "Asset che <em>rompono i massimi</em> con volume e battono il mercato. I segnali operativi sono le crypto con score ≥ 100, quando BTC è in salita." },
+  momentum: { title: "Accelerazioni", lead: "Asset che <em>rompono i massimi</em> con volume e battono il mercato. I segnali operativi sono le crypto con score ≥ 100, quando BTC è in tendenza rialzista." },
   setup: { title: "In carica", lead: "Volatilità <em>compressa</em> sotto il tetto del range. Da tenere d'occhio: l'alert arriva solo quando scattano verso l'alto." },
   reversion: { title: "Rimbalzi", lead: "Asset scesi troppo e troppo in fretta. Lista <em>informativa</em>: nel backtest comprarli non ha reso." },
 };
-// Risultati del backtest (backtest.py, sezione "Confronto modelli"): crypto Accelerazioni + Squeeze
+// Risultati di research.py (E7 ed E3, 31 ottobre 2026): crypto Accelerazioni + Squeeze con esecuzione
+// realistica (entrata il giorno dopo il segnale, 1% di slittamento), portafoglio da 10.000 valutato ogni giorno.
 const BACKTEST = {
-  date: "15 ottobre 2026",
-  rows: [["2022", -43.3, -11.4], ["2023", 25.4, 49.0], ["2024", 30.2, 90.2], ["2025", -16.3, 21.2], ["2026 (a ottobre)", -26.8, 13.7]],
-  total: { v2: -34.5, v3: 162.6, dd2: -47.5, dd3: -21.1 },
+  date: "31 ottobre 2026",
+  cols: ["Regole v3", "Regole v4", "BTC tenuto"],
+  rows: [["2022", -17.9, 0.0, -64.8], ["2023", 23.0, 12.2, 153.7], ["2024", 75.1, 74.1, 120.2], ["2025", 1.3, -3.0, -4.6], ["2026 (a ottobre)", -24.3, 0.0, -12.6]],
+  total: [35.7, 89.7, 65.7],
+  cagr: [6.5, 14.0, 10.9],
+  dd: [-35.3, -13.9, -69.0],
 };
 const SIG_BADGE = {
   operativo: ["op", "Operativo"],
@@ -608,7 +631,7 @@ const SIG_BADGE = {
   regime_negativo: ["pause", "In pausa"],
   regime_nd: ["pause", "In pausa"],
 };
-const PF_RULE = { crypto_breakout: "crypto_breakout", crypto_squeeze: "crypto_breakout", brokerage_breakout: "brokerage_breakout" };
+const PF_RULE = { crypto_v4: "crypto_v4", brokerage_breakout: "brokerage_breakout" };
 const TABS = ["combined", "crypto", "brokerage"];
 
 let data = null;
@@ -662,7 +685,7 @@ function metric(label, value) { return `<div class="metric"><div class="ml">${la
 function pctIt(v, d = 1) { return (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(d).replace(".", ",") + "%"; }
 
 function regimeRef(a) {
-  if (a.type === "crypto") return "BTC sotto la media a 50 giorni";
+  if (a.type === "crypto") return "regime crypto negativo (BTC sotto la media a 50 giorni o media 50 sotto la 200)";
   if (a.type === "stock") return "indice di riferimento sotto la media a 200 giorni";
   return "regime negativo";
 }
@@ -672,8 +695,19 @@ function signalLine(a) {
   const r = (data?.paper?.rules || {})[PF_RULE[s.portfolio]];
   let plan = "";
   if (r && a.price) {
-    const stop = a.price * (1 + r.stop / 100);
-    plan = ` Piano: stop a <strong>${fmtPrice(stop)}</strong> (${pctIt(r.stop, 0)})` +
+    let stopPct = r.stop;
+    if (r.atr_mult) {
+      const atr = a.daily?.atr_pct;
+      stopPct = atr ? -Math.min(Math.max(r.atr_mult * atr, r.stop_min), r.stop_max) : r.stop_fallback;
+    }
+    const stop = a.price * (1 + stopPct / 100);
+    let size = "";
+    if (r.risk_pct) {
+      const cap = data?.paper?.settings?.capital || 10000;
+      const amt = Math.min(cap * r.risk_pct / Math.abs(stopPct), cap * r.max_pos_pct / 100);
+      size = ` compra circa <strong>${fmtMoney(amt)} €</strong> su ${fmtMoney(cap)} (${(amt / cap * 100).toFixed(1).replace(".", ",")}%),`;
+    }
+    plan = ` Piano:${size} stop a <strong>${fmtPrice(stop)}</strong> (${pctIt(stopPct, 0)})` +
       (r.trail ? `, dopo ${pctIt(r.trail_from, 0)} uscita se perde ${r.trail}% dal massimo` : "") +
       `, uscita entro <strong>${r.max_days} giorni</strong>.`;
   }
@@ -697,14 +731,22 @@ function renderRegime() {
   box.innerHTML = order.filter(k => R[k]).map(k => {
     const r = R[k];
     const st = r.on === true ? "on" : (r.on === false ? "off" : "");
-    const d = r.dist_pct != null ? `<span class="d">${pctIt(r.dist_pct)} vs MA${r.ma_days}</span>` : `<span class="d">n/d</span>`;
+    let d = r.dist_pct != null ? `<span class="d">${pctIt(r.dist_pct)} vs MA${r.ma_days}</span>` : `<span class="d">n/d</span>`;
+    if (r.long_days && r.trend_ok != null) d += `<span class="d">· MA${r.ma_days} ${r.trend_ok ? "&gt;" : "&lt;"} MA${r.long_days}</span>`;
     return `<span class="rg ${st}" title="Ultima chiusura giornaliera rispetto alla media a ${r.ma_days} giorni"><span class="dot"></span>${esc(r.label)} ${d}</span>`;
   }).join("");
-  const c = R.crypto?.on;
+  const rc = R.crypto || {};
+  const c = rc.on;
+  let why = "";
+  if (c === false) {
+    const below = rc.dist_pct != null && rc.dist_pct < 0;
+    why = below && rc.trend_ok === false ? "BTC sotto la media a 50 giorni e media 50 sotto la 200"
+      : below ? "BTC sotto la media a 50 giorni" : "media a 50 giorni sotto quella a 200 (tendenza di fondo ribassista)";
+  }
   note.innerHTML = c === true
-    ? `<strong>Regime crypto positivo</strong>: BTC sopra la media a 50 giorni, gli alert Accelerazioni e Squeeze crypto sono attivi.`
+    ? `<strong>Regime crypto positivo</strong>: BTC sopra la media a 50 giorni e media 50 sopra la 200. Gli alert Accelerazioni e Squeeze crypto sono attivi.`
     : c === false
-      ? `<strong>Regime crypto negativo</strong>: BTC sotto la media a 50 giorni. Alert crypto in pausa: nel backtest i breakout in questa fase perdevano.`
+      ? `<strong>Regime crypto negativo</strong>: ${why}. Alert crypto in pausa: nel backtest i breakout in questa fase perdevano.`
       : `Regime crypto non disponibile in questo aggiornamento: alert crypto in pausa per prudenza.`;
 }
 
@@ -720,6 +762,7 @@ function detailsFor(a) {
       metric("ADX", d.adx != null ? d.adx.toFixed(0) : "—"),
       metric("RSI giornaliero", d.rsi_d != null ? d.rsi_d.toFixed(0) : "—"),
       metric("Sopra MA20", d.ext != null ? sign(d.ext, 0) : "—"),
+      metric("Volatilità (ATR 14g)", d.atr_pct != null ? d.atr_pct.toFixed(1).replace(".", ",") + "% al giorno" : "—"),
     ].join("");
   }
   if (lens === "setup") {
@@ -840,10 +883,14 @@ function renderPerf() {
   $("recent-body").innerHTML = rows || `<tr><td colspan="6" class="muted">Nessun segnale registrato finora: il registro parte dal primo aggiornamento con il nuovo modello.</td></tr>`;
 }
 
-function fmtMoney(v) { return v == null ? "—" : v.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
+function fmtMoney(v) {
+  if (v == null) return "—";
+  const r = Math.round(v);
+  return (r < 0 ? "−" : "") + String(Math.abs(r)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
 const VERDICT_ICON = { raccolta: "◷", promettente: "✓", debole: "~", negativo: "✕" };
-const PF_ORDER = ["crypto_breakout", "crypto_squeeze", "brokerage_breakout", "manual"];
-const PF_SHORT = { crypto_breakout: "Accelerazioni", crypto_squeeze: "Squeeze", brokerage_breakout: "Azioni", manual: "Mie",
+const PF_ORDER = ["crypto_v4", "brokerage_breakout", "manual"];
+const PF_SHORT = { crypto_v4: "Crypto", crypto_breakout: "Accelerazioni", crypto_squeeze: "Squeeze", brokerage_breakout: "Azioni", manual: "Mie",
                    momentum: "Accelerazioni", setup: "Squeeze", reversion: "Rimbalzi" };
 const BENCH_NAME = { BTC: "BTC", SPY: "S&P 500" };
 function fmtDay(iso) { return iso ? new Date(iso).toLocaleDateString("it-IT", { day: "numeric", month: "short" }) : "—"; }
@@ -866,15 +913,17 @@ function sparkline(hist, initial) {
 function renderPaper() {
   const pp = data?.paper;
   if (!pp?.portfolios) return;
-  $("paper-intro").innerHTML = `10.000 finti ciascuno. I portafogli automatici seguono i segnali del modello v3: comprano ${fmtMoney(pp.trade_size)} a ogni segnale e vendono con regole fisse. <strong style="color:var(--text);font-weight:500">Le mie scelte</strong> sono i tuoi acquisti da Telegram. Costi inclusi.`;
+  $("paper-intro").innerHTML = `10.000 finti ciascuno. I portafogli automatici seguono i segnali del modello v${data.model_version || ""} e vendono con regole fisse; quello crypto dimensiona ogni posizione in base alla volatilità. <strong style="color:var(--text);font-weight:500">Le mie scelte</strong> sono i tuoi acquisti da Telegram. Costi inclusi.`;
   $("pf-size").textContent = fmtMoney(pp.trade_size);
   $("pf-min").textContent = pp.min_trades;
   const R = pp.rules || {};
-  const rl = (k, label) => { const r = R[k]; if (!r) return ""; const parts = [`stop ${pctIt(r.stop, 0)}`];
+  const rl = (k, label) => { const r = R[k]; if (!r) return "";
+    const parts = [r.atr_mult ? `stop a ${r.atr_mult}× la volatilità (ATR 14 giorni), tra −${r.stop_min}% e −${r.stop_max}%` : `stop ${pctIt(r.stop, 0)}`];
+    if (r.risk_pct) parts.push(`importo scelto perché lo stop costi l'${r.risk_pct}% del capitale (al massimo il ${r.max_pos_pct}% in una posizione)`);
     if (r.take != null) parts.push(`obiettivo +${r.take}%`);
     if (r.trail != null) parts.push(`dopo +${r.trail_from}% uscita se perde ${r.trail}% dal massimo`);
     parts.push(`${r.trail != null || r.take != null ? "massimo" : "altrimenti vende dopo"} ${r.max_days} giorni`); return `<li><strong>${label}</strong>: ${parts.join(", ")}</li>`; };
-  $("pf-rules-list").innerHTML = rl("crypto_breakout", "Accelerazioni e Squeeze crypto") + rl("brokerage_breakout", "Breakout azioni (sperimentale)") +
+  $("pf-rules-list").innerHTML = rl("crypto_v4", "Breakout crypto (Accelerazioni e Squeeze)") + rl("brokerage_breakout", "Breakout azioni (sperimentale, 1.000 a operazione)") +
     `<li>comprano solo con il regime di mercato positivo; al massimo 10 posizioni aperte per portafoglio</li>`;
 
   $("pf-grid").innerHTML = PF_ORDER.filter(k => pp.portfolios[k]).map(k => {
@@ -923,24 +972,26 @@ function renderPaper() {
     : `<tr><td colspan="3" class="muted">Ancora nessuna operazione chiusa.</td></tr>`;
 
   $("pf-archive").innerHTML = (pp.archive || []).map(a => {
-    const rows = ["momentum", "setup", "reversion"].filter(k => a.portfolios?.[k]).map(k => {
+    const rows = Object.keys(a.portfolios || {}).map(k => {
       const x = a.portfolios[k];
       const pf = x.profit_factor != null ? x.profit_factor.toFixed(2).replace(".", ",") : "—";
       return `<div class="arc-row"><div class="arc-l"><span>${esc(x.label)}</span><span class="${cls(x.ret_pct)}">${sign(x.ret_pct)}</span></div><div class="k">${x.n_closed} chiuse · positive ${x.win_rate != null ? Math.round(x.win_rate) + "%" : "—"} · profit factor ${pf}</div></div>`;
     }).join("");
     const b = a.bench || {};
     const bl = Object.entries(b).filter(([, v]) => v != null).map(([k, v]) => `${BENCH_NAME[k] || k} ${sign(v)}`).join(" · ");
-    return `<div class="sub-title">Archivio</div><div class="arc"><h4>${esc(a.label)}</h4>
+    return `<div class="arc"><h4>${esc(a.label)}</h4>
       <div class="arc-sub">${fmtDay(a.from)} → ${fmtDay(a.to)}${bl ? " · mercato: " + bl : ""}</div>
       <div class="arc-rows">${rows}</div>${a.note ? `<div class="arc-note">${esc(a.note)}</div>` : ""}</div>`;
   }).join("");
+  if ((pp.archive || []).length) $("pf-archive").innerHTML = `<div class="sub-title">Archivio · modelli precedenti</div>` + $("pf-archive").innerHTML;
 }
 
 function renderBacktest() {
   const f = v => `<span class="${cls(v)}">${pctIt(v)}</span>`;
-  $("bt-body").innerHTML = BACKTEST.rows.map(([y, a, b]) => `<tr><td>${y}</td><td>${f(a)}</td><td>${f(b)}</td></tr>`).join("") +
-    `<tr class="tot"><td>Tutto il periodo</td><td>${f(BACKTEST.total.v2)}<div class="rsub">calo max ${pctIt(BACKTEST.total.dd2)}</div></td>` +
-    `<td>${f(BACKTEST.total.v3)}<div class="rsub">calo max ${pctIt(BACKTEST.total.dd3)}</div></td></tr>`;
+  $("bt-head").innerHTML = `<tr><th>Anno</th>${BACKTEST.cols.map(c => `<th>${c}</th>`).join("")}</tr>`;
+  $("bt-body").innerHTML = BACKTEST.rows.map(([y, ...v]) => `<tr><td>${y}</td>${v.map(x => `<td>${f(x)}</td>`).join("")}</tr>`).join("") +
+    `<tr class="tot"><td>Tutto il periodo</td>${BACKTEST.total.map((t, i) =>
+      `<td>${f(t)}<div class="rsub">${pctIt(BACKTEST.cagr[i])}/anno</div><div class="rsub">calo ${pctIt(BACKTEST.dd[i], 0)}</div></td>`).join("")}</tr>`;
 }
 
 function setLens(l) { lens = l; try { sessionStorage.setItem("lens", l); } catch (e) {} render(); }

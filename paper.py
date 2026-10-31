@@ -1,9 +1,10 @@
 """
 Paper trading — soldi finti per verificare se i segnali valgono qualcosa.
 
-Modello v3 (validato dal backtest 2021–2026, vedi backtest.py):
-  crypto_breakout     segue ogni alert 🚀 Accelerazione crypto (regime BTC positivo, score ≥ 100)
-  crypto_squeeze      segue ogni alert ⚡ Squeeze crypto (regime BTC positivo)
+Modello v4 (validato con backtest.py e research.py, 2021–2026):
+  crypto_v4           segue ogni alert crypto (🚀 Accelerazione e ⚡ Squeeze) con regime BTC positivo.
+                      Stop a 3× la volatilità (ATR 14 giorni), posizione dimensionata perché lo stop
+                      costi l'1% del capitale, uscita dopo 5 giorni.
   brokerage_breakout  breakout/squeeze su azioni e commodity · sperimentale, senza alert
   manual              le tue scelte, via Telegram: /compra QNT 500 · /vendi QNT · /portafoglio
 
@@ -16,7 +17,7 @@ processate: niente "senno di poi". Stop e scadenze sono controllati agli
 aggiornamenti (ogni 30'): se il prezzo scavalca lo stop tra un run e l'altro,
 l'uscita avviene al prezzo osservato (conservativo).
 
-I portafogli del modello precedente (v2) vengono archiviati, non cancellati.
+I portafogli dei modelli precedenti (v2, v3) vengono archiviati, non cancellati.
 """
 
 from __future__ import annotations
@@ -28,7 +29,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 PAPER_FILE = Path("paper.json")
-PAPER_VERSION = 2
+PAPER_VERSION = 3
 
 INITIAL_CAPITAL = 10_000.0
 TRADE_SIZE = 1_000.0          # importo per operazione nei portafogli automatici
@@ -37,22 +38,26 @@ DEFAULT_MANUAL_SIZE = 1_000.0
 MIN_TRADES_FOR_VERDICT = 20   # operazioni chiuse prima di dare un giudizio
 
 PORTFOLIOS = {
-    "crypto_breakout": {"label": "Accelerazioni crypto", "kind": "auto", "rule": "crypto_breakout",
-                        "bench": ["BTC"], "experimental": False},
-    "crypto_squeeze": {"label": "Squeeze crypto", "kind": "auto", "rule": "crypto_breakout",
-                       "bench": ["BTC"], "experimental": False},
+    "crypto_v4": {"label": "Breakout crypto", "kind": "auto", "rule": "crypto_v4",
+                  "bench": ["BTC"], "experimental": False},
     "brokerage_breakout": {"label": "Breakout azioni", "kind": "auto", "rule": "brokerage_breakout",
                            "bench": ["SPY"], "experimental": True},
     "manual": {"label": "Le mie scelte", "kind": "manual", "rule": None,
                "bench": ["BTC", "SPY"], "experimental": False},
 }
 
-# Regole di uscita (percentuali). Scelte col backtest: per le crypto l'uscita a
-# tempo (5 giorni) con stop -8% batte il trailing; per le azioni serve più spazio.
+# Regole di uscita (percentuali).
+# crypto_v4 (research.py, E1/E2/E7): lo stop fisso a −8% veniva preso dal rumore normale delle
+# crypto; uno stop a 3× ATR con posizione a rischio fisso rende di più con un calo massimo minore.
+#   stop = 3 × ATR% (tra 4% e 35%), posizione = 1% del capitale / stop (massimo 20% del capitale)
+# brokerage_breakout: per le azioni serve più spazio (stop −12%, trailing 20% dopo +10%).
 PAPER_RULES = {
-    "crypto_breakout": {"stop": -8.0, "take": None, "trail": None, "trail_from": None, "max_days": 5},
+    "crypto_v4": {"stop": None, "atr_mult": 3.0, "stop_min": 4.0, "stop_max": 35.0, "stop_fallback": -20.0,
+                  "take": None, "trail": None, "trail_from": None, "max_days": 5,
+                  "risk_pct": 1.0, "max_pos_pct": 20.0},
     "brokerage_breakout": {"stop": -12.0, "take": None, "trail": 20.0, "trail_from": 10.0, "max_days": 20},
 }
+DEFAULT_CAPITAL = 10_000.0    # capitale di riferimento per gli importi negli alert (/capitale per cambiarlo)
 
 # Costi per lato (acquisto o vendita): percentuale + fisso
 COSTS = {
@@ -61,9 +66,10 @@ COSTS = {
     "commodity": {"pct": 0.15, "fixed": 1.0},  # ETF/ETC: 1 € + spread più largo
 }
 
-# Nomi dei portafogli del modello v2 (per l'archivio)
+# Nomi dei portafogli dei modelli precedenti (per l'archivio)
 V1_LABELS = {"momentum": "Accelerazioni", "setup": "In carica → squeeze", "reversion": "Rimbalzi",
              "manual": "Le mie scelte"}
+V2_LABELS = {"crypto_breakout": "Accelerazioni crypto", "crypto_squeeze": "Squeeze crypto"}
 
 HELP_TEXT = (
     "📒 <b>Portafoglio simulato</b> (soldi finti, 10.000 di partenza)\n\n"
@@ -72,7 +78,8 @@ HELP_TEXT = (
     "<code>/vendi QNT</code> — vende tutto QNT\n"
     "<code>/vendi QNT 50%</code> — vende metà\n"
     "<code>/portafoglio</code> — il tuo portafoglio\n"
-    "<code>/riepilogo</code> — tutti i portafogli simulati\n\n"
+    "<code>/riepilogo</code> — tutti i portafogli simulati\n"
+    "<code>/capitale 5000</code> — il capitale che useresti davvero: gli alert ti dicono quanto comprare\n\n"
     "Puoi usare il ticker (QNT, NVDA, ENI.MI, GC=F) o il nome (Quant, Oro).\n"
     "Gli ordini vengono eseguiti al prezzo del prossimo aggiornamento dello scanner (entro 30')."
 )
@@ -121,14 +128,36 @@ def trade_cost(asset_type: str, amount: float) -> float:
     return amount * c["pct"] / 100 + c["fixed"]
 
 
-def exit_plan(rule_name: str, price: float, now: datetime) -> dict | None:
-    """Prezzo di stop e data di uscita di una nuova posizione (per gli alert)."""
+def stop_pct_for(rule: dict, atr_pct: float | None) -> float:
+    """Distanza dello stop in % (negativa). Con atr_mult: multiplo dell'ATR, limitato."""
+    if rule.get("atr_mult"):
+        if atr_pct and atr_pct > 0:
+            return -min(max(rule["atr_mult"] * atr_pct, rule["stop_min"]), rule["stop_max"])
+        return rule.get("stop_fallback", -20.0)
+    return rule["stop"]
+
+
+def position_size(rule: dict, stop_pct: float, capital: float) -> float:
+    """Importo da investire: con risk_pct lo stop costa risk_pct% del capitale."""
+    if rule.get("risk_pct") and stop_pct:
+        return min(capital * rule["risk_pct"] / abs(stop_pct), capital * rule["max_pos_pct"] / 100)
+    return TRADE_SIZE
+
+
+def exit_plan(rule_name: str, price: float, now: datetime, atr_pct: float | None = None,
+              capital: float | None = None) -> dict | None:
+    """Piano di una nuova posizione (per gli alert): stop, data di uscita, importo."""
     r = PAPER_RULES.get(rule_name)
     if not r:
         return None
-    return {"stop_price": price * (1 + r["stop"] / 100), "stop_pct": r["stop"],
+    stop = stop_pct_for(r, atr_pct)
+    cap = capital or DEFAULT_CAPITAL
+    amount = position_size(r, stop, cap)
+    return {"stop_price": price * (1 + stop / 100), "stop_pct": stop,
             "exit_by": now + timedelta(days=r["max_days"]), "max_days": r["max_days"],
-            "trail": r["trail"], "trail_from": r["trail_from"]}
+            "trail": r["trail"], "trail_from": r["trail_from"],
+            "capital": cap, "amount": amount, "size_pct": amount / cap * 100,
+            "risk_pct": r.get("risk_pct")}
 
 
 def _new_portfolio(now: datetime | None, bench_start: dict) -> dict:
@@ -193,7 +222,7 @@ class PaperBook:
         return cls(data)
 
     def prepare(self, now: datetime, bench_prices: dict[str, float]) -> list[str]:
-        """Migra dal formato v1 (archiviando i vecchi portafogli) e avvia i portafogli nuovi."""
+        """Migra dai formati precedenti (archiviando i vecchi portafogli) e avvia i portafogli nuovi."""
         notes = []
         d = self.data
         if d.get("version") == 1:
@@ -222,10 +251,35 @@ class PaperBook:
             d["portfolios"] = new_ports
             d.pop("started", None)
             d.pop("bench_start", None)
+            d["version"] = 2
+            notes.append("portafogli v2 archiviati")
+        if d.get("version") == 2:
+            ports = d.get("portfolios", {})
+            snap, starts, bench = {}, [], {}
+            for key in ("crypto_breakout", "crypto_squeeze"):
+                p = ports.pop(key, None)
+                if not p:
+                    continue
+                st = _stats(p)
+                snap[key] = {"label": V2_LABELS[key], **{k: (None if isinstance(v, float) and not math.isfinite(v) else v)
+                                                       for k, v in st.items()}}
+                if p.get("started"):
+                    starts.append(p["started"])
+                bench = bench or _bench_ret(p.get("bench_start", {}), bench_prices, ["BTC"])
+            if snap:
+                d.setdefault("archive", []).insert(0, {
+                    "label": "Modello v3 · portafogli crypto",
+                    "from": min(starts) if starts else None, "to": _iso(now), "bench": bench, "portfolios": snap,
+                    "note": "Sostituito dal modello v4: lo stop fisso a −8% veniva preso dal rumore delle crypto "
+                            "(perdita media agli stop −13,7%). Ora stop a 3× la volatilità con posizione a rischio "
+                            "fisso e regime BTC più severo (media 50 sopra la 200).",
+                })
             d["version"] = PAPER_VERSION
-            notes.append("portafogli v2 archiviati, nuovi portafogli v3 avviati")
+            notes.append("portafogli crypto v3 archiviati, portafoglio crypto v4 avviato" if snap
+                         else "formato portafogli aggiornato alla v3")
         d.setdefault("archive", [])
         d.setdefault("telegram_offset", None)
+        d.setdefault("settings", {}).setdefault("capital", DEFAULT_CAPITAL)
         for key in PORTFOLIOS:
             p = d["portfolios"].get(key)
             if p is None:
@@ -250,8 +304,12 @@ class PaperBook:
     def find_position(self, key: str, asset_id: str) -> dict | None:
         return next((x for x in self._p(key)["positions"] if x["asset_id"] == asset_id), None)
 
+    def capital(self) -> float:
+        return float((self.data.get("settings") or {}).get("capital") or DEFAULT_CAPITAL)
+
     def buy(self, key: str, asset: dict, amount: float, now: datetime, reason: str,
-            suggested_by: list[str] | None = None, rule: str | None = None) -> tuple[bool, str]:
+            suggested_by: list[str] | None = None, rule: str | None = None,
+            stop_pct: float | None = None) -> tuple[bool, str]:
         p = self._p(key)
         price = asset.get("price")
         if not price or price <= 0:
@@ -286,6 +344,7 @@ class PaperBook:
                 "last_price": price,
                 "last_seen": _iso(now),
                 "rule": rule,
+                "stop_pct": stop_pct,
                 "reason": reason,
                 "suggested_by": suggested_by or [],
             })
@@ -320,13 +379,22 @@ class PaperBook:
         return closed
 
     # ── portafogli automatici ──
-    def open_auto(self, key: str, asset: dict, score: float, now: datetime, signal_kind: str) -> str | None:
+    def open_auto(self, key: str, asset: dict, score: float, now: datetime, signal_kind: str,
+                  atr_pct: float | None = None) -> str | None:
         meta = PORTFOLIOS.get(key)
         if not meta or meta["kind"] != "auto" or self.find_position(key, asset["asset_id"]):
             return None
-        ok, msg = self.buy(key, asset, TRADE_SIZE, now, reason=f"{signal_kind} (score {score:.0f})",
-                           rule=meta["rule"])
-        return f"{meta['label']}: {asset['symbol']} {msg}" if ok else None
+        rule = PAPER_RULES[meta["rule"]]
+        p = self._p(key)
+        stop = stop_pct_for(rule, atr_pct)
+        amount = position_size(rule, stop, _equity(p))
+        c = COSTS.get(asset["type"], COSTS["stock"])
+        amount = min(amount, (p["cash"] - c["fixed"]) / (1 + c["pct"] / 100))
+        if amount < 50:
+            return None
+        ok, msg = self.buy(key, asset, amount, now, reason=f"{signal_kind} (score {score:.0f})",
+                           rule=meta["rule"], stop_pct=stop)
+        return f"{meta['label']}: {asset['symbol']} {msg}, stop {stop:.0f}%" if ok else None
 
     def update(self, prices: dict[str, float], now: datetime) -> list[str]:
         """Aggiorna i prezzi e applica le regole di uscita dei portafogli automatici."""
@@ -348,9 +416,10 @@ class PaperBook:
                 ret = (px / pos["entry_price"] - 1) * 100
                 peak_ret = (pos["peak"] / pos["entry_price"] - 1) * 100
                 age_d = (now - (_parse(pos["entry_ts"]) or now)).total_seconds() / 86400
+                stop = pos.get("stop_pct") if pos.get("stop_pct") is not None else rule["stop"]
                 reason = None
-                if ret <= rule["stop"]:
-                    reason = f"stop {rule['stop']:.0f}%"
+                if stop is not None and ret <= stop:
+                    reason = f"stop {stop:.0f}%"
                 elif rule["take"] is not None and ret >= rule["take"]:
                     reason = f"obiettivo +{rule['take']:.0f}%"
                 elif rule["trail"] and peak_ret >= rule["trail_from"] and px <= pos["peak"] * (1 - rule["trail"] / 100):
@@ -386,6 +455,18 @@ class PaperBook:
             return self.portfolio_text("manual")
         if cmd in ("riepilogo", "r", "simulazioni", "tutti"):
             return self.overview_text()
+        if cmd in ("capitale", "capital"):
+            if not args:
+                return (f"💶 Capitale di riferimento: <b>{fmt_money(self.capital())}</b>\n"
+                        "Gli alert ti dicono quanto comprare su questa cifra. Per cambiarlo: <code>/capitale 5000</code>")
+            v = _num(args[0])
+            if v is None or v < 100:
+                return "Importo non valido: scrivi ad esempio <code>/capitale 5000</code>"
+            self.data.setdefault("settings", {})["capital"] = v
+            r = PAPER_RULES["crypto_v4"]
+            return (f"✅ Capitale di riferimento: <b>{fmt_money(v)}</b>\n"
+                    f"Da ora gli alert crypto ti indicano l'importo perché lo stop costi l'{r['risk_pct']:.0f}% "
+                    f"({fmt_money(v * r['risk_pct'] / 100)}). È solo un'indicazione: nessun ordine viene inviato.")
         if cmd in ("compra", "buy", "c"):
             if not args:
                 return "Scrivi cosa comprare, es. <code>/compra QNT 500</code>"
@@ -525,6 +606,7 @@ class PaperBook:
                 }
         return {
             "rules": PAPER_RULES,
+            "settings": {"capital": self.capital()},
             "costs": COSTS,
             "trade_size": TRADE_SIZE,
             "min_trades": MIN_TRADES_FOR_VERDICT,

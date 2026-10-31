@@ -1,0 +1,38 @@
+name: Ricerca
+
+# Esperimenti sul modello (research.py): solo a mano, da Actions → Ricerca → Run workflow
+# (circa 3 minuti). Salva il report in research_results/.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: research
+  cancel-in-progress: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install --quiet requests yfinance pandas numpy
+      - name: Ricerca
+        run: python research.py
+      - name: Salva il report
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research_results/report.md research_results/report.json
+          if git diff --staged --quiet; then echo "Report invariato"; exit 0; fi
+          git commit -m "ricerca: report aggiornato [skip ci]"
+          for i in 1 2 3; do
+            git push && exit 0
+            git pull --rebase origin "$GITHUB_REF_NAME" || exit 1
+            sleep 5
+          done
+          exit 1
