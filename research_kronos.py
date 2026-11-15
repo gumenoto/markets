@@ -9,8 +9,9 @@ giornaliere e confrontiamo quello che prevede con quello che è successo davvero
 
 Disegno, deciso PRIMA di guardare i risultati:
   · 20 crypto tra le più liquide e con più storia (lista fissa, COINS)
-  · solo date dal 1° settembre 2025 in poi: dopo la pubblicazione del modello (agosto 2025),
-    quindi dati che non può aver visto durante l'addestramento
+  · solo date dal 15 settembre 2025 in poi: dopo la pubblicazione del modello (agosto 2025) e
+    dopo l'ultima modifica dei file su Hugging Face (9 settembre 2025), quindi dati che non
+    può aver visto durante l'addestramento
   · ogni giorno: previsione del rendimento a 1 giorno; ogni 5 giorni: anche a 5 giorni
   · Kronos-small (lo stesso dei post), 10 campioni per previsione, T=1.0, top_p=0.9
 
@@ -47,7 +48,7 @@ import pandas as pd
 OUT = Path("research_results")
 COINS = ["BTC", "ETH", "SOL", "XRP", "BNB", "DOGE", "ADA", "AVAX", "LINK", "LTC",
          "TRX", "DOT", "BCH", "NEAR", "UNI", "APT", "SUI", "ATOM", "FIL", "ETC"]
-OOS_START = "2025-09-01"
+OOS_START = "2025-09-15"
 CTX = 256
 SAMPLES = 10
 EVERY_5 = 5
