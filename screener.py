@@ -15,8 +15,9 @@ Segnali operativi (alert + portafoglio simulato), vedi SIGNAL_POLICY:
   solo Accelerazioni crypto (score ≥ 100) e Squeeze crypto, e solo quando
   BTC ha chiuso sopra la media a 50 giorni con la media 50 sopra la 200.
   Stop a 3× ATR, posizione a rischio fisso (1% del capitale), uscita dopo
-  5 giorni (paper.py). Azioni e commodity: portafoglio sperimentale, senza
-  alert. Regole validate con backtest.py e research.py.
+  5 giorni (paper.py). Azioni e commodity: solo liste informative, come i
+  Rimbalzi (research_stocks.py: su 500 azioni, 2018–2026, i breakout rendono
+  meno dell'indice). Regole validate con backtest.py e research.py.
 
 Universo:
   crypto     CoinGecko /coins/markets (top 250 per capitalizzazione, filtrate
@@ -75,6 +76,12 @@ DASHBOARD_URL = os.environ.get("DASHBOARD_URL", "https://gumenoto.github.io/mark
 _REF = os.environ.get("GITHUB_REF_NAME", "").strip()
 DRY_RUN = bool(_REF) and _REF != "main"
 
+# Due avvii quasi insieme (cron-job.org + schedule di GitHub): il secondo salta.
+MIN_RUN_GAP_MIN = 10
+FORCE_RUN = os.environ.get("SCREENER_FORCE", "").strip() == "1"
+# Riepilogo settimanale su Telegram: domenica dalle 18 (ora italiana)
+WEEKLY_WEEKDAY, WEEKLY_HOUR = 6, 18
+
 STATE_FILE = Path("state.json")
 LOG_FILE = Path("signals_log.json")
 DOCS_DIR = Path("docs")
@@ -130,14 +137,13 @@ ALERT_MIN_VOLUME = {
 #   alert True  → messaggio Telegram + portafoglio simulato (segnale "operativo")
 #   alert False → solo portafoglio simulato (segnale "sperimentale")
 # I Rimbalzi non compaiono: nel backtest non hanno vantaggio (restano come lista informativa).
+# Azioni e commodity non compaiono più (novembre 2026): research_stocks.py, su 500 azioni
+# dell'S&P 500 dal 2018 al 2026, dà ai breakout un rendimento più basso dell'indice (eccesso
+# medio −0,6% a operazione, t ≈ −4, in entrambe le metà). Restano in lista a titolo informativo.
 # Accelerazioni e Squeeze crypto vanno nello stesso portafoglio, come nel backtest.
 SIGNAL_POLICY = {
     ("momentum", "crypto"): {"alert": True, "portfolio": "crypto_v4"},
     ("squeeze", "crypto"): {"alert": True, "portfolio": "crypto_v4"},
-    ("momentum", "brokerage"): {"alert": False, "portfolio": "brokerage_breakout"},
-    ("squeeze", "brokerage"): {"alert": False, "portfolio": "brokerage_breakout"},
-    ("momentum", "commodity"): {"alert": False, "portfolio": "brokerage_breakout"},
-    ("squeeze", "commodity"): {"alert": False, "portfolio": "brokerage_breakout"},
 }
 # Filtro di regime: si compra solo quando il mercato di riferimento è in salita.
 # Crypto: BTC sopra la media a 50 giorni E media a 50 sopra quella a 200 (research.py, E5:
@@ -1299,6 +1305,159 @@ def regime_change_text(r: dict) -> str:
     return f"{head}\n{body}" + (f"\n{html.escape(rl)}" if rl else "")
 
 
+def fmt_usd(v: float | None) -> str:
+    if v is None:
+        return "—"
+    return f"{v:,.0f}".replace(",", ".") + " $"
+
+
+def regime_gap_text(r: dict | None) -> str | None:
+    """In parole: cosa serve perché il regime crypto torni positivo (o quando diventa negativo)."""
+    if not r or r.get("on") is None or not r.get("price") or not r.get("ma"):
+        return None
+    price, ma = r["price"], r["ma"]
+    name = "BTC" if r.get("label") == "Bitcoin" else r.get("label", "")
+    if r["on"]:
+        return (f"{name} ha chiuso a {fmt_usd(price)}: il regime diventa negativo se chiude sotto "
+                f"{fmt_usd(ma)} (media a {r['ma_days']} giorni).")
+    parts = []
+    if price <= ma:
+        up = (ma / price - 1) * 100
+        parts.append(f"{name} deve chiudere sopra {fmt_usd(ma)} (ora {fmt_usd(price)}: serve "
+                     f"+{up:.0f}%)")
+    if r.get("long_days") and r.get("trend_ok") is False:
+        parts.append(f"la media a {r['ma_days']} giorni ({fmt_usd(ma)}) deve tornare sopra quella a "
+                     f"{r['long_days']} ({fmt_usd(r.get('ma_long'))})")
+    if not parts:
+        return None
+    return "Per tornare positivo: " + " e ".join(parts) + "."
+
+
+def runs_last_days(runs: dict, now: datetime, days: int = 7) -> int:
+    lo = (now - timedelta(days=days - 1)).date().isoformat()
+    return sum(n for d, n in (runs or {}).items() if d >= lo)
+
+
+def runs_phrase(runs: dict, now: datetime) -> str:
+    """«334 aggiornamenti in 7 giorni», oppure «da gio 12/11» se il conteggio è partito da poco."""
+    n = runs_last_days(runs, now)
+    word = "aggiornamento" if n == 1 else "aggiornamenti"
+    first = min(runs) if runs else now.date().isoformat()
+    if first <= (now - timedelta(days=6)).date().isoformat():
+        return f"{n} {word} in 7 giorni"
+    d = datetime.fromisoformat(first)
+    return f"{n} {word} da {WEEKDAYS_IT[d.weekday()]} {d:%d/%m} (il conteggio parte da lì)"
+
+
+def _avg(vals: list[float]) -> float | None:
+    vals = [v for v in vals if v is not None]
+    return sum(vals) / len(vals) if vals else None
+
+
+def week_signals(log: list[dict], now: datetime, days: int = 7) -> dict:
+    """Segnali degli ultimi `days` giorni: operativi, e come sono andati quelli scartati."""
+    lo = now - timedelta(days=days)
+    recent = [e for e in log if (parse_iso(e["ts"]) or now) > lo]
+    op = [e for e in recent if e.get("operational") and e.get("model") == MODEL_VERSION]
+    acc = [e for e in recent if e["lens"] == "momentum" and e["type"] == "crypto" and not e.get("operational")]
+    reb = [e for e in recent if e["lens"] == "reversion" and e["type"] == "crypto"]
+    return {"operational": len(op), "operational_avg": _avg([e.get("last_ret") for e in op]),
+            "discarded": len(acc), "discarded_avg": _avg([e.get("last_ret") for e in acc]),
+            "rebounds": len(reb), "rebounds_avg": _avg([e.get("last_ret") for e in reb])}
+
+
+def _pct(v: float | None, d: int = 1) -> str:
+    if v is None:
+        return "—"
+    return f"{'+' if v >= 0 else '−'}{abs(v):.{d}f}".replace(".", ",") + "%"
+
+
+def status_lines(regimes: dict, btc_7d: float | None) -> list[str]:
+    r = regimes.get("crypto") or {}
+    e = html.escape
+    if r.get("on") is True:
+        head = "🟢 <b>Regime crypto positivo</b>: alert attivi"
+    elif r.get("on") is False:
+        head = "🔴 <b>Regime crypto negativo</b>: alert in pausa"
+    else:
+        head = "⚪️ <b>Regime crypto non disponibile</b>: alert in pausa"
+    lines = [head]
+    if r.get("price"):
+        lines.append(f"BTC {fmt_usd(r['price'])}" + (f" ({_pct(btc_7d)} in 7 giorni)" if btc_7d is not None else ""))
+    gap = regime_gap_text(r)
+    if gap:
+        lines.append(e(gap))
+    return lines
+
+
+def status_text(now: datetime, regimes: dict, btc_7d: float | None, runs: dict, log: list[dict]) -> str:
+    """Risposta a /stato: il sistema è vivo? Perché (non) arrivano alert?"""
+    w = week_signals(log, now)
+    lines = ["🩺 <b>Stato del sistema</b>",
+             f"Attivo: {runs_phrase(runs, now)}, l'ultimo adesso ({fmt_local(now)}).", ""]
+    lines += status_lines(regimes, btc_7d)
+    lines += ["", f"Alert negli ultimi 7 giorni: {w['operational']}"]
+    if (regimes.get("crypto") or {}).get("on") is False:
+        lines.append("Con il regime negativo il silenzio è voluto: nel backtest i breakout in questa fase perdevano.")
+    if DASHBOARD_URL:
+        lines.append(f'<a href="{html.escape(DASHBOARD_URL)}">Apri la dashboard</a>')
+    return "\n".join(lines)
+
+
+def weekly_text(now: datetime, regimes: dict, btc_7d: float | None, runs: dict, log: list[dict],
+                paper: dict) -> str:
+    """Riepilogo della domenica: prova che il sistema lavora anche quando non manda alert."""
+    w = week_signals(log, now)
+    lines = ["🗓 <b>Riepilogo della settimana</b>",
+             f"Sistema attivo: {runs_phrase(runs, now)}.", ""]
+    lines += status_lines(regimes, btc_7d)
+    lines += ["", "<b>Segnali</b>", f"• Alert inviati: {w['operational']}"
+              + (f" (finora in media {_pct(w['operational_avg'])})" if w["operational"] else "")]
+    if w["discarded"]:
+        lines.append(f"• Accelerazioni crypto scartate dal modello: {w['discarded']} "
+                     f"(finora in media {_pct(w['discarded_avg'])})")
+    if w["rebounds"]:
+        lines.append(f"• Rimbalzi crypto, solo in lista: {w['rebounds']} (in media {_pct(w['rebounds_avg'])})")
+    lines += ["", "<b>Portafogli simulati</b>"]
+    for key, pf in (paper.get("portfolios") or {}).items():
+        bench = " · ".join(f"{'BTC' if k == 'BTC' else 'S&P 500'} {_pct(v)}" for k, v in (pf.get("bench") or {}).items()
+                           if v is not None)
+        tag = " (in chiusura)" if pf.get("closing") else ""
+        lines.append(f"• {html.escape(pf['label'])}{tag}: {_pct(pf['ret_pct'])} · aperte {pf['n_open']}, "
+                     f"chiuse {pf['n_closed']}" + (f" · mercato: {bench}" if bench else ""))
+    lines.append("")
+    if DASHBOARD_URL:
+        lines.append(f'<a href="{html.escape(DASHBOARD_URL)}">Apri la dashboard</a>')
+    lines.append("Per non riceverlo più: /settimanale off")
+    return "\n".join(lines)
+
+
+def weekly_due(now: datetime, last_sent: str | None) -> str | None:
+    """Chiave della settimana (data della domenica) se il riepilogo va mandato adesso."""
+    local = now.astimezone(LOCAL_TZ)
+    if local.weekday() != WEEKLY_WEEKDAY or local.hour < WEEKLY_HOUR:
+        return None
+    key = local.date().isoformat()
+    return key if key != last_sent else None
+
+
+RELEASE_ID = "v4.1"
+
+
+def release_note_text(regimes: dict, btc_7d: float | None) -> str:
+    """Avviso una tantum dopo un aggiornamento che non cambia le regole del modello."""
+    lines = ["🛠 <b>Aggiornamento del sistema</b> (le regole crypto non cambiano)", ""]
+    lines += status_lines(regimes, btc_7d)
+    lines += ["",
+              "Novità:",
+              "• <code>/stato</code>: in ogni momento ti dico se il sistema è attivo e cosa manca per gli alert",
+              "• Ogni domenica alle 18 arriva un riepilogo della settimana (<code>/settimanale off</code> per spegnerlo)",
+              "• Azioni e commodity restano solo in lista: nel test su 500 azioni comprare i loro breakout ha reso "
+              "meno dell'indice. L'esperimento «Breakout azioni» si chiude da solo e finisce in archivio",
+              "• Corretto un difetto: ogni tanto partivano due aggiornamenti insieme"]
+    return "\n".join(lines)
+
+
 def model_intro_text(regimes: dict) -> str:
     rl = regime_line(regimes.get("crypto")) or "Regime crypto non disponibile"
     return (
@@ -1360,7 +1519,8 @@ def format_alert(kind: str, a: dict, score: float, signals: list, flags: list,
     if plan:
         lines += ["", "🎯 <b>Piano</b>"]
         if plan.get("risk_pct"):
-            lines.append(f"Compra <b>{fmt_money(plan['amount'])} €</b> ({plan['size_pct']:.1f}".replace(".", ",") + "% di "
+            size = f"{plan['size_pct']:.1f}".replace(".", ",")
+            lines.append(f"Compra <b>{fmt_money(plan['amount'])} €</b> ({size}% di "
                          f"{fmt_money(plan['capital'])} €): se scatta lo stop perdi circa l'{plan['risk_pct']:.0f}% del capitale")
         lines.append(f"Stop a <code>{fmt_num(plan['stop_price'])}</code> (−{abs(plan['stop_pct']):.0f}%) "
                      f"· vendi entro {fmt_local(plan['exit_by'])} ({plan['max_days']} giorni)")
@@ -1586,6 +1746,12 @@ def classify_signal(lens: str, a: dict, score: float, regimes: dict) -> dict | N
 def main() -> int:
     now = now_utc()
     print(f"[{iso(now)}] Avvio screener v{MODEL_VERSION}")
+    last_run = parse_iso((load_json(STATE_FILE, {}) or {}).get("last_run"))
+    if last_run and not DRY_RUN and not FORCE_RUN \
+            and timedelta(0) <= now - last_run < timedelta(minutes=MIN_RUN_GAP_MIN):
+        mins = (now - last_run).total_seconds() / 60
+        print(f"Aggiornamento già fatto {mins:.0f} minuti fa: salto questo avvio (doppio avvio).")
+        return 0
 
     # ── Dati ──
     t0 = time.monotonic()
@@ -1632,6 +1798,9 @@ def main() -> int:
     # ── Stato precedente ──
     state = load_json(STATE_FILE, {})
     baseline = state.get("model_version") != MODEL_VERSION
+    runs = {d: n for d, n in (state.get("runs") or {}).items()
+            if d >= (now - timedelta(days=9)).date().isoformat()}
+    runs[now.date().isoformat()] = runs.get(now.date().isoformat(), 0) + 1
     prev_lenses = state.get("lenses") or {}
     setup_seen = {k: v for k, v in (state.get("setup_seen") or {}).items()
                   if (parse_iso(v) or now) > now - timedelta(days=SETUP_MEMORY_DAYS)}
@@ -1720,6 +1889,11 @@ def main() -> int:
     if not baseline and prev_regime is not None and cur_regime is not None and cur_regime != prev_regime:
         print(f"\nCambio di regime crypto: {'ON' if cur_regime else 'OFF'}")
         send_telegram(regime_change_text(regimes["crypto"]))
+    # avviso una tantum dell'aggiornamento (non al primo avvio in assoluto né a un cambio di modello)
+    releases = list(state.get("releases") or [])
+    if RELEASE_ID not in releases:
+        if baseline or send_telegram(release_note_text(regimes, cinfo["btc_7d"])):
+            releases.append(RELEASE_ID)
 
     # ── Portafogli simulati: uscite, poi nuove entrate sui segnali qualificati ──
     prices = {asset_id(a): a["price"] for a in all_assets}
@@ -1782,7 +1956,11 @@ def main() -> int:
     cmds, new_offset = fetch_telegram_commands(book.data.get("telegram_offset"), now)
     for c in cmds:
         print(f"  ✉️  comando: {c['text']}")
-        reply = book.handle_command(c["text"], resolve, lambda aid: listed.get(aid, []), now, c["ts"])
+        word = (c["text"] or "").strip().split()[0].lower().lstrip("/").split("@")[0] if (c["text"] or "").strip() else ""
+        if word in ("stato", "status"):
+            reply = status_text(now, regimes, cinfo["btc_7d"], runs, log)
+        else:
+            reply = book.handle_command(c["text"], resolve, lambda aid: listed.get(aid, []), now, c["ts"])
         send_telegram(reply)
     book.data["telegram_offset"] = new_offset
     book.record_history(now)
@@ -1805,7 +1983,18 @@ def main() -> int:
         "alert_history": alert_hist,
         # se il dato manca in questo run teniamo l'ultimo noto (niente falsi cambi di regime)
         "regime": {"crypto": cur_regime if cur_regime is not None else prev_regime},
+        "runs": runs,
+        "weekly_sent": state.get("weekly_sent"),
+        "releases": releases,
     }
+
+    # ── Riepilogo della domenica ──
+    paper_summary = book.summary({k: v for k, v in paper_bench_px.items() if v}, now)
+    week_key = weekly_due(now, state.get("weekly_sent"))
+    if week_key and book.weekly_on():
+        print("\nRiepilogo settimanale")
+        if send_telegram(weekly_text(now, regimes, cinfo["btc_7d"], runs, log, paper_summary)):
+            new_state["weekly_sent"] = week_key
 
     # ── Dashboard ──
     lenses_out = {
@@ -1830,6 +2019,9 @@ def main() -> int:
             "btc_7d": cinfo["btc_7d"],
             "benchmarks_7d": bench,
             "regime": regimes,
+            "regime_gap": regime_gap_text(regimes.get("crypto")),
+            "health": {"runs_7d": runs_last_days(runs, now), "since": min(runs) if runs else None,
+                       "phrase": runs_phrase(runs, now)},
             "trending": cinfo["trending"],
             "sources": {s.name: s.diag() for s in ALL_SOURCES},
         },
@@ -1838,7 +2030,7 @@ def main() -> int:
                   "brokerage": rev["brokerage"], "stocks": rev["brokerage"]},
         "lenses": lenses_out,
         "performance": perf_summary(log),
-        "paper": book.summary({k: v for k, v in paper_bench_px.items() if v}, now),
+        "paper": paper_summary,
     }
     write_json(DOCS_DIR / "data.json", payload)
     write_json(LOG_FILE, log)

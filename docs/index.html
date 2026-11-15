@@ -97,6 +97,10 @@
   .rg .d { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; opacity: 0.75; }
   .regime-note { font-size: 12.5px; color: var(--text-dim); margin: 0 0 18px; line-height: 1.5; }
   .regime-note strong { color: var(--text); font-weight: 500; }
+  .regime-note.health { margin-top: -10px; font-size: 12px; color: var(--text-faint); }
+  .regime-note.health:empty { display: none; }
+  .regime-note code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--amber-2); }
+  .ok-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-right: 7px; vertical-align: 1px; }
 
   .stats {
     margin: 0 0 18px; display: flex; flex-wrap: wrap; gap: 8px 22px;
@@ -330,6 +334,7 @@
 
   <div class="regime" id="regime"></div>
   <p class="regime-note" id="regime-note"></p>
+  <p class="regime-note health" id="health-note"></p>
 
   <div class="stats">
     <div class="stat"><div class="label">Crypto analizzate</div><div class="value" id="stat-crypto">—</div></div>
@@ -381,9 +386,9 @@
     <details class="rules" id="why-v3">
       <summary>Perché queste regole: cosa dicono 5 anni di dati</summary>
       <div class="rules-body">
-        <p>Il modello è stato rivisto due volte, sempre con lo stesso metodo: ricostruire i segnali del sito su <strong>5 anni di dati</strong>
-        (circa 95 crypto liquide, 30 azioni, 10 commodity, 13 ETF), costi inclusi, e tenere solo le regole che reggono in
-        <strong>entrambe le metà</strong> del periodo, non solo in media. Cosa è emerso (dettagli in <code>research_results/report.md</code>):</p>
+        <p>Il modello è stato rivisto più volte, sempre con lo stesso metodo: ricostruire i segnali del sito su <strong>5 anni di dati</strong>
+        (circa 95 crypto liquide, 13 ETF) e, per le azioni, su <strong>500 titoli dell'S&amp;P 500 dal 2018 a oggi</strong>, costi inclusi, e tenere solo le regole
+        che reggono in <strong>entrambe le metà</strong> del periodo, non solo in media. Cosa è emerso (dettagli nella cartella <code>research_results</code>):</p>
         <ul>
           <li><strong>Rimbalzi</strong>: dopo i costi perdono (profit factor 0,75 sulle crypto). Restano visibili, senza alert.</li>
           <li><strong>Breakout crypto</strong>: l'unico segnale con un vantaggio, ma <strong>solo quando BTC è in tendenza</strong>
@@ -392,8 +397,17 @@
           (tipicamente intorno a −21%) con una posizione più piccola, dimensionata perché lo stop costi l'1% del capitale, rende di più e perde meno.</li>
           <li><strong>Velocità</strong>: entrare il giorno dopo il segnale, con l'1% di slittamento, toglie circa un terzo del guadagno medio.
           Con lo stop a −8% il vantaggio spariva quasi del tutto.</li>
-          <li><strong>Scartate</strong>: rotazione settimanale sulle crypto più forti (−12% l'anno, calo massimo −71%) e rotazione mensile
-          tra ETF (+7% l'anno contro +20% dell'S&amp;P 500 tenuto). Strategie da manuale, ma non in questi anni.</li>
+          <li><strong>Azioni</strong>: provate tre strade su 500 titoli dal 2018 al 2026. I breakout dello screener rendono <strong>meno dell'indice</strong>
+          (in media −0,6% a operazione rispetto a tenere tutte le azioni, in entrambe le metà). I salti di prezzo con volume, idem.
+          Il momentum mensile sulle 10 più forti fa +3% l'anno con il filtro di regime; senza filtro +16% contro +14% dell'indice,
+          ma con cali del 46% e peggio dell'indice nella prima metà.
+          Sulle azioni, tenere un ETF ha battuto tutto quello che abbiamo provato: per questo non ci sono alert.</li>
+          <li><strong>Scartate</strong>: rotazione settimanale sulle crypto più forti (−12% l'anno, calo massimo −71%), rotazione mensile
+          tra ETF (+7% l'anno contro +20% dell'S&amp;P 500 tenuto) e S&amp;P 500 tenuto solo sopra la media a 200 giorni (+6,5% l'anno contro +14%).
+          Strategie da manuale, ma non in questi anni.</li>
+          <li><strong>Kronos</strong>, il modello «che prevede le crypto» dei post sui social: provato così com'è su 20 crypto e 425 giorni
+          che non poteva aver visto (settembre 2025 – novembre 2026). Nessuna capacità di previsione: indovina la direzione del giorno dopo
+          il 48,8% delle volte, e comprare ogni giorno le sue 3 preferite ha perso più che tenerle tutte. Non entra nel modello.</li>
         </ul>
         <p>Breakout crypto, portafoglio da 10.000 valutato ogni giorno, <strong>esecuzione realistica</strong> (il giorno dopo il segnale, 1% di slittamento):</p>
         <div class="table-wrap" style="margin-top:0"><table class="bt" id="bt-table">
@@ -504,11 +518,11 @@
           </div>
         </div>
         <div class="term">
-          <div class="t">Operativo · Sperimentale · In pausa <span class="sub">badge nella lista Accelerazioni</span></div>
+          <div class="t">Operativo · In pausa <span class="sub">badge nella lista Accelerazioni</span></div>
           <div class="d">
             <strong>Operativo</strong>: soddisfa tutte le regole del modello; quando entra in top 10 ti arriva l'alert e il portafoglio simulato compra.
-            <strong>Sperimentale</strong>: azioni e commodity, seguite solo dal portafoglio «Breakout azioni», senza alert, finché i numeri non dicono che funziona.
             <strong>In pausa</strong>: sarebbe un segnale, ma il regime è negativo. Senza badge: score o volume sotto soglia.
+            Azioni e commodity non hanno mai il badge: sono in lista solo a titolo informativo, perché nel test su 500 azioni (2018–2026) i loro breakout hanno reso meno dell'indice.
             Aprendo la riga vedi il piano: <em>quanto comprare, prezzo di stop e giorni massimi</em>.
           </div>
         </div>
@@ -743,11 +757,16 @@ function renderRegime() {
     why = below && rc.trend_ok === false ? "BTC sotto la media a 50 giorni e media 50 sotto la 200"
       : below ? "BTC sotto la media a 50 giorni" : "media a 50 giorni sotto quella a 200 (tendenza di fondo ribassista)";
   }
+  const gap = data?.stats?.regime_gap ? ` ${esc(data.stats.regime_gap)}` : "";
   note.innerHTML = c === true
-    ? `<strong>Regime crypto positivo</strong>: BTC sopra la media a 50 giorni e media 50 sopra la 200. Gli alert Accelerazioni e Squeeze crypto sono attivi.`
+    ? `<strong>Regime crypto positivo</strong>: BTC sopra la media a 50 giorni e media 50 sopra la 200. Gli alert Accelerazioni e Squeeze crypto sono attivi.${gap}`
     : c === false
-      ? `<strong>Regime crypto negativo</strong>: ${why}. Alert crypto in pausa: nel backtest i breakout in questa fase perdevano.`
+      ? `<strong>Regime crypto negativo</strong>: ${why}. Alert crypto in pausa: nel backtest i breakout in questa fase perdevano. Il silenzio è voluto.${gap}`
       : `Regime crypto non disponibile in questo aggiornamento: alert crypto in pausa per prudenza.`;
+  const h = data?.stats?.health;
+  $("health-note").innerHTML = h?.phrase
+    ? `<span class="ok-dot"></span>Sistema attivo: ${esc(h.phrase)}. Ogni domenica alle 18 arriva un riepilogo su Telegram; in qualsiasi momento puoi scrivere <code>/stato</code> al bot.`
+    : "";
 }
 
 function detailsFor(a) {
@@ -825,7 +844,9 @@ function render() {
   ln.className = "lens-note" + (lens === "reversion" ? " warn" : "");
   ln.innerHTML = lens === "reversion"
     ? "⚠ <strong>Solo informativa.</strong> Nel backtest 2021–2026 comprare questi titoli, dopo i costi, ha perso in media. Niente alert e niente simulazione."
-    : lens === "setup" ? "Watchlist: nessun alert all'ingresso. Se rompe verso l'alto con volume diventa uno <strong>⚡ Squeeze</strong> nelle Accelerazioni." : "";
+    : lens === "setup" ? "Watchlist: nessun alert all'ingresso. Se rompe verso l'alto con volume diventa uno <strong>⚡ Squeeze</strong> nelle Accelerazioni."
+    : tab === "crypto" ? ""
+    : "Gli alert riguardano solo le <strong>crypto</strong>. Azioni e commodity sono in lista a titolo informativo: nel test su 500 azioni (2018–2026) comprare i loro breakout ha reso meno dell'indice.";
 
   const lists = currentLists();
   for (const t of TABS) $("count-" + t).textContent = lists?.[t]?.length ?? 0;
@@ -913,7 +934,7 @@ function sparkline(hist, initial) {
 function renderPaper() {
   const pp = data?.paper;
   if (!pp?.portfolios) return;
-  $("paper-intro").innerHTML = `10.000 finti ciascuno. I portafogli automatici seguono i segnali del modello v${data.model_version || ""} e vendono con regole fisse; quello crypto dimensiona ogni posizione in base alla volatilità. <strong style="color:var(--text);font-weight:500">Le mie scelte</strong> sono i tuoi acquisti da Telegram. Costi inclusi.`;
+  $("paper-intro").innerHTML = `10.000 finti ciascuno. Il portafoglio «Breakout crypto» segue gli alert del modello v${data.model_version || ""}: dimensiona ogni posizione in base alla volatilità e vende con regole fisse. <strong style="color:var(--text);font-weight:500">Le mie scelte</strong> sono i tuoi acquisti da Telegram. Costi inclusi.`;
   $("pf-size").textContent = fmtMoney(pp.trade_size);
   $("pf-min").textContent = pp.min_trades;
   const R = pp.rules || {};
@@ -923,7 +944,8 @@ function renderPaper() {
     if (r.take != null) parts.push(`obiettivo +${r.take}%`);
     if (r.trail != null) parts.push(`dopo +${r.trail_from}% uscita se perde ${r.trail}% dal massimo`);
     parts.push(`${r.trail != null || r.take != null ? "massimo" : "altrimenti vende dopo"} ${r.max_days} giorni`); return `<li><strong>${label}</strong>: ${parts.join(", ")}</li>`; };
-  $("pf-rules-list").innerHTML = rl("crypto_v4", "Breakout crypto (Accelerazioni e Squeeze)") + rl("brokerage_breakout", "Breakout azioni (sperimentale, 1.000 a operazione)") +
+  $("pf-rules-list").innerHTML = rl("crypto_v4", "Breakout crypto (Accelerazioni e Squeeze)") +
+    (pp.portfolios.brokerage_breakout ? rl("brokerage_breakout", "Breakout azioni (esperimento in chiusura: non compra più, 1.000 a operazione)") : "") +
     `<li>comprano solo con il regime di mercato positivo; al massimo 10 posizioni aperte per portafoglio</li>`;
 
   $("pf-grid").innerHTML = PF_ORDER.filter(k => pp.portfolios[k]).map(k => {
@@ -937,7 +959,8 @@ function renderPaper() {
     }
     const bench = Object.entries(p.bench || {}).filter(([, v]) => v != null)
       .map(([bk, v]) => `${BENCH_NAME[bk] || bk} <span class="${cls(v)}">${sign(v)}</span>`).join(" · ");
-    const kind = k === "manual" ? "tue scelte · Telegram" : (p.experimental ? "automatico · sperimentale" : "automatico · operativo");
+    const kind = k === "manual" ? "tue scelte · Telegram" : (p.closing ? "esperimento in chiusura" : (p.experimental ? "automatico · sperimentale" : "automatico · operativo"));
+    const closingNote = p.closing ? `<div class="pf-bench">Non apre più posizioni: il test su 500 azioni (2018–2026) dice che questa strategia rende meno dell'indice. Le posizioni aperte seguono le loro regole, poi il risultato va in archivio.</div>` : "";
     return `<div class="pf-card ${k === "manual" ? "manual" : ""} ${p.experimental ? "exp" : ""}">
       <div class="pf-head"><h4>${esc(p.label)}</h4><span class="kind">${kind}</span></div>
       <div class="pf-meta">dal ${fmtDay(p.started)}</div>
@@ -952,6 +975,7 @@ function renderPaper() {
         <span>Calo max <b>${p.max_dd != null ? sign(p.max_dd) : "—"}</b></span>
       </div>${split}
       ${bench ? `<div class="pf-bench">Mercato nello stesso periodo: ${bench}</div>` : ""}
+      ${closingNote}
     </div>`;
   }).join("");
 
@@ -983,7 +1007,7 @@ function renderPaper() {
       <div class="arc-sub">${fmtDay(a.from)} → ${fmtDay(a.to)}${bl ? " · mercato: " + bl : ""}</div>
       <div class="arc-rows">${rows}</div>${a.note ? `<div class="arc-note">${esc(a.note)}</div>` : ""}</div>`;
   }).join("");
-  if ((pp.archive || []).length) $("pf-archive").innerHTML = `<div class="sub-title">Archivio · modelli precedenti</div>` + $("pf-archive").innerHTML;
+  if ((pp.archive || []).length) $("pf-archive").innerHTML = `<div class="sub-title">Archivio · modelli ed esperimenti chiusi</div>` + $("pf-archive").innerHTML;
 }
 
 function renderBacktest() {

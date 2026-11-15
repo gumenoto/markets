@@ -5,7 +5,9 @@ Modello v4 (validato con backtest.py e research.py, 2021–2026):
   crypto_v4           segue ogni alert crypto (🚀 Accelerazione e ⚡ Squeeze) con regime BTC positivo.
                       Stop a 3× la volatilità (ATR 14 giorni), posizione dimensionata perché lo stop
                       costi l'1% del capitale, uscita dopo 5 giorni.
-  brokerage_breakout  breakout/squeeze su azioni e commodity · sperimentale, senza alert
+  brokerage_breakout  breakout su azioni e commodity · esperimento CHIUSO (novembre 2026): il test su
+                      500 azioni, 2018–2026 (research_stocks.py) dice che rende meno dell'indice.
+                      Non apre più posizioni; quando l'ultima si chiude finisce in archivio.
   manual              le tue scelte, via Telegram: /compra QNT 500 · /vendi QNT · /portafoglio
 
 Regole di uscita in PAPER_RULES, costi realistici in COSTS. Ogni portafoglio ha
@@ -17,7 +19,7 @@ processate: niente "senno di poi". Stop e scadenze sono controllati agli
 aggiornamenti (ogni 30'): se il prezzo scavalca lo stop tra un run e l'altro,
 l'uscita avviene al prezzo osservato (conservativo).
 
-I portafogli dei modelli precedenti (v2, v3) vengono archiviati, non cancellati.
+I portafogli dei modelli precedenti (v2, v3) e gli esperimenti chiusi vengono archiviati, non cancellati.
 """
 
 from __future__ import annotations
@@ -40,8 +42,13 @@ MIN_TRADES_FOR_VERDICT = 20   # operazioni chiuse prima di dare un giudizio
 PORTFOLIOS = {
     "crypto_v4": {"label": "Breakout crypto", "kind": "auto", "rule": "crypto_v4",
                   "bench": ["BTC"], "experimental": False},
+    # "closing": non apre più posizioni; quando è vuoto viene archiviato (vedi prepare)
     "brokerage_breakout": {"label": "Breakout azioni", "kind": "auto", "rule": "brokerage_breakout",
-                           "bench": ["SPY"], "experimental": True},
+                           "bench": ["SPY"], "experimental": True, "closing": True,
+                           "archive_label": "Esperimento · Breakout azioni e commodity",
+                           "archive_note": "Chiuso dopo il test su 500 azioni dell'S&P 500 dal 2018 al 2026 "
+                                           "(research_stocks.py): i breakout sulle azioni hanno reso meno "
+                                           "dell'indice, in media −0,6% a operazione, in entrambe le metà del periodo."},
     "manual": {"label": "Le mie scelte", "kind": "manual", "rule": None,
                "bench": ["BTC", "SPY"], "experimental": False},
 }
@@ -79,7 +86,9 @@ HELP_TEXT = (
     "<code>/vendi QNT 50%</code> — vende metà\n"
     "<code>/portafoglio</code> — il tuo portafoglio\n"
     "<code>/riepilogo</code> — tutti i portafogli simulati\n"
-    "<code>/capitale 5000</code> — il capitale che useresti davvero: gli alert ti dicono quanto comprare\n\n"
+    "<code>/capitale 5000</code> — il capitale che useresti davvero: gli alert ti dicono quanto comprare\n"
+    "<code>/stato</code> — il sistema sta funzionando? Regime di mercato e cosa manca per gli alert\n"
+    "<code>/settimanale off</code> — niente riepilogo della domenica (<code>on</code> per riattivarlo)\n\n"
     "Puoi usare il ticker (QNT, NVDA, ENI.MI, GC=F) o il nome (Quant, Oro).\n"
     "Gli ordini vengono eseguiti al prezzo del prossimo aggiornamento dello scanner (entro 30')."
 )
@@ -280,10 +289,12 @@ class PaperBook:
         d.setdefault("archive", [])
         d.setdefault("telegram_offset", None)
         d.setdefault("settings", {}).setdefault("capital", DEFAULT_CAPITAL)
-        for key in PORTFOLIOS:
+        d.setdefault("settings", {}).setdefault("weekly", True)
+        for key, meta in PORTFOLIOS.items():
             p = d["portfolios"].get(key)
             if p is None:
-                d["portfolios"][key] = _new_portfolio(now, bench_prices)
+                if not meta.get("closing"):
+                    d["portfolios"][key] = _new_portfolio(now, bench_prices)
                 continue
             for k, v in _new_portfolio(None, {}).items():
                 p.setdefault(k, v)
@@ -292,7 +303,23 @@ class PaperBook:
             for k, v in bench_prices.items():
                 if v and k not in p["bench_start"]:
                     p["bench_start"][k] = v
+            if meta.get("closing") and not p["positions"]:
+                st = _stats(p)
+                d["archive"].insert(0, {
+                    "label": meta["archive_label"], "from": p.get("started"), "to": _iso(now),
+                    "bench": _bench_ret(p.get("bench_start", {}), bench_prices, meta["bench"]),
+                    "portfolios": {key: {"label": meta["label"],
+                                         **{k: (None if isinstance(v, float) and not math.isfinite(v) else v)
+                                            for k, v in st.items()}}},
+                    "note": meta["archive_note"],
+                })
+                del d["portfolios"][key]
+                notes.append(f"{meta['label']}: esperimento chiuso e archiviato ({fmt_pct(st['ret_pct'])})")
         return notes
+
+    def active(self) -> list[tuple[str, dict]]:
+        """I portafogli che esistono davvero (quelli in chiusura spariscono una volta archiviati)."""
+        return [(k, m) for k, m in PORTFOLIOS.items() if k in self.data["portfolios"]]
 
     def to_json(self) -> dict:
         return self.data
@@ -306,6 +333,9 @@ class PaperBook:
 
     def capital(self) -> float:
         return float((self.data.get("settings") or {}).get("capital") or DEFAULT_CAPITAL)
+
+    def weekly_on(self) -> bool:
+        return bool((self.data.get("settings") or {}).get("weekly", True))
 
     def buy(self, key: str, asset: dict, amount: float, now: datetime, reason: str,
             suggested_by: list[str] | None = None, rule: str | None = None,
@@ -382,7 +412,8 @@ class PaperBook:
     def open_auto(self, key: str, asset: dict, score: float, now: datetime, signal_kind: str,
                   atr_pct: float | None = None) -> str | None:
         meta = PORTFOLIOS.get(key)
-        if not meta or meta["kind"] != "auto" or self.find_position(key, asset["asset_id"]):
+        if not meta or meta["kind"] != "auto" or meta.get("closing") or key not in self.data["portfolios"] \
+                or self.find_position(key, asset["asset_id"]):
             return None
         rule = PAPER_RULES[meta["rule"]]
         p = self._p(key)
@@ -399,7 +430,7 @@ class PaperBook:
     def update(self, prices: dict[str, float], now: datetime) -> list[str]:
         """Aggiorna i prezzi e applica le regole di uscita dei portafogli automatici."""
         events = []
-        for key, meta in PORTFOLIOS.items():
+        for key, meta in self.active():
             p = self._p(key)
             for pos in list(p["positions"]):
                 price = prices.get(pos["asset_id"])
@@ -435,7 +466,7 @@ class PaperBook:
         return _equity(self._p(key))
 
     def record_history(self, now: datetime) -> None:
-        for key in PORTFOLIOS:
+        for key, _ in self.active():
             h = self._p(key)["history"]
             h.append([_iso(now), round(self.equity(key), 2)])
             if len(h) > 1500:
@@ -467,6 +498,16 @@ class PaperBook:
             return (f"✅ Capitale di riferimento: <b>{fmt_money(v)}</b>\n"
                     f"Da ora gli alert crypto ti indicano l'importo perché lo stop costi l'{r['risk_pct']:.0f}% "
                     f"({fmt_money(v * r['risk_pct'] / 100)}). È solo un'indicazione: nessun ordine viene inviato.")
+        if cmd in ("settimanale", "weekly"):
+            arg = args[0].lower() if args else ""
+            if arg in ("off", "no", "stop"):
+                self.data.setdefault("settings", {})["weekly"] = False
+                return "🔕 Riepilogo della domenica disattivato. Per riattivarlo: <code>/settimanale on</code>"
+            if arg in ("on", "si", "sì"):
+                self.data.setdefault("settings", {})["weekly"] = True
+                return "🔔 Riepilogo della domenica attivo: arriva ogni domenica alle 18."
+            return (f"Il riepilogo della domenica è {'attivo' if self.weekly_on() else 'disattivato'}. "
+                    "Scrivi <code>/settimanale on</code> oppure <code>/settimanale off</code>.")
         if cmd in ("compra", "buy", "c"):
             if not args:
                 return "Scrivi cosa comprare, es. <code>/compra QNT 500</code>"
@@ -540,9 +581,9 @@ class PaperBook:
 
     def overview_text(self) -> str:
         lines = ["📊 <b>Portafogli simulati</b> (10.000 di partenza ciascuno)", ""]
-        for key, meta in PORTFOLIOS.items():
+        for key, meta in self.active():
             s = _stats(self._p(key))
-            tag = " · sperimentale" if meta["experimental"] else ""
+            tag = " · in chiusura" if meta.get("closing") else (" · sperimentale" if meta["experimental"] else "")
             lines.append(f"• <b>{meta['label']}</b>{tag}: {fmt_money(s['equity'])} ({fmt_pct(s['ret_pct'])}) · "
                          f"{s['n_open']} aperte, {s['n_closed']} chiuse")
         return "\n".join(lines)
@@ -567,7 +608,7 @@ class PaperBook:
 
     def summary(self, bench_prices: dict[str, float], now: datetime) -> dict:
         out = {}
-        for key, meta in PORTFOLIOS.items():
+        for key, meta in self.active():
             p = self._p(key)
             st = _stats(p)
             bench = _bench_ret(p.get("bench_start", {}), bench_prices, meta["bench"])
@@ -580,6 +621,7 @@ class PaperBook:
                 "label": meta["label"],
                 "kind": meta["kind"],
                 "experimental": meta["experimental"],
+                "closing": bool(meta.get("closing")),
                 "rule": meta["rule"],
                 "started": p.get("started"),
                 "bench": bench,
@@ -606,7 +648,7 @@ class PaperBook:
                 }
         return {
             "rules": PAPER_RULES,
-            "settings": {"capital": self.capital()},
+            "settings": {"capital": self.capital(), "weekly": self.weekly_on()},
             "costs": COSTS,
             "trade_size": TRADE_SIZE,
             "min_trades": MIN_TRADES_FOR_VERDICT,

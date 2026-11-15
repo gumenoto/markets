@@ -19,8 +19,13 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Si parte dalla punta del branch nel momento in cui il lavoro comincia davvero, non dal
+      # commit di quando è stato richiesto: se due avvii arrivano insieme (cron-job.org + schedule),
+      # il secondo aspetta in coda, vede lo stato salvato dal primo e salta (vedi MIN_RUN_GAP_MIN).
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -49,7 +54,7 @@ jobs:
           for i in 1 2 3; do
             git push && exit 0
             echo "Push rifiutato (tentativo $i): riallineo e riprovo"
-            git pull --rebase origin main || exit 1
+            git pull --rebase origin "$GITHUB_REF_NAME" || exit 1
             sleep 5
           done
           exit 1
