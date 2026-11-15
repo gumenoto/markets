@@ -1,0 +1,38 @@
+name: Ricerca azioni
+
+# Test delle strategie sulle azioni dell'S&P 500 (research_stocks.py, circa 10 minuti).
+# Solo a mano: Actions → Ricerca azioni → Run workflow. Salva il report in research_results/.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: research-stocks
+  cancel-in-progress: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install --quiet requests yfinance pandas numpy
+      - name: Ricerca azioni
+        run: python research_stocks.py
+      - name: Salva il report
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research_results/stocks_report.md research_results/stocks_report.json
+          if git diff --staged --quiet; then echo "Report invariato"; exit 0; fi
+          git commit -m "ricerca azioni: report aggiornato [skip ci]"
+          for i in 1 2 3; do
+            git push && exit 0
+            git pull --rebase origin "$GITHUB_REF_NAME" || exit 1
+            sleep 5
+          done
+          exit 1
