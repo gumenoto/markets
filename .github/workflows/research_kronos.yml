@@ -1,0 +1,88 @@
+name: Ricerca Kronos
+
+# Prova fuori campione del modello Kronos sulle crypto (research_kronos.py).
+# Il modello gira in 12 parti in parallelo, senza segreti e in sola lettura: è codice di terzi
+# (github.com/shiyu-coder/Kronos, versione fissata). Solo il lavoro finale, che legge i numeri
+# e scrive il report, può salvare nel repository.
+on:
+  push:
+    branches: [research-kronos]
+    paths: ['research_kronos.py', '.github/workflows/research_kronos.yml']
+  workflow_dispatch:
+
+concurrency:
+  group: research-kronos
+  cancel-in-progress: true
+
+env:
+  MAX_DATES: '1'          # 0 = tutte le date; un numero piccolo = prova rapida
+  KRONOS_SHA: 67b630e67f6a18c9e9be918d9b4337c960db1e9a
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Dipendenze
+        run: |
+          pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          pip install --quiet "pandas==2.2.3" requests einops==0.8.1 huggingface_hub==0.33.1 safetensors==0.6.2 tqdm
+      - name: Codice Kronos (versione fissata)
+        run: |
+          git init -q kronos_src && cd kronos_src
+          git remote add origin https://github.com/shiyu-coder/Kronos.git
+          git fetch -q --depth 1 origin "$KRONOS_SHA"
+          git checkout -q FETCH_HEAD
+      - name: Previsioni
+        run: python research_kronos.py predict --shard ${{ matrix.shard }} --of 12 --out preds/shard_${{ matrix.shard }}.json --max-dates "$MAX_DATES"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preds-${{ matrix.shard }}
+          path: preds/
+          retention-days: 14
+
+  report:
+    needs: predict
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install --quiet pandas numpy
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: preds-*
+          path: preds
+          merge-multiple: true
+      - name: Report
+        run: python research_kronos.py report --inputs preds
+      - name: Salva il report
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research_results/kronos_report.md research_results/kronos_report.json
+          if git diff --staged --quiet; then echo "Report invariato"; exit 0; fi
+          git commit -m "ricerca Kronos: report aggiornato [skip ci]"
+          for i in 1 2 3; do
+            git push && exit 0
+            git pull --rebase origin "$GITHUB_REF_NAME" || exit 1
+            sleep 5
+          done
+          exit 1
